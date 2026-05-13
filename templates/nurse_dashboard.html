@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nurse Dashboard — Guerrero Dental</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--br:#7C3D12;--brm:#A0522D;--go:#C9933C;--gop:#F5E6C8;--bg:#F3EDE4;--cr:#FAF6F0;--ink:#1A1209;--inks:#4A3728;--mu:#8A7A6A;--bd:#E5DDD3;--wh:#fff;--ok:#2D6A4F;--okb:#D8F3DC;--wa:#9C6A00;--wab:#FFF3CD;--er:#C0392B;--erb:#FDECEA;--in:#1A5276;--inb:#D6EAF8;--sw:240px;--th:64px;}
+html,body{height:100%}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--inks);display:flex}
+.sidebar{width:var(--sw);background:#1A0D04;height:100vh;position:fixed;left:0;top:0;display:flex;flex-direction:column;z-index:200;overflow:hidden}
+.sb-brand{padding:20px 22px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px}
+.sb-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--go),var(--brm));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;overflow:hidden}
+.sb-icon img{width:100%;height:100%;object-fit:contain}
+.sb-name{font-family:'Cormorant Garamond',serif;color:var(--gop);font-size:1.05rem;line-height:1.2}
+.sb-name span{display:block;font-family:'Outfit',sans-serif;font-size:.64rem;font-weight:300;color:#5C4A38;letter-spacing:.1em;text-transform:uppercase}
+.sb-nav{flex:1;padding:16px 0;overflow-y:auto}
+.sb-sect{padding:5px 22px 7px;font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#3D2817;margin-top:10px}
+.sb-item{display:flex;align-items:center;gap:11px;padding:11px 22px;color:#7A5C3E;cursor:pointer;transition:all .2s;border-left:3px solid transparent;font-size:.88rem}
+.sb-item:hover,.sb-item.active{color:var(--gop);background:rgba(201,147,60,.1);border-left-color:var(--go)}
+.sb-item i{width:17px;text-align:center;font-size:.88rem}
+.sb-badge{margin-left:auto;background:var(--go);color:var(--ink);font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:99px}
+.sb-foot{padding:14px 22px;border-top:1px solid rgba(255,255,255,.06)}
+.sb-user{display:flex;align-items:center;gap:10px}
+.sb-av{width:34px;height:34px;background:linear-gradient(135deg,var(--br),var(--go));border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:.78rem;flex-shrink:0}
+.sb-uinfo{flex:1;min-width:0}
+.sb-uinfo strong{display:block;font-size:.8rem;color:var(--gop);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-uinfo span{font-size:.66rem;color:#5C4A38;text-transform:capitalize}
+.sb-logout{background:none;border:none;color:#5C4A38;cursor:pointer;padding:6px;border-radius:6px;transition:all .2s;font-size:.82rem}
+.sb-logout:hover{color:var(--er);background:rgba(192,57,43,.1)}
+.topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:#fff;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:100}
+.tb-left h1{font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:var(--ink)}
+.tb-left p{font-size:.78rem;color:var(--mu);margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:12px}
+.topbar-clock{font-family:'Courier New',monospace;font-size:1rem;font-weight:700;color:var(--ink);background:#F8F4EE;border:1px solid var(--bd);border-radius:10px;padding:8px 12px;min-width:94px;text-align:center}
+.topbar-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--bd);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mu);transition:all .2s;font-size:.9rem;position:relative}
+.topbar-btn:hover{border-color:var(--br);color:var(--br)}
+.notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--er);border-radius:50%;border:2px solid #fff;display:none}
+.role-chip{padding:5px 12px;border-radius:99px;background:var(--okb);color:var(--ok);font-size:.72rem;font-weight:600}
+/* NOTIF PANEL */
+.notif-panel{position:absolute;top:calc(100% + 10px);right:0;width:300px;background:#fff;border:1px solid var(--bd);border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.14);z-index:300;display:none;overflow:hidden}
+.notif-panel.open{display:block}
+.notif-hd{padding:13px 16px;border-bottom:1px solid var(--bd);font-weight:600;font-size:.88rem}
+.notif-list{max-height:280px;overflow-y:auto}
+.notif-item{padding:12px 16px;border-bottom:1px solid #F5F0EA;cursor:pointer;transition:background .15s}
+.notif-item:hover{background:var(--bg)}
+.notif-item:last-child{border-bottom:none}
+.ni-name{font-size:.85rem;font-weight:600;color:var(--ink)}
+.ni-concern{font-size:.78rem;color:var(--mu);margin-top:2px}
+.ni-meta{font-size:.72rem;color:var(--mu);margin-top:3px}
+.notif-empty{padding:22px;text-align:center;color:var(--mu);font-size:.85rem}
+.main{margin-left:var(--sw);margin-top:var(--th);padding:16px;min-height:calc(100vh - var(--th));flex:1}
+.section{display:none}.section.active{display:block}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.stat-card{background:#fff;border-radius:13px;padding:18px 18px;border:1px solid var(--bd);transition:box-shadow .2s}
+.stat-card:hover{box-shadow:0 4px 18px rgba(0,0,0,.07)}
+.stat-card[data-tooltip]{cursor:pointer;position:relative}
+.stat-card[data-tooltip]::after{content:attr(data-tooltip);position:absolute;left:14px;right:14px;top:calc(100% + 8px);background:rgba(34,28,22,.96);color:#fff;border-radius:10px;padding:9px 11px;font-size:.75rem;line-height:1.4;box-shadow:0 10px 24px rgba(0,0,0,.2);opacity:0;transform:translateY(5px);pointer-events:none;transition:opacity .16s ease,transform .16s ease;z-index:20}
+.stat-card[data-tooltip]:hover::after,.stat-card[data-tooltip]:focus-visible::after,.stat-card.tooltip-pinned::after{opacity:1;transform:translateY(0)}
+.sc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.sc-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.ic-br{background:rgba(124,61,18,.1);color:var(--br)}.ic-go{background:rgba(201,147,60,.12);color:var(--go)}
+.ic-ok{background:var(--okb);color:var(--ok)}.ic-er{background:var(--erb);color:var(--er)}
+.sc-lbl{font-size:.7rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mu)}
+.sc-num{font-size:2.2rem;font-weight:600;color:var(--ink);line-height:1;margin:5px 0}
+.sc-sub{font-size:.75rem;color:var(--mu)}
+.card{background:#fff;border-radius:13px;border:1px solid var(--bd);overflow:hidden;margin-bottom:20px}
+.card-head{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.card-title{font-weight:600;font-size:.92rem;color:var(--ink)}
+.card-body{padding:18px 20px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:18px}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:180px}
+.search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--mu);font-size:.82rem}
+.search-wrap input{width:100%;padding:9px 12px 9px 33px;border:1px solid var(--bd);border-radius:9px;font-family:'Outfit',sans-serif;font-size:.85rem;background:#fff;color:var(--ink);outline:none;transition:border-color .2s}
+.search-wrap input:focus{border-color:var(--br)}
+.f-select{padding:9px 13px;border:1px solid var(--bd);border-radius:9px;font-family:'Outfit',sans-serif;font-size:.83rem;background:#fff;outline:none;cursor:pointer}
+.btn{padding:8px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:.83rem;font-weight:500;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-br{background:var(--br);color:#fff}.btn-br:hover{background:var(--brm)}
+.btn-go{background:var(--go);color:#fff}.btn-go:hover{opacity:.9}
+.btn-sec{background:var(--bg);color:var(--ink);border:1px solid var(--bd)}.btn-sec:hover{background:var(--bd)}
+.btn-ok{background:var(--okb);color:var(--ok)}.btn-ok:hover{background:#C7EDD1}
+.btn-in{background:var(--inb);color:var(--in)}.btn-in:hover{opacity:.85}
+.btn-sm{padding:6px 11px;font-size:.77rem}
+
+.btn, .topbar-btn, .notif-item, .sb-item, .act-btn, .logout-btn, .modal-close {
+    transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+.btn:hover, .topbar-btn:hover, .notif-item:hover, .sb-item:hover, .act-btn:hover, .logout-btn:hover, .modal-close:hover {
+    transform: translateY(-1px);
+}
+.btn:active, .topbar-btn:active, .notif-item:active, .sb-item:active, .act-btn:active, .logout-btn:active, .modal-close:active {
+    transform: scale(0.97);
+}
+
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:9px 13px;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--bd)}
+td{padding:12px 13px;font-size:.85rem;border-bottom:1px solid #F5F0EA;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FDFAF7}
+.p-cell{display:flex;align-items:center;gap:9px}
+.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--br),var(--brm));display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:600;flex-shrink:0}
+.badge{padding:3px 9px;border-radius:99px;font-size:.7rem;font-weight:500}
+.bg-ok{background:var(--okb);color:var(--ok)}.bg-wa{background:var(--wab);color:var(--wa)}
+.bg-er{background:var(--erb);color:var(--er)}.bg-in{background:var(--inb);color:var(--in)}
+.bg-gy{background:#F0EBE5;color:var(--mu)}
+.act-row{display:flex;gap:5px}
+.act-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--bd);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.78rem;color:var(--mu);transition:all .14s}
+.act-btn:hover{border-color:var(--br);color:var(--br)}
+.cc{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.cc.urgent{border-left:4px solid var(--er)}.cc.soon{border-left:4px solid var(--wa)}.cc.routine{border-left:4px solid var(--ok)}
+.cc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.cc-name{font-weight:600;font-size:.9rem}.cc-meta{font-size:.76rem;color:var(--mu);margin-top:2px}
+.cc-concern{font-size:.83rem;margin-bottom:6px}.cc-desc{font-size:.79rem;color:var(--mu);line-height:1.55;background:var(--bg);padding:9px 11px;border-radius:7px;margin-bottom:10px}
+.cc-foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.appt-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--bd)}
+.appt-row:last-child{border-bottom:none}
+.appt-time{text-align:center;min-width:52px;background:var(--bg);border-radius:8px;padding:7px 5px}
+.appt-time .t{font-size:.92rem;font-weight:600;color:var(--ink)}
+.appt-time .am{font-size:.6rem;color:var(--mu);text-transform:uppercase}
+.appt-inf{flex:1}.appt-inf h4{font-size:.86rem;font-weight:600;margin-bottom:2px}.appt-inf p{font-size:.76rem;color:var(--mu)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);z-index:500;display:none;align-items:center;justify-content:center;padding:18px}
+.modal-overlay.open{display:flex}
+body.modal-active{overflow:hidden}
+body.modal-active > :not(.modal-overlay){pointer-events:none;user-select:none}
+.modal-box{background:#fff;border-radius:20px;width:min(100%,680px);max-width:680px;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.22)}
+.modal-head{padding:24px 28px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{font-size:1.15rem;letter-spacing:.02em}
+.modal-body{padding:26px 28px;font-size:1rem;line-height:1.7}
+.modal-body strong{font-weight:700}
+.modal-foot{padding:18px 28px 24px;display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+.modal-head h3{font-weight:600;font-size:1rem}
+.modal-close{background:none;border:none;cursor:pointer;color:var(--mu);font-size:1.1rem;padding:4px}
+.modal-body{padding:22px 24px}
+.modal-foot{padding:14px 24px 20px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.mf-group{margin-bottom:16px}
+.mf-label{display:block;font-size:.7rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
+.mf-input{width:100%;padding:10px 13px;border:1.5px solid var(--bd);border-radius:9px;font-family:'Outfit',sans-serif;font-size:.88rem;color:var(--ink);outline:none;background:#fff;transition:border-color .2s}
+.mf-input:focus{border-color:var(--br)}
+textarea.mf-input{resize:vertical;min-height:75px}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pw-wrap{position:relative}
+.pw-wrap .mf-input{padding-right:38px}
+.pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#C4B8AC;font-size:.85rem}
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 18px;border-radius:11px;font-size:.86rem;font-weight:500;box-shadow:0 8px 28px rgba(0,0,0,.18);display:none;align-items:center;gap:9px;z-index:999;max-width:320px;transform:translateY(16px);opacity:0;transition:all .3s;color:#fff}
+.toast.show{display:flex;transform:translateY(0);opacity:1}
+.toast.ok{background:var(--ok)}.toast.er{background:var(--er)}.toast.in{background:var(--in)}
+.empty{text-align:center;padding:44px 20px;color:var(--mu)}
+.empty i{font-size:2.2rem;opacity:.25;display:block;margin-bottom:12px}
+.empty p{font-size:.88rem}
+@media(max-width:768px){.g2{grid-template-columns:1fr}.mf-row{grid-template-columns:1fr}}
+
+/* Calendar Widget Styles */
+.calendar-widget{font-family:'Outfit',sans-serif}
+.calendar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding:0 10px}
+.calendar-title{font-size:1.1rem;font-weight:600;color:var(--ink)}
+.calendar-nav{display:flex;gap:10px}
+.calendar-nav-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--bd);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mu);transition:all .2s;font-size:.9rem}
+.calendar-nav-btn:hover{border-color:var(--br);color:var(--br)}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.calendar-day-header{text-align:center;padding:8px 0;font-size:.75rem;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em}
+.calendar-day{text-align:center;padding:10px 0;font-size:.9rem;color:var(--ink);cursor:pointer;border-radius:6px;transition:background .2s;position:relative}
+.calendar-day:hover{background:var(--bg)}
+.calendar-day.today{background:var(--go);color:#fff;font-weight:600}
+.calendar-day.other-month{color:var(--mu);opacity:.5}
+.calendar-day.today::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#fff;border-radius:50%}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-icon">🦷</div>
+    <div class="sb-name">Guerrero Dental<span>Nurse Portal</span></div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sect">My Work</div>
+    <div class="sb-item active" onclick="show('dashboard')"><i class="fas fa-th-large"></i> Dashboard</div>
+    <div class="sb-item" onclick="show('inquiries')"><i class="fas fa-inbox"></i> Patient Inquiries<span class="sb-badge" id="inqBadge" style="display:none">0</span></div>
+    <div class="sb-sect">Clinical</div>
+    <div class="sb-item" onclick="show('appointments')"><i class="fas fa-calendar-check"></i> Appointments</div>
+    <div class="sb-item" onclick="show('patients')"><i class="fas fa-user-injured"></i> Patients</div>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-user">
+      <div class="sb-av" id="sbAv">N</div>
+      <div class="sb-uinfo"><strong id="sbName">Nurse</strong><span>nurse</span></div>
+      <button class="sb-logout" onclick="logout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </div>
+</aside>
+
+<header class="topbar">
+  <div class="tb-left">
+    <h1 id="pageTitle">Dashboard</h1>
+    <p>Nurse Portal · <span id="todayDate"></span></p>
+  </div>
+  <div class="tb-right">
+    <span class="role-chip">🩺 Nurse</span>
+    <div class="topbar-clock" id="topbarClock" aria-label="Current time">00:00:00</div>
+    <div style="position:relative">
+      <button class="topbar-btn" id="bellBtn" onclick="toggleNotif()" title="New Inquiries">
+        <i class="fas fa-bell"></i>
+        <span class="notif-dot" id="notifDot"></span>
+      </button>
+      <div class="notif-panel" id="notifPanel">
+        <div class="notif-hd">🔔 New Patient Inquiries</div>
+        <div class="notif-list" id="notifList"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- DASHBOARD -->
+<div class="section active" id="sec-dashboard">
+  <div class="stats-grid" id="statsGrid"></div>
+  
+  <!-- Calendar and Clock Widgets -->
+  <div class="g2" style="margin-bottom:22px">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">📅 Calendar</div>
+      </div>
+      <div class="card-body">
+        <div id="calendarWidget"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="g2">
+    <div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Today's Appointments</div><button class="btn btn-sec btn-sm" onclick="show('appointments')">View All</button></div>
+        <div class="card-body" id="todayAppts"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">New Inquiries</div><button class="btn btn-sec btn-sm" onclick="show('inquiries')">View All</button></div>
+        <div class="card-body" id="newInqList"></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Quick Actions</div></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn btn-sec" style="justify-content:center;width:100%" onclick="show('patients');setTimeout(()=>openPatModal(),100)"><i class="fas fa-user-injured"></i> Add Patient</button>
+          <button class="btn btn-br" style="justify-content:center;width:100%" onclick="show('inquiries')"><i class="fas fa-inbox"></i> View Inquiries</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INQUIRIES -->
+<div class="section" id="sec-inquiries">
+  <div class="toolbar">
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="inqSearch" placeholder="Search name, concern..." oninput="renderInquiries()"></div>
+    <select class="f-select" id="inqFilter" onchange="renderInquiries()">
+      <option value="all">All Status</option><option value="new">New</option>
+      <option value="in_review">In Review</option><option value="scheduled">Scheduled</option><option value="closed">Closed</option>
+    </select>
+    <select class="f-select" id="urgFilter" onchange="renderInquiries()">
+      <option value="all">All Urgency</option>
+      <option value="urgent">🔴 Urgent</option><option value="soon">🟡 Soon</option><option value="routine">🟢 Routine</option>
+    </select>
+    <button class="btn btn-br" onclick="scheduleSelectedInquiry()" title="Schedule selected inquiry"><i class="fas fa-calendar-plus"></i> Schedule</button>
+  </div>
+  <div id="inqList"></div>
+</div>
+
+<!-- APPOINTMENTS -->
+<div class="section" id="sec-appointments">
+  <div class="toolbar">
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="apptSearch" placeholder="Search patient..." oninput="renderAppts()"></div>
+    <select class="f-select" id="apptFilter" onchange="renderAppts()">
+      <option value="all">All</option><option value="scheduled">Scheduled</option>
+      <option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option>
+    </select>
+    <button class="btn btn-sm" id="deleteToggleBtn" onclick="toggleDeleteMode()" style="margin-left:10px;padding:8px 14px;font-size:.8rem;background:var(--ok);color:#fff;border:none;border-radius:6px;cursor:pointer"><i class="fas fa-trash"></i></button>
+    <div id="bulkActionBtns" style="display:none;margin-left:10px;display:flex;gap:8px">
+      <button class="btn btn-sm" onclick="selectAllAppts()" style="padding:8px 12px;font-size:.8rem;background:var(--ok);color:#fff;border:none;border-radius:6px;cursor:pointer">Select All</button>
+      <button class="btn btn-sm" onclick="deleteBulkAppts()" style="padding:8px 12px;font-size:.8rem;background:var(--er);color:#fff;border:none;border-radius:6px;cursor:pointer">Delete</button>
+      <button class="btn btn-sm" onclick="cancelDeleteMode()" style="padding:8px 12px;font-size:.8rem;background:var(--mu);color:#fff;border:none;border-radius:6px;cursor:pointer">Cancel</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div class="card-title">All Appointments</div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Patient</th><th>Type</th><th>Date</th><th>Time</th><th>Status</th></tr></thead><tbody id="apptTbody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- PATIENTS -->
+<div class="section" id="sec-patients">
+  <div class="toolbar">
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="patSearch" placeholder="Search patients..." oninput="renderPatients()"></div>
+    <select class="f-select" id="patFilter" onchange="renderPatients()">
+      <option value="all">All</option><option value="active">Active</option><option value="inactive">Inactive</option>
+    </select>
+    <button class="btn btn-br" onclick="openPatModal()"><i class="fas fa-plus"></i> Add Patient</button>
+  </div>
+  <div class="card">
+    <div class="card-head"><div class="card-title">Patient Records</div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Patient</th><th>ID</th><th>Phone</th><th>Last Visit</th><th>Status</th><th>Actions</th></tr></thead><tbody id="patTbody"></tbody></table></div>
+  </div>
+</div>
+
+</main>
+
+<!-- INQUIRY MODAL — with doctor display + email patient -->
+<div class="modal-overlay" id="inqModal">
+  <div class="modal-box" style="max-width:600px">
+    <div class="modal-head"><h3>Patient Inquiry</h3><button class="modal-close" onclick="closeM('inqModal')">&times;</button></div>
+    <div class="modal-body" id="inqModalBody"></div>
+    <div class="modal-foot">
+      <div style="flex:1"></div>
+      <button class="btn btn-sec" onclick="closeM('inqModal')">Cancel</button>
+      <button class="btn btn-br" onclick="saveAndConvert()"><i class="fas fa-user-check"></i> Save & Add to Patients</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- APPT MODAL -->
+<div class="modal-overlay" id="apptModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3><i class="fas fa-calendar-plus" style="color:var(--go);margin-right:7px"></i>Schedule Appointment</h3><button class="modal-close" onclick="closeM('apptModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="mf-group"><label class="mf-label">Patient *</label><select class="mf-input" id="am-pat"></select></div>
+      <div class="mf-row">
+        <div class="mf-group"><label class="mf-label">Service *</label>
+          <select class="mf-input" id="am-type">
+            <option value="">Select service</option>
+            <option>Regular Check-up</option><option>Teeth Cleaning</option><option>Dental Filling</option>
+            <option>Tooth Extraction</option><option>Teeth Whitening</option><option>Emergency</option>
+            <option>Orthodontic Consultation</option><option>Dental Implant Consultation</option>
+          </select>
+        </div>
+        <div class="mf-group"><label class="mf-label">Date *</label><input class="mf-input" type="date" id="am-date"></div>
+      </div>
+      <div class="mf-group"><label class="mf-label">Time *</label>
+        <select class="mf-input" id="am-time">
+          <option value="">Select time</option>
+          <option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option>
+          <option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option>
+          <option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option>
+          <option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option>
+          <option value="15:00">3:00 PM</option><option value="16:00">4:00 PM</option>
+        </select>
+      </div>
+      <div class="mf-group"><label class="mf-label">Notes</label><textarea class="mf-input" id="am-notes" rows="2"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-sec" onclick="closeM('apptModal')">Cancel</button>
+      <button class="btn btn-go" onclick="saveAppt()"><i class="fas fa-check"></i> Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="viewApptModal">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-head"><h3><i class="fas fa-user-injured" style="color:var(--go);margin-right:7px"></i>Appointment Details</h3><button class="modal-close" onclick="closeM('viewApptModal')">&times;</button></div>
+    <div class="modal-body" id="viewApptPatient"></div>
+    <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+      <div id="viewApptStatus"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-ok" onclick="confirmAppointment()"><i class="fas fa-check"></i> Confirm</button>
+        <button class="btn btn-sec" onclick="completeAppointment()"><i class="fas fa-check-double"></i> Complete</button>
+        <button class="btn btn-br" onclick="cancelAppointment()"><i class="fas fa-times"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PATIENT MODAL -->
+<div class="modal-overlay" id="patModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="patModalTitle">Add Patient</h3><button class="modal-close" onclick="closeM('patModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="mf-row">
+        <div class="mf-group"><label class="mf-label">Full Name *</label><input class="mf-input" id="pm-name" placeholder="Juan Dela Cruz"></div>
+        <div class="mf-group"><label class="mf-label">Phone *</label><input class="mf-input" id="pm-phone" placeholder="0917-000-0000"></div>
+      </div>
+      <div class="mf-row">
+        <div class="mf-group"><label class="mf-label">Email</label><input class="mf-input" id="pm-email" type="email"></div>
+        <div class="mf-group"><label class="mf-label">Date of Birth</label><input class="mf-input" id="pm-dob" type="date"></div>
+      </div>
+      <div class="mf-group"><label class="mf-label">Address</label><input class="mf-input" id="pm-address"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-sec" onclick="closeM('patModal')">Cancel</button>
+      <button class="btn btn-br" onclick="savePat()"><i class="fas fa-save"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i id="toastIco"></i><span id="toastMsg"></span></div>
+
+<script>
+const API='/api';
+let state={complaints:[],appointments:[],patients:[],currentInq:null,editingPat:null,selectedInquiryId:null,deleteMode:false,selectedApptIds:[],currentAppointment:null};
+
+function initStatCardTooltips(){
+  const statsGrid=document.getElementById('statsGrid');
+  if(!statsGrid||statsGrid.dataset.tooltipBound==='1') return;
+  statsGrid.dataset.tooltipBound='1';
+
+  statsGrid.addEventListener('click',(event)=>{
+    const card=event.target.closest('.stat-card[data-tooltip]');
+    if(!card) return;
+    const wasPinned=card.classList.contains('tooltip-pinned');
+    statsGrid.querySelectorAll('.stat-card.tooltip-pinned').forEach(c=>c.classList.remove('tooltip-pinned'));
+    if(!wasPinned) card.classList.add('tooltip-pinned');
+  });
+
+  statsGrid.addEventListener('keydown',(event)=>{
+    if(event.key!=='Enter'&&event.key!==' ') return;
+    const card=event.target.closest('.stat-card[data-tooltip]');
+    if(!card) return;
+    event.preventDefault();
+    card.click();
+  });
+
+  document.addEventListener('click',(event)=>{
+    if(statsGrid.contains(event.target)) return;
+    statsGrid.querySelectorAll('.stat-card.tooltip-pinned').forEach(c=>c.classList.remove('tooltip-pinned'));
+  });
+}
+
+window.onload=async()=>{
+  const role=sessionStorage.getItem('gd_role');
+  const name=sessionStorage.getItem('gd_name');
+  const token=sessionStorage.getItem('gd_token');
+  if(!token||!['nurse','admin','superadmin'].includes(role)){window.location.replace('/gd-admin/login');return}
+  document.getElementById('sbName').textContent=name||'Nurse';
+  document.getElementById('sbAv').textContent=(name||'N').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('am-date').min=new Date().toISOString().split('T')[0];
+  initStatCardTooltips();
+  await fetchAll();
+  // Live date and time for dashboard
+  function updateDateTime(){
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    const timeStr = now.toLocaleTimeString('en-PH',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    document.getElementById('todayDate').textContent=`${dateStr} · ${timeStr}`;
+    const topbarClock = document.getElementById('topbarClock');
+    if(topbarClock){ topbarClock.textContent = timeStr; }
+  }
+  updateDateTime();setInterval(updateDateTime,1000);
+  
+  // Initialize calendar widget
+  function initCalendar(){
+    const calendarEl = document.getElementById('calendarWidget');
+    if(!calendarEl) return;
+    
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const today = now.getDate();
+    
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    
+    let html = `
+      <div class="calendar-widget">
+        <div class="calendar-header">
+          <div class="calendar-title">${monthNames[month]} ${year}</div>
+        </div>
+        <div class="calendar-grid">
+    `;
+    
+    // Day headers
+    dayNames.forEach(day => {
+      html += `<div class="calendar-day-header">${day}</div>`;
+    });
+    
+    // Get first day of month and last day
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+    const prevLastDate = new Date(year, month, 0).getDate();
+    
+    // Previous month days
+    for(let i = firstDay - 1; i >= 0; i--){
+      html += `<div class="calendar-day other-month">${prevLastDate - i}</div>`;
+    }
+    
+    // Current month days
+    for(let date = 1; date <= lastDate; date++){
+      const isToday = date === today;
+      html += `<div class="calendar-day ${isToday ? 'today' : ''}">${date}</div>`;
+    }
+    
+    // Next month days to fill grid
+    const totalCells = Math.ceil((firstDay + lastDate) / 7) * 7;
+    const remainingCells = totalCells - (firstDay + lastDate);
+    for(let i = 1; i <= remainingCells; i++){
+      html += `<div class="calendar-day other-month">${i}</div>`;
+    }
+    
+    html += `
+        </div>
+      </div>
+    `;
+    
+    calendarEl.innerHTML = html;
+  }
+  
+  // Initialize widgets
+  initCalendar();
+  
+  // Auto-refresh inquiries every 30s
+  setInterval(async()=>{
+    try{
+      const r=await fetch(`${API}/complaints`,{headers:hdr()});
+      if(r.ok){const d=await r.json();if(Array.isArray(d)){const prev=state.complaints.filter(c=>c.status==='new').length;state.complaints=d;const curr=d.filter(c=>c.status==='new').length;if(curr>prev){toast(`🔔 ${curr-prev} new inquiry!`,'ok');}renderAll();}}
+    }catch{}
+  },30000);
+};
+
+const hdr=()=>({'Content-Type':'application/json','Authorization':`Bearer ${sessionStorage.getItem('gd_token')}`});
+
+async function fetchAll(){
+  try{
+    const [c,a,p]=await Promise.all([
+      fetch(`${API}/complaints`,{headers:hdr()}).then(r=>r.json()),
+      fetch(`${API}/appointments`,{headers:hdr()}).then(r=>r.json()),
+      fetch(`${API}/patients`,{headers:hdr()}).then(r=>r.json()),
+    ]);
+    state.complaints=Array.isArray(c)?c:[];
+    state.appointments=Array.isArray(a)?a:[];
+    state.patients=Array.isArray(p)?p:[];
+  }catch{toast('Cannot reach server.','er')}
+  renderAll();
+}
+
+function renderAll(){renderStats();renderTodayAppts();renderNewInq();renderRecentPats();renderStaffDuty();renderInquiries();renderAppts();renderPatients();populatePatSelect();renderNotifPanel();}
+
+function renderStats(){
+  const today=new Date().toISOString().split('T')[0];
+  const newInq=state.complaints.filter(c=>c.status==='new').length;
+  const todayA=state.appointments.filter(a=>a.date===today).length;
+  const urgentInq=state.complaints.filter(c=>c.urgency==='urgent'&&c.status==='new').length;
+  document.getElementById('statsGrid').innerHTML=`
+    <div class="stat-card" tabindex="0" role="button" data-tooltip="Counts patient inquiries that are still new and need triage."><div class="sc-head"><div><div class="sc-lbl">New Inquiries</div><div class="sc-num">${newInq}</div></div><div class="sc-icon ic-er"><i class="fas fa-inbox"></i></div></div><div class="sc-sub" style="color:${urgentInq>0?'var(--er)':'var(--mu)'}">⚡ ${urgentInq} urgent</div></div>
+    <div class="stat-card" tabindex="0" role="button" data-tooltip="Counts appointments booked specifically for today."><div class="sc-head"><div><div class="sc-lbl">Today's Appts</div><div class="sc-num">${todayA}</div></div><div class="sc-icon ic-go"><i class="fas fa-calendar-day"></i></div></div><div class="sc-sub">Scheduled for today</div></div>
+    <div class="stat-card" tabindex="0" role="button" data-tooltip="Shows how many patient records exist in total."><div class="sc-head"><div><div class="sc-lbl">Total Patients</div><div class="sc-num">${state.patients.length}</div></div><div class="sc-icon ic-br"><i class="fas fa-users"></i></div></div><div class="sc-sub">${state.patients.filter(p=>p.status==='active').length} active</div></div>
+    <div class="stat-card" tabindex="0" role="button" data-tooltip="Shows the number of upcoming appointments from today onward."><div class="sc-head"><div><div class="sc-lbl">Upcoming</div><div class="sc-num">${state.appointments.filter(a=>a.date>=today).length}</div></div><div class="sc-icon ic-ok"><i class="fas fa-calendar-check"></i></div></div><div class="sc-sub">Next appointments</div></div>`;
+  const nb=state.complaints.filter(c=>c.status==='new').length;
+  const badge=document.getElementById('inqBadge');
+  badge.textContent=nb;badge.style.display=nb?'':'none';
+  document.getElementById('notifDot').style.display=nb?'flex':'none';
+}
+
+function renderTodayAppts(){
+  const today=new Date().toISOString().split('T')[0];
+  const list=state.appointments.filter(a=>a.date===today);
+  const el=document.getElementById('todayAppts');
+  if(!list.length){el.innerHTML='<div class="empty"><i class="fas fa-calendar-times"></i><p>No appointments today</p></div>';return}
+  el.innerHTML=list.slice(0,4).map(a=>{const[h,m]=a.time.split(':');const hr=parseInt(h);return`<div class="appt-row"><div class="appt-time"><div class="t">${hr>12?hr-12:hr}:${m}</div><div class="am">${hr>=12?'PM':'AM'}</div></div><div class="appt-inf"><h4>${a.patientName}</h4><p>${a.type}</p></div>${sbadge(a.status)}</div>`;}).join('');
+}
+
+function renderNewInq(){
+  const el=document.getElementById('newInqList');
+  const list=state.complaints.filter(c=>c.status==='new').slice(0,4);
+  if(!list.length){el.innerHTML='<div class="empty"><i class="fas fa-check-circle"></i><p>All inquiries handled</p></div>';return}
+  el.innerHTML=list.map(c=>`<div style="padding:10px 0;border-bottom:1px solid var(--bd);cursor:pointer" onclick="viewInquiry(${c.id})"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:600;font-size:.88rem">${c.name}</div>${urgBadge(c.urgency)}</div><div style="font-size:.79rem;color:var(--mu);margin-top:3px">${c.concern||'—'}</div></div>`).join('');
+}
+
+function renderRecentPats(){
+  const el=document.getElementById('recentPatList');if(!el)return;
+  const list=state.patients.slice(0,4);
+  if(!list.length){el.innerHTML='<div class="empty"><i class="fas fa-users"></i><p>No patients yet</p></div>';return}
+  el.innerHTML=list.map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)"><div class="av">${ini(p.name)}</div><div style="flex:1;min-width:0"><div style="font-size:.84rem;font-weight:600">${p.name}</div><div style="font-size:.72rem;color:var(--mu)">${p.patientId}·${p.phone||'—'}</div></div><span style="font-size:.7rem;padding:2px 7px;border-radius:20px;background:${p.status==='active'?'#D8F3DC':'#F0F0F0'};color:${p.status==='active'?'#2D6A4F':'#999'}">${p.status}</span></div>`).join('');
+}
+
+function renderStaffDuty(){
+  const el=document.getElementById('staffDutyList');if(!el)return;
+  // Show clinic staff info - this nurse can see the duty schedule
+  const now=new Date();const day=now.getDay();const hr=now.getHours();
+  const isOpen=(day>0&&day<6&&hr>=8&&hr<18)||(day===6&&hr>=9&&hr<14);
+  const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid var(--bd)">
+      <div style="width:10px;height:10px;border-radius:50%;background:${isOpen?'#52B788':'#EF4444'};flex-shrink:0"></div>
+      <div><div style="font-size:.85rem;font-weight:600">Clinic ${isOpen?'Open':'Closed'}</div>
+      <div style="font-size:.72rem;color:var(--mu)">${dayNames[day]} · ${now.toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit'})}</div></div>
+    </div>
+    <div style="padding:8px 0;font-size:.78rem;color:var(--mu);line-height:1.7">
+      <div>Mon–Fri <strong style="color:var(--ink)">8:00 AM – 6:00 PM</strong></div>
+      <div>Saturday <strong style="color:var(--ink)">9:00 AM – 2:00 PM</strong></div>
+      <div>Sunday <strong style="color:#EF4444">Closed</strong></div>
+    </div>
+    <div style="padding:8px 0;border-top:1px solid var(--bd)">
+      <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin-bottom:6px">Doctors on duty</div>
+      <div style="font-size:.82rem;display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:26px;height:26px;font-size:.65rem;background:var(--go)">BG</div><div><div style="font-weight:600">Dr. Bambina Guerrero</div><div style="font-size:.68rem;color:var(--mu)">General & Cosmetic</div></div></div>
+        <div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:26px;height:26px;font-size:.65rem;background:#7B5EA7">CR</div><div><div style="font-weight:600">Dr. Carlos Reyes</div><div style="font-size:.68rem;color:var(--mu)">Orthodontics</div></div></div>
+        <div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:26px;height:26px;font-size:.65rem;background:#2D6A4F">LS</div><div><div style="font-weight:600">Dr. Lena Santos</div><div style="font-size:.68rem;color:var(--mu)">Pediatric & Implants</div></div></div>
+      </div>
+    </div>`;
+}
+
+// ── BELL NOTIFICATION PANEL ──
+function toggleNotif(){
+  const panel=document.getElementById('notifPanel');
+  panel.classList.toggle('open');
+}
+function renderNotifPanel(){
+  const list=state.complaints.filter(c=>c.status==='new');
+  const el=document.getElementById('notifList');
+  if(!list.length){el.innerHTML='<div class="notif-empty">✅ No new inquiries</div>';return}
+  el.innerHTML=list.map(c=>`
+    <div class="notif-item" onclick="openNotifInq(${c.id})">
+      <div class="ni-name">${c.name}</div>
+      <div class="ni-concern">${c.concern||'General Inquiry'}</div>
+      <div class="ni-meta">${urgBadge(c.urgency)} · ${fmtDt(c.createdAt)}</div>
+    </div>`).join('');
+}
+function openNotifInq(id){
+  document.getElementById('notifPanel').classList.remove('open');
+  show('inquiries');
+  setTimeout(()=>viewInquiry(id),150);
+}
+document.addEventListener('click',e=>{
+  const panel=document.getElementById('notifPanel');
+  const btn=document.getElementById('bellBtn');
+  if(panel&&btn&&!panel.contains(e.target)&&!btn.contains(e.target))panel.classList.remove('open');
+});
+
+// ── INQUIRIES ──
+function renderInquiries(){
+  const q=(document.getElementById('inqSearch').value||'').toLowerCase();
+  const st=document.getElementById('inqFilter').value;
+  const urg=document.getElementById('urgFilter').value;
+  let list=state.complaints.filter(c=>(st==='all'||c.status===st)&&(urg==='all'||c.urgency===urg)&&(c.name.toLowerCase().includes(q)||(c.concern||'').toLowerCase().includes(q)||(c.phone||'').includes(q)));
+  const el=document.getElementById('inqList');
+  if(!list.length){el.innerHTML='<div class="empty"><i class="fas fa-inbox"></i><p>No inquiries found</p></div>';return}
+  el.innerHTML=list.map(c=>{
+    const selected = state.selectedInquiryId===c.id;
+    return `
+    <div class="cc ${c.urgency}" style="cursor:pointer;${selected?'border-color:var(--ok);box-shadow:0 0 0 2px rgba(46,125,50,.12);background:rgba(72,187,120,.06);':''}" onclick="selectInquiry(${c.id})">
+      <div class="cc-head">
+        <div><div class="cc-name">${c.name}</div><div class="cc-meta">${c.phone||''}${c.email?' · '+c.email:''} · ${fmtDt(c.createdAt)}</div></div>
+        <div style="display:flex;gap:7px;align-items:center">
+          ${urgBadge(c.urgency)} ${sbadge(c.status)}${selected?'<span style="padding:3px 9px;border-radius:99px;font-size:.7rem;font-weight:600;background:var(--br);color:#fff">Selected</span>':''}
+        </div>
+      </div>
+      <div class="cc-concern"><strong>${c.concern||'General Inquiry'}</strong></div>
+      ${c.description?`<div class="cc-desc">${c.description}</div>`:''}
+      ${c.assignedDoctor?`<div style="font-size:.8rem;color:var(--ok);margin-bottom:8px"><i class="fas fa-user-md"></i> Doctor: <strong>${c.assignedDoctor}</strong></div>`:''}
+      <div class="cc-foot">
+        <div style="display:flex;gap:10px;font-size:.76rem;color:var(--mu)">
+          ${c.preferredDate?`<span>📅 ${c.preferredDate}</span>`:''}
+          ${c.preferredTime?`<span>🕐 ${c.preferredTime}</span>`:''}
+        </div>
+        <div style="display:flex;gap:7px">
+          <button class="btn btn-br btn-sm" onclick="event.stopPropagation();viewInquiry(${c.id})"><i class="fas fa-edit"></i> Update</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectInquiry(id){
+  state.selectedInquiryId = id;
+  renderInquiries();
+}
+
+function viewInquiry(id){
+  const c=state.complaints.find(x=>x.id===id);if(!c)return;
+  state.currentInq=c;
+  document.getElementById('inqModalBody').innerHTML=`
+    <div style="background:var(--bg);border-radius:10px;padding:16px 18px;margin-bottom:18px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:3px">Patient Name</div><div style="font-weight:600">${c.name}</div></div>
+        <div><div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:3px">Phone</div><div>${c.phone||'—'}</div></div>
+        <div><div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:3px">Email</div><div>${c.email||'—'}</div></div>
+        <div><div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:3px">Urgency</div>${urgBadge(c.urgency)}</div>
+        <div><div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:3px">Concern</div><div>${c.concern||'—'}</div></div>
+        <div><div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:3px">Preferred Date</div><div>${c.preferredDate||'—'}</div></div>
+      </div>
+      ${c.description?`<div style="margin-top:12px"><div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:5px">Patient Description</div><div style="font-size:.85rem;line-height:1.6">${c.description}</div></div>`:''}
+      ${c.assignedDoctor?`<div style="margin-top:12px;padding:9px 12px;background:var(--okb);border-radius:8px;font-size:.83rem;color:var(--ok)"><i class="fas fa-user-md"></i> <strong>Assigned Doctor:</strong> ${c.assignedDoctor}</div>`:'<div style="margin-top:12px;padding:9px 12px;background:#FFF3CD;border-radius:8px;font-size:.83rem;color:var(--wa)"><i class="fas fa-clock"></i> No doctor assigned yet — waiting for assignment</div>'}
+    </div>
+    <div class="mf-group">
+      <label class="mf-label">Update Status</label>
+      <select class="mf-input" id="inq-status">
+        <option value="new" ${c.status==='new'?'selected':''}>New</option>
+        <option value="in_review" ${c.status==='in_review'?'selected':''}>In Review</option>
+        <option value="scheduled" ${c.status==='scheduled'?'selected':''}>Scheduled</option>
+        <option value="closed" ${c.status==='closed'?'selected':''}>Closed</option>
+      </select>
+    </div>
+    <div class="mf-group">
+      <label class="mf-label">Staff Notes</label>
+      <textarea class="mf-input" id="inq-notes" rows="3" placeholder="e.g. Called patient, confirmed for Thursday 10am">${c.staffNotes||''}</textarea>
+    </div>`;
+  openM('inqModal');
+}
+
+async function saveInquiry(){
+  const c=state.currentInq;if(!c)return;
+  const payload={status:document.getElementById('inq-status').value,staffNotes:document.getElementById('inq-notes').value};
+  try{
+    const res=await fetch(`${API}/complaints/${c.id}`,{method:'PUT',headers:hdr(),body:JSON.stringify(payload)});
+    const data=await res.json();
+    const idx=state.complaints.findIndex(x=>x.id===c.id);if(idx>-1)state.complaints[idx]=data;
+    closeM('inqModal');renderAll();toast('Inquiry updated','ok');
+  }catch{toast('Failed to save.','er')}
+}
+
+async function saveAndConvert(){
+  const c=state.currentInq;if(!c)return;
+  // First save inquiry status/notes
+  const payload={
+    status:document.getElementById('inq-status').value,
+    staffNotes:document.getElementById('inq-notes').value
+  };
+  try{
+    const r=await fetch(`${API}/complaints/${c.id}`,{method:'PUT',headers:hdr(),body:JSON.stringify(payload)});
+    const d=await r.json();
+    const idx=state.complaints.findIndex(x=>x.id===c.id);if(idx>-1)state.complaints[idx]=d;
+  }catch{}
+  // Then open the convert modal
+  closeM('inqModal');
+  openConvertModal();
+}
+
+function findPatientForInquiry(c){
+  const phone=(c.phone||'').trim();
+  const email=(c.email||'').trim().toLowerCase();
+  const name=(c.name||'').trim().toLowerCase();
+  return state.patients.find(p=>phone && (p.phone||'').trim()===phone)
+      || state.patients.find(p=>email && (p.email||'').trim().toLowerCase()===email)
+      || state.patients.find(p=>name && (p.name||'').trim().toLowerCase()===name);
+}
+
+function guessServiceType(text){
+  const t=(text||'').toLowerCase();
+  if(/check/.test(t))return 'Regular Check-up';
+  if(/clean/.test(t))return 'Teeth Cleaning';
+  if(/fill|cavity/.test(t))return 'Dental Filling';
+  if(/extract|wisdom/.test(t))return 'Tooth Extraction';
+  if(/whiten/.test(t))return 'Teeth Whitening';
+  if(/ortho|braces|orthodontic/.test(t))return 'Orthodontic Consultation';
+  if(/implant/.test(t))return 'Dental Implant Consultation';
+  if(/emerg|urgent|pain/.test(t))return 'Emergency';
+  return '';
+}
+
+async function ensureInquiryPatient(c){
+  let patient=findPatientForInquiry(c);
+  if(patient) return patient;
+  if(!c.phone){toast('Inquiry needs a phone number to create a patient.','er');return null;}
+  try{
+    const res=await fetch(`${API}/patients`,{method:'POST',headers:hdr(),body:JSON.stringify({name:c.name,phone:c.phone,email:c.email||'',dob:'',address:c.address||''})});
+    const data=await res.json();
+    if(!res.ok){toast(data.message||'Unable to create patient from inquiry','er');return null;}
+    state.patients.unshift(data);
+    return data;
+  }catch(e){console.error(e);toast('Failed to create patient from inquiry','er');return null;}
+}
+
+async function quickSchedule(cid){
+  const c=state.complaints.find(x=>x.id===cid);if(!c)return;
+  const patient = await ensureInquiryPatient(c);
+  if(!patient) return;
+  populatePatSelect();
+  document.getElementById('am-pat').value = patient.id;
+  document.getElementById('am-type').value = guessServiceType(c.concern || c.description || '') || '';
+  document.getElementById('am-date').value = c.preferredDate || '';
+  document.getElementById('am-time').value = '';
+  document.getElementById('am-notes').value = c.description || '';
+  openM('apptModal');
+}
+
+async function scheduleSelectedInquiry(){
+  const q=(document.getElementById('inqSearch').value||'').toLowerCase();
+  const st=document.getElementById('inqFilter').value;
+  const urg=document.getElementById('urgFilter').value;
+  const selectedId = state.selectedInquiryId;
+  const filtered = state.complaints.filter(c=>(st==='all'||c.status===st)&&(urg==='all'||c.urgency===urg)&&(c.name.toLowerCase().includes(q)||(c.concern||'').toLowerCase().includes(q)||(c.phone||'').includes(q)));
+  let selected = filtered.find(c=>c.id===selectedId);
+  if(!selected && filtered.length){
+    selected = filtered[0];
+    state.selectedInquiryId = selected.id;
+    toast('No inquiry selected, using the first visible inquiry.','in');
+    renderInquiries();
+  }
+  if(selected){await quickSchedule(selected.id);return}
+  toast('No inquiries to schedule','er');
+}
+
+// ── APPOINTMENTS ──
+function renderAppts(){
+  const q=(document.getElementById('apptSearch').value||'').toLowerCase();
+  const st=document.getElementById('apptFilter').value;
+  const list=state.appointments.filter(a=>(st==='all'||a.status===st)&&a.patientName.toLowerCase().includes(q));
+  document.getElementById('apptTbody').innerHTML=list.map(a=>`<tr style="cursor:pointer;${state.deleteMode?'background:var(--bg)':''}" onclick="${state.deleteMode?`toggleApptCheckbox(${a.id})`:` viewAppointment(${a.id})`}"><td>${state.deleteMode?`<input type="checkbox" id="appt-check-${a.id}" style="margin-right:10px" onchange="(event)=>event.stopPropagation()">`:''}<div class="p-cell"><div class="av">${ini(a.patientName)}</div><span>${a.patientName}</span></div></td><td>${a.type}</td><td>${fmtD(a.date)}</td><td>${fmtT(a.time)}</td><td>${sbadge(a.status)}</td></tr>`).join('');
+  document.getElementById('bulkActionBtns').style.display=state.deleteMode?'flex':'none';
+}
+
+async function saveAppt(){
+  const pid=document.getElementById('am-pat').value,type=document.getElementById('am-type').value,date=document.getElementById('am-date').value,time=document.getElementById('am-time').value;
+  if(!pid||!type||!date||!time){toast('Fill all required fields','er');return}
+  try{
+    const res=await fetch(`${API}/appointments`,{method:'POST',headers:hdr(),body:JSON.stringify({patientId:parseInt(pid),type,date,time,notes:document.getElementById('am-notes').value})});
+    const data=await res.json();state.appointments.unshift(data);closeM('apptModal');renderAll();toast('Appointment scheduled!','ok');
+    ['am-type','am-date','am-time','am-notes'].forEach(id=>document.getElementById(id).value='');
+  }catch{toast('Failed','er')}
+}
+
+async function setApptSt(id,status){
+  try{const res=await fetch(`${API}/appointments/${id}`,{method:'PUT',headers:hdr(),body:JSON.stringify({status})});const data=await res.json();const i=state.appointments.findIndex(a=>a.id===id);if(i>-1)state.appointments[i]=data;renderAll();toast(`Marked as ${status}`,'ok');}catch{toast('Update failed','er')}
+}
+
+// ── PATIENTS ──
+function renderPatients(){
+  const q=(document.getElementById('patSearch').value||'').toLowerCase();
+  const st=document.getElementById('patFilter').value;
+  const list=state.patients.filter(p=>(st==='all'||p.status===st)&&(p.name.toLowerCase().includes(q)||(p.phone||'').includes(q)));
+  document.getElementById('patTbody').innerHTML=list.map(p=>`<tr><td><div class="p-cell"><div class="av">${ini(p.name)}</div><div><div style="font-weight:600">${p.name}</div><div style="font-size:.76rem;color:var(--mu)">${p.email||''}</div></div></div></td><td style="color:var(--mu);font-size:.79rem">${p.patientId}</td><td style="font-size:.83rem">${p.phone||'—'}</td><td style="font-size:.79rem;color:var(--mu)">${p.lastVisit?fmtD(p.lastVisit):'—'}</td><td>${sbadge(p.status)}</td><td><div class="act-row"><button class="act-btn" onclick="editPat(${p.id})" title="Edit"><i class="fas fa-edit"></i></button></div></td></tr>`).join('');
+}
+
+function openPatModal(){state.editingPat=null;document.getElementById('patModalTitle').textContent='Add Patient';['pm-name','pm-phone','pm-email','pm-address'].forEach(id=>document.getElementById(id).value='');document.getElementById('pm-dob').value='';openM('patModal');}
+function editPat(id){const p=state.patients.find(x=>x.id===id);if(!p)return;state.editingPat=id;document.getElementById('patModalTitle').textContent='Edit Patient';document.getElementById('pm-name').value=p.name||'';document.getElementById('pm-phone').value=p.phone||'';document.getElementById('pm-email').value=p.email||'';document.getElementById('pm-dob').value=p.dob||'';document.getElementById('pm-address').value=p.address||'';openM('patModal');}
+
+async function savePat(){
+  const name=document.getElementById('pm-name').value.trim();const phone=document.getElementById('pm-phone').value.trim();
+  if(!name||!phone){toast('Name and phone required','er');return}
+  const payload={name,phone,email:document.getElementById('pm-email').value,dob:document.getElementById('pm-dob').value,address:document.getElementById('pm-address').value};
+  try{
+    let res,data;
+    if(state.editingPat){res=await fetch(`${API}/patients/${state.editingPat}`,{method:'PUT',headers:hdr(),body:JSON.stringify(payload)});data=await res.json();const i=state.patients.findIndex(x=>x.id===state.editingPat);if(i>-1)state.patients[i]=data;toast(`${name} updated!`,'ok');}
+    else{res=await fetch(`${API}/patients`,{method:'POST',headers:hdr(),body:JSON.stringify(payload)});data=await res.json();state.patients.unshift(data);toast(`${name} added!`,'ok');}
+    closeM('patModal');renderAll();
+  }catch{toast('Failed to save','er')}
+}
+function schedForPat(id){document.getElementById('am-pat').value=id;populatePatSelect();openM('apptModal');}
+
+// ── HELPERS ──
+function populatePatSelect(){const el=document.getElementById('am-pat'),cur=el.value;el.innerHTML='<option value="">Select patient</option>'+state.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');if(cur)el.value=cur;}
+function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('active'));document.getElementById('sec-'+id).classList.add('active');const map={dashboard:0,inquiries:1,appointments:2,patients:3};const items=document.querySelectorAll('.sb-item');if(items[map[id]])items[map[id]].classList.add('active');const titles={dashboard:'Dashboard',inquiries:'Patient Inquiries',appointments:'Appointments',patients:'Patient Records'};document.getElementById('pageTitle').textContent=titles[id]||id;if(id==='inquiries')renderInquiries();if(id==='appointments'){populatePatSelect();renderAppts()}if(id==='patients'){populatePatSelect();renderPatients()};}
+function openM(id){document.body.classList.add('modal-active');document.getElementById(id).classList.add('open')}
+function closeM(id){document.body.classList.remove('modal-active');document.getElementById(id).classList.remove('open')}
+function openApptModal(){populatePatSelect();openM('apptModal')}
+
+function viewAppointment(id){
+  const a=state.appointments.find(x=>x.id===id);if(!a)return;
+  state.currentAppointment=a;
+  const patient = state.patients.find(p=>p.id===a.patientId) || {name:a.patientName,email:'N/A',phone:'N/A',dob:'N/A',address:'N/A'};
+  document.getElementById('viewApptPatient').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><div style="font-size:.75rem;color:var(--mu);margin-bottom:4px">Patient</div><strong>${patient.name}</strong></div>
+      <div><div style="font-size:.75rem;color:var(--mu);margin-bottom:4px">Phone</div><div>${patient.phone||'N/A'}</div></div>
+      <div><div style="font-size:.75rem;color:var(--mu);margin-bottom:4px">Email</div><div>${patient.email||'N/A'}</div></div>
+      <div><div style="font-size:.75rem;color:var(--mu);margin-bottom:4px">Patient ID</div><div>${patient.patientId||'N/A'}</div></div>
+      <div><div style="font-size:.75rem;color:var(--mu);margin-bottom:4px">Date</div><div>${fmtD(a.date)}</div></div>
+      <div><div style="font-size:.75rem;color:var(--mu);margin-bottom:4px">Time</div><div>${fmtT(a.time)}</div></div>
+      <div><div style="font-size:.75rem;color:var(--mu);margin-bottom:4px">Service</div><div>${a.type||'N/A'}</div></div>
+      <div><div style="font-size:.75rem;color:var(--mu);margin-bottom:4px">Doctor</div><div>${a.doctor||a.assignedDoctor||'N/A'}</div></div>
+    </div>
+    ${a.notes?`<div style="margin-top:14px;font-size:.86rem;color:var(--mu)"><strong>Notes:</strong><div style="margin-top:6px;line-height:1.5">${a.notes}</div></div>`:''}
+  `;
+  document.getElementById('viewApptStatus').innerHTML = `${sbadge(a.status)}`;
+  openM('viewApptModal');
+}
+
+
+function confirmAppointment(){
+  if(!state.currentAppointment)return;
+  setApptSt(state.currentAppointment.id,'confirmed');
+  closeM('viewApptModal');
+}
+
+function completeAppointment(){
+  if(!state.currentAppointment)return;
+  setApptSt(state.currentAppointment.id,'completed');
+  closeM('viewApptModal');
+}
+
+function cancelAppointment(){
+  if(!state.currentAppointment)return;
+  setApptSt(state.currentAppointment.id,'cancelled');
+  closeM('viewApptModal');
+}
+
+function toggleDeleteMode(){
+  state.deleteMode=!state.deleteMode;
+  state.selectedApptIds=[];
+  if(state.deleteMode){
+    renderAppts();
+  }else{
+    cancelDeleteMode();
+  }
+}
+
+function cancelDeleteMode(){
+  state.deleteMode=false;
+  state.selectedApptIds=[];
+  renderAppts();
+}
+
+function toggleApptCheckbox(id){
+  const idx=state.selectedApptIds.indexOf(id);
+  if(idx>-1){
+    state.selectedApptIds.splice(idx,1);
+  }else{
+    state.selectedApptIds.push(id);
+  }
+  document.getElementById(`appt-check-${id}`).checked=state.selectedApptIds.includes(id);
+}
+
+function selectAllAppts(){
+  const q=(document.getElementById('apptSearch').value||'').toLowerCase();
+  const st=document.getElementById('apptFilter').value;
+  const list=state.appointments.filter(a=>(st==='all'||a.status===st)&&a.patientName.toLowerCase().includes(q));
+  state.selectedApptIds=list.map(a=>a.id);
+  renderAppts();
+  list.forEach(a=>{
+    const chk=document.getElementById(`appt-check-${a.id}`);
+    if(chk)chk.checked=true;
+  });
+}
+
+async function deleteBulkAppts(){
+  if(!state.selectedApptIds.length){toast('Select appointments to delete','er');return}
+  if(!confirm(`Delete ${state.selectedApptIds.length} appointment(s)?`))return;
+  try{
+    for(const id of state.selectedApptIds){
+      await fetch(`${API}/appointments/${id}`,{method:'DELETE',headers:hdr()});
+    }
+    state.appointments=state.appointments.filter(a=>!state.selectedApptIds.includes(a.id));
+    state.selectedApptIds=[];
+    state.deleteMode=false;
+    renderAll();
+    toast(`${state.selectedApptIds.length} appointment(s) deleted`,'ok');
+  }catch{toast('Delete failed','er')}
+}
+
+
+function logout(){
+  if(!confirm('Sign out?'))return;
+  sessionStorage.removeItem('gd_token');
+  sessionStorage.removeItem('gd_name');
+  sessionStorage.removeItem('gd_email');
+  sessionStorage.removeItem('gd_role');
+  sessionStorage.removeItem('gd_id');
+  window.location.replace('/gd-admin/login');
+}
+function ini(n){return(n||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function fmtD(d){return d?new Date(d+'T00:00:00').toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'}):'—'}
+function fmtDt(d){return d?new Date(d).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'}):'—'}
+function fmtT(t){if(!t)return'—';const[h,m]=t.split(':');const hr=parseInt(h);return`${hr>12?hr-12:hr}:${m} ${hr>=12?'PM':'AM'}`}
+function sbadge(s){const map={active:'bg-ok',inactive:'bg-gy',scheduled:'bg-in',confirmed:'bg-ok',completed:'bg-gy',cancelled:'bg-er',new:'bg-er',in_review:'bg-wa',closed:'bg-gy'};return`<span class="badge ${map[s]||'bg-gy'}">${s.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase())}</span>`;}
+function urgBadge(u){const map={urgent:'bg-er',soon:'bg-wa',routine:'bg-ok'};const icons={urgent:'🔴',soon:'🟡',routine:'🟢'};return`<span class="badge ${map[u]||'bg-gy'}">${icons[u]||''} ${(u||'').replace(/\b\w/g,c=>c.toUpperCase())}</span>`;}
+function toast(msg,type='ok'){const el=document.getElementById('toast');const icons={ok:'fas fa-check-circle',er:'fas fa-exclamation-circle',in:'fas fa-info-circle'};el.style.background=type==='ok'?'var(--ok)':type==='er'?'var(--er)':'var(--in)';el.className='toast '+type;document.getElementById('toastIco').className=icons[type]||icons.ok;document.getElementById('toastMsg').textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3500);}
+
+function openConvertModal(){
+  const c=state.currentInq;if(!c)return;
+  document.getElementById('convertPatInfo').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><div style="font-size:.65rem;text-transform:uppercase;color:var(--mu);margin-bottom:2px">Name</div><strong>${c.name}</strong></div>
+      <div><div style="font-size:.65rem;text-transform:uppercase;color:var(--mu);margin-bottom:2px">Phone</div>${c.phone||'—'}</div>
+      <div><div style="font-size:.65rem;text-transform:uppercase;color:var(--mu);margin-bottom:2px">Email</div>${c.email||'—'}</div>
+      <div><div style="font-size:.65rem;text-transform:uppercase;color:var(--mu);margin-bottom:2px">Concern</div>${c.concern||'—'}</div>
+    </div>`;
+  if(c.preferredDate)document.getElementById('cv-date').value=c.preferredDate;
+  document.getElementById('cv-type').value=c.concern||'';
+  closeM('inqModal');
+  openM('convertModal');
+}
+
+async function doConvert(){
+  const c=state.currentInq;if(!c)return;
+  const type=document.getElementById('cv-type').value;
+  const date=document.getElementById('cv-date').value;
+  const time=document.getElementById('cv-time').value;
+  // Show loading
+  const btn=document.getElementById('cvConfirmBtn');
+  const origHtml=btn.innerHTML;
+  btn.disabled=true;
+  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Creating…';
+  // Remove any prior error
+  const errEl=document.getElementById('cvError');if(errEl)errEl.remove();
+  try{
+    const payload={};
+    // Only schedule appointment if type is selected
+    if(type){
+      payload.schedule_appointment=true;
+      payload.appointment_type=type;
+      payload.appointment_date=date;
+      payload.appointment_time=time;
+    }
+    const res=await fetch(`${API}/complaints/${c.id}/convert`,{
+      method:'POST',headers:hdr(),
+      body:JSON.stringify(payload)
+    });
+    const data=await res.json();
+    if(!res.ok){
+      // Show inline error
+      const err=document.createElement('div');
+      err.id='cvError';
+      err.style.cssText='background:#FEF2F2;border:1px solid #FCA5A5;color:#C0392B;padding:9px 13px;border-radius:8px;font-size:.8rem;margin:0 0 8px';
+      err.innerHTML='<i class="fas fa-exclamation-circle"></i> '+(data.message||'Conversion failed. Please try again.');
+      btn.parentNode.insertBefore(err,btn.parentNode.firstChild);
+      btn.disabled=false;btn.innerHTML=origHtml;
+      return;
+    }
+    // Success — update local state
+    const pi=state.complaints.findIndex(x=>x.id===c.id);
+    if(pi>-1)state.complaints[pi]=data.inquiry;
+    if(data.patient&&!state.patients.find(p=>p.id===data.patient.id))
+      state.patients.unshift(data.patient);
+    if(data.appointment)state.appointments.unshift(data.appointment);
+    closeM('convertModal');
+    renderAll();
+    toast(`✅ ${c.name} added to patients${data.appointment?' & appointment scheduled':''}!`,'ok');
+    // Auto-navigate to patients
+    setTimeout(()=>show('patients'), 600);
+  }catch(e){
+    console.error('Convert error:',e);
+    toast('Server error — check console','er');
+  }finally{
+    btn.disabled=false;btn.innerHTML=origHtml;
+  }
+}
+
+
+</script>
+
+<!-- CONVERT INQUIRY TO PATIENT + APPOINTMENT MODAL -->
+<div class="modal-overlay" id="convertModal">
+  <div class="modal-box" style="max-width:500px">
+    <div class="modal-head">
+      <h3><i class="fas fa-user-check" style="color:var(--ok);margin-right:7px"></i>Add to Patients & Schedule</h3>
+      <button class="modal-close" onclick="closeM('convertModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--okb);border:1px solid rgba(45,106,79,.2);border-radius:9px;padding:11px 14px;font-size:.81rem;color:var(--ok);margin-bottom:18px">
+        <strong><i class="fas fa-info-circle"></i> This will:</strong> Create a patient record from this inquiry and optionally schedule an appointment.
+      </div>
+      <div id="convertPatInfo" style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.85rem"></div>
+      <div class="mf-group">
+        <label class="mf-label">Schedule Appointment? (optional)</label>
+        <select class="mf-input" id="cv-type">
+          <option value="">— No appointment —</option>
+          <option>Regular Check-up</option><option>Teeth Cleaning</option><option>Dental Filling</option>
+          <option>Tooth Extraction</option><option>Teeth Whitening</option><option>Emergency</option>
+          <option>Orthodontic Consultation</option><option>Dental Implant Consultation</option>
+        </select>
+      </div>
+      <div class="mf-row">
+        <div class="mf-group"><label class="mf-label">Date</label><input class="mf-input" type="date" id="cv-date"></div>
+        <div class="mf-group"><label class="mf-label">Time</label>
+          <select class="mf-input" id="cv-time">
+            <option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option>
+            <option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option>
+            <option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option>
+            <option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option>
+            <option value="15:00">3:00 PM</option><option value="16:00">4:00 PM</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-sec" onclick="closeM('convertModal')">Cancel</button>
+      <button class="btn btn-ok" id="cvConfirmBtn" onclick="doConvert()"><i class="fas fa-check"></i> Create Patient Record</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

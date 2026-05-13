@@ -1,0 +1,2478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Guerrero Dental Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --brown: #7C3D12;
+            --brown-light: #A0522D;
+            --gold: #C9933C;
+            --gold-pale: #F5E6C8;
+            --cream: #FAF6F0;
+            --bg: #F3EDE4;
+            --ink: #1A1209;
+            --muted: #8A7A6A;
+            --border: #E5DDD3;
+            --white: #FFFFFF;
+            --success: #2D6A4F;
+            --success-bg: #D8F3DC;
+            --warning: #9C6A00;
+            --warning-bg: #FFF3CD;
+            --error: #C0392B;
+            --error-bg: #FDECEA;
+            --info: #1A5276;
+            --info-bg: #D6EAF8;
+            --sidebar-width: 260px;
+            --topbar-height: 65px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: #1A0D04;
+            height: 100vh;
+            position: fixed; left: 0; top: 0;
+            display: flex; flex-direction: column;
+            z-index: 200;
+            overflow: hidden;
+        }
+
+        .sidebar-brand {
+            padding: 22px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex; align-items: center; gap: 12px;
+        }
+
+        .brand-icon {
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, var(--gold), var(--brown-light));
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .brand-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .brand-text { font-family: 'Playfair Display', serif; color: var(--gold-pale); font-size: 1.05rem; line-height: 1.2; }
+        .brand-text span { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 300; color: #5C4A38; letter-spacing: 0.1em; text-transform: uppercase; }
+
+        .sidebar-nav { flex: 1; padding: 20px 0; overflow-y: auto; }
+
+        .nav-section-label {
+            padding: 6px 24px 8px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #3D2817;
+            margin-top: 10px;
+        }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 24px;
+            color: #7A5C3E;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .nav-item:hover { color: var(--gold-pale); background: rgba(201,147,60,0.06); border-left-color: rgba(201,147,60,0.3); }
+        .nav-item.active { color: var(--gold-pale); background: rgba(201,147,60,0.1); border-left-color: var(--gold); font-weight: 500; }
+        .nav-item i { width: 18px; text-align: center; font-size: 0.9rem; }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--gold);
+            color: var(--ink);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 99px;
+        }
+
+        .sidebar-footer {
+            padding: 16px 24px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .admin-card {
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .admin-avatar {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--brown), var(--gold));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 600; font-size: 0.8rem; flex-shrink: 0;
+        }
+
+        .admin-info { flex: 1; min-width: 0; }
+        .admin-info strong { display: block; font-size: 0.82rem; color: var(--gold-pale); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .admin-info span { font-size: 0.7rem; color: #5C4A38; }
+
+        .logout-btn {
+            background: none; border: none;
+            color: #5C4A38; cursor: pointer;
+            padding: 6px; border-radius: 6px;
+            transition: color 0.2s, background 0.2s;
+            font-size: 0.85rem;
+        }
+        .logout-btn:hover { color: #E74C3C; background: rgba(231,76,60,0.1); }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            position: fixed;
+            top: 0; left: var(--sidebar-width); right: 0;
+            height: var(--topbar-height);
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 30px;
+            z-index: 100;
+        }
+
+        .topbar-left h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--ink);
+        }
+
+        .topbar-left p { font-size: 0.8rem; color: var(--muted); margin-top: 1px; }
+
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+        .topbar-clock {
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--ink);
+            background: #F8F4EE;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 12px;
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .topbar-btn {
+            width: 38px; height: 38px;
+            border-radius: 10px; border: 1px solid var(--border);
+            background: white; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--muted); transition: all 0.2s; font-size: 0.9rem;
+            position: relative;
+        }
+        .topbar-btn:hover { border-color: var(--brown); color: var(--brown); }
+
+        .notif-dot {
+            position: absolute; top: 7px; right: 7px;
+            width: 7px; height: 7px;
+            background: var(--gold); border-radius: 50%;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .main {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--topbar-height);
+            padding: 18px;
+            min-height: calc(100vh - var(--topbar-height));
+        }
+
+        /* ── SECTIONS ── */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* ── STAT CARDS ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #fff 0%, #fafaf8 100%);
+            border-radius: 14px;
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: visible;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 60px; height: 60px;
+            background: radial-gradient(circle, rgba(201,147,60,0.08), transparent);
+            border-radius: 50%;
+        }
+
+        .stat-card:hover { 
+            box-shadow: 0 8px 24px rgba(124,61,18,0.12); 
+            transform: translateY(-2px);
+            border-color: rgba(201,147,60,0.2);
+        }
+        .stat-card[data-tooltip] { cursor: pointer; }
+        .stat-help-popup {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            width: min(360px, calc(100vw - 30px));
+            background: rgba(34, 28, 22, 0.97);
+            color: #fff;
+            border-radius: 12px;
+            padding: 12px 14px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.24);
+            z-index: 1200;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 0.16s ease, transform 0.16s ease;
+        }
+        .stat-help-popup.open {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .stat-help-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #f5dfbb;
+            margin-bottom: 6px;
+        }
+        .stat-help-text { font-size: 0.82rem; line-height: 1.45; }
+
+        .stat-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        .stat-icon { 
+            width: 44px; height: 44px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .stat-icon.brown { background: linear-gradient(135deg, rgba(124,61,18,0.15), rgba(160,82,45,0.1)); color: var(--brown); }
+        .stat-icon.gold { background: linear-gradient(135deg, rgba(201,147,60,0.15), rgba(245,230,200,0.1)); color: var(--gold); }
+        .stat-icon.green { background: linear-gradient(135deg, rgba(45,106,79,0.15), rgba(216,243,220,0.1)); color: var(--success); }
+        .stat-icon.blue { background: linear-gradient(135deg, rgba(26,82,118,0.15), rgba(214,234,248,0.1)); color: var(--info); }
+
+        .stat-label { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+        .stat-number { font-size: 2rem; font-weight: 700; color: var(--ink); line-height: 1; margin: 4px 0; }
+        .stat-trend { font-size: 0.78rem; color: var(--success); }
+        .stat-trend.down { color: var(--error); }
+
+        /* ── CARDS ── */
+        .card {
+            background: white;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .card-title { font-weight: 600; color: var(--ink); font-size: 0.95rem; }
+        .card-subtitle { font-size: 0.78rem; color: var(--muted); }
+        .card-body { padding: 14px 16px; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+        /* ── TABLE ── */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 10px 14px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
+        td { padding: 13px 14px; font-size: 0.88rem; border-bottom: 1px solid #F5F0EA; vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #FDFAF7; }
+
+        .patient-cell { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--brown), var(--brown-light)); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.72rem; font-weight: 600; flex-shrink: 0; }
+
+        /* ── BADGES ── */
+        .badge {
+            padding: 3px 10px; border-radius: 99px;
+            font-size: 0.72rem; font-weight: 500;
+        }
+        .badge-green { background: var(--success-bg); color: var(--success); }
+        .badge-yellow { background: var(--warning-bg); color: var(--warning); }
+        .badge-red { background: var(--error-bg); color: var(--error); }
+        .badge-blue { background: var(--info-bg); color: var(--info); }
+        .badge-gray { background: #F0EBE5; color: var(--muted); }
+
+        /* ── ACTIONS ── */
+        .action-row { display: flex; gap: 6px; }
+        .btn-icon {
+            width: 30px; height: 30px; border-radius: 8px;
+            border: 1px solid var(--border); background: white;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; color: var(--muted); transition: all 0.15s;
+        }
+        .btn-icon:hover { border-color: var(--brown); color: var(--brown); }
+        .btn-icon.danger:hover { border-color: var(--error); color: var(--error); }
+
+        /* ── BUTTONS ── */
+        .btn {
+            padding: 9px 18px; border-radius: 9px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+            cursor: pointer; border: none; transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 7px;
+        }
+        .btn-primary { background: var(--brown); color: white; }
+        .btn-primary:hover { background: var(--brown-light); }
+        .btn-secondary { background: var(--bg); color: var(--ink); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: var(--border); }
+        .btn-gold { background: var(--gold); color: white; }
+        .btn-gold:hover { opacity: 0.9; }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+
+        .btn, .btn-icon, .topbar-btn, .nav-item, .notif-item, .act-btn, .logout-btn, .modal-close {
+            transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, color 0.16s ease;
+        }
+        .btn:hover, .btn-icon:hover, .topbar-btn:hover, .nav-item:hover, .notif-item:hover, .act-btn:hover, .logout-btn:hover, .modal-close:hover {
+            transform: translateY(-1px);
+        }
+        .btn:active, .btn-icon:active, .topbar-btn:active, .nav-item:active, .notif-item:active, .act-btn:active, .logout-btn:active, .modal-close:active {
+            transform: scale(0.97);
+        }
+
+        /* ── SEARCH & FILTER ── */
+        .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+
+        .search-box {
+            position: relative; flex: 1; min-width: 200px;
+        }
+        .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.85rem; }
+        .search-box input {
+            width: 100%; padding: 9px 12px 9px 36px;
+            border: 1px solid var(--border); border-radius: 9px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+            background: white; color: var(--ink); outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-box input:focus { border-color: var(--brown); }
+
+        select.filter-select {
+            padding: 9px 14px; border: 1px solid var(--border); border-radius: 9px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+            background: white; color: var(--ink); outline: none; cursor: pointer;
+        }
+
+        /* ── APPOINTMENT CARD ── */
+        .appt-card {
+            background: white; border: 1px solid var(--border); border-radius: 12px;
+            padding: 16px 18px; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .appt-time-block {
+            text-align: center; min-width: 60px;
+            background: var(--bg); border-radius: 10px;
+            padding: 10px 8px;
+        }
+        .appt-time-block .time { font-size: 1rem; font-weight: 600; color: var(--ink); }
+        .appt-time-block .ampm { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; }
+        .appt-info { flex: 1; }
+        .appt-info h4 { font-size: 0.92rem; font-weight: 600; margin-bottom: 3px; }
+        .appt-info p { font-size: 0.8rem; color: var(--muted); }
+
+        /* ── MESSAGE ITEM ── */
+        .msg-item {
+            padding: 16px 0; border-bottom: 1px solid var(--border);
+            display: flex; gap: 14px; cursor: pointer;
+        }
+        .msg-item:last-child { border-bottom: none; }
+        .msg-item:hover { background: none; }
+        .msg-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+        .msg-dot.read { background: transparent; border: 1.5px solid var(--border); }
+        .msg-subject { font-weight: 600; font-size: 0.88rem; margin-bottom: 3px; }
+        .msg-preview { font-size: 0.8rem; color: var(--muted); }
+        .msg-meta { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(3px);
+            z-index: 500; display: none; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: white; border-radius: 18px;
+            width: 100%; max-width: 520px;
+            max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        }
+        .modal-head {
+            padding: 22px 26px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .modal-head h3 { font-weight: 600; font-size: 1.05rem; }
+        .modal-close { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1.2rem; padding: 4px; }
+        .modal-body { padding: 24px 26px; }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label {
+            display: block; font-size: 0.78rem; font-weight: 500;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            color: var(--muted); margin-bottom: 7px;
+        }
+        .form-control {
+            width: 100%; padding: 10px 14px;
+            border: 1.5px solid var(--border); border-radius: 9px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+            color: var(--ink); background: white; outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus { border-color: var(--brown); }
+        textarea.form-control { resize: vertical; min-height: 80px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .modal-footer { padding: 16px 26px 22px; display: flex; gap: 10px; justify-content: flex-end; }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed; bottom: 28px; right: 28px;
+            background: var(--ink); color: white;
+            padding: 13px 20px; border-radius: 12px;
+            font-size: 0.88rem; font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            display: none; align-items: center; gap: 10px;
+            z-index: 999; transform: translateY(20px); opacity: 0;
+            transition: all 0.3s;
+            max-width: 320px;
+        }
+        .toast.show { display: flex; transform: translateY(0); opacity: 1; }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--error); }
+        .toast.info { background: var(--info); }
+
+        /* ── ACTIVITY LOG ── */
+        .activity-item {
+            display: flex; gap: 12px; padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+
+        /* ── EMPTY STATE ── */
+        .empty-state { text-align: center; padding: 50px 20px; color: var(--muted); }
+        .empty-state i { font-size: 2.5rem; margin-bottom: 14px; opacity: 0.3; display: block; }
+        .empty-state p { font-size: 0.9rem; }
+
+        /* ── REPORTS ── */
+        .report-metric {
+            background: var(--bg); border-radius: 10px; padding: 16px 18px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .report-metric .label { font-size: 0.85rem; color: var(--muted); }
+        .report-metric .value { font-weight: 600; font-size: 1.1rem; color: var(--ink); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+            .sidebar.open { transform: translateX(0); }
+            .main, .topbar { margin-left: 0; left: 0; }
+        }
+
+        /* Calendar Widget Styles */
+        .calendar-widget{font-family:'DM Sans',sans-serif}
+        .calendar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding:0 10px}
+        .calendar-title{font-size:1.1rem;font-weight:600;color:var(--ink)}
+        .calendar-nav{display:flex;gap:10px}
+        .calendar-nav-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s;font-size:.9rem}
+        .calendar-nav-btn:hover{border-color:var(--brown);color:var(--brown)}
+        .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+        .calendar-day-header{text-align:center;padding:8px 0;font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+        .calendar-day{text-align:center;padding:10px 0;font-size:.9rem;color:var(--ink);cursor:pointer;border-radius:6px;transition:background .2s;position:relative}
+        .calendar-day:hover{background:var(--bg)}
+        .calendar-day.today{background:var(--gold);color:#fff;font-weight:600}
+        .calendar-day.other-month{color:var(--muted);opacity:.5}
+        .calendar-day.today::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#fff;border-radius:50%}
+    </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-icon"><img src="/static/logo.svg" alt="Guerrero Dental logo"></div>
+        <div class="brand-text">
+            Guerrero Dental
+            <span>Administration</span>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <div class="nav-item active" onclick="showSection('dashboard')">
+            <i class="fas fa-th-large"></i> Dashboard
+        </div>
+        <div class="nav-item" onclick="showSection('patients')">
+            <i class="fas fa-user-injured"></i> Patients
+        </div>
+        <div class="nav-item" onclick="showSection('appointments')">
+            <i class="fas fa-calendar-check"></i> Appointments
+        </div>
+
+        <div class="nav-section-label">Communication</div>
+        <div class="nav-item" onclick="showSection('inquiries')">
+            <i class="fas fa-inbox"></i> Patient Inquiries
+            <span class="nav-badge" id="inqNavBadge" style="display:none">0</span>
+        </div>
+        <div class="nav-item" onclick="showSection('messages')">
+            <i class="fas fa-envelope"></i> Messages
+            <span class="nav-badge" id="unreadBadge">2</span>
+        </div>
+
+        <div class="nav-section-label">Analytics</div>
+        <div class="nav-item" onclick="showSection('reports')">
+            <i class="fas fa-chart-bar"></i> Reports
+        </div>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="admin-card">
+            <div class="admin-avatar" id="sidebarAvatar">BG</div>
+            <div class="admin-info">
+                <strong id="sidebarName">Dr. Bambina Guerrero</strong>
+                <span>Administrator</span>
+            </div>
+            <button class="logout-btn" onclick="logout()" title="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+</aside>
+
+<!-- ── TOPBAR ── -->
+<header class="topbar">
+    <div class="topbar-left">
+        <h1 id="pageTitle">Dashboard</h1>
+        <p>Admin · <span id="currentDate"></span></p>
+    </div>
+    <div class="topbar-right">
+        <div class="topbar-clock" id="topbarClock">00:00:00</div>
+        <div style="position:relative">
+          <button class="topbar-btn" id="bellBtn" onclick="toggleNotif()" title="New Inquiries">
+            <i class="fas fa-bell"></i>
+            <span class="notif-dot" id="notifDot" style="display:none"></span>
+          </button>
+          <div id="notifPanel" style="position:absolute;top:calc(100% + 10px);right:0;width:300px;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.14);z-index:300;display:none;overflow:hidden">
+            <div style="padding:13px 16px;border-bottom:1px solid var(--border);font-weight:600;font-size:.88rem">🔔 New Patient Inquiries</div>
+            <div id="notifList" style="max-height:280px;overflow-y:auto"></div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" id="topbarAction" onclick="showSection('inquiries')">
+            <i class="fas fa-inbox"></i> Inquiries
+        </button>
+    </div>
+</header>
+
+<!-- ── MAIN CONTENT ── -->
+<main class="main">
+
+    <!-- DASHBOARD SECTION -->
+    <div class="section active" id="dashboardSection">
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <!-- Secondary Stats Row -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title">📊 This Month</div></div>
+            <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div style="padding:12px;border-radius:10px;background:#F0EBE5">
+                <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">Appointments</div>
+                <div style="font-size:1.8rem;font-weight:700;color:var(--brown)" id="monthAppts">0</div>
+              </div>
+              <div style="padding:12px;border-radius:10px;background:#F5E6C8">
+                <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">New Patients</div>
+                <div style="font-size:1.8rem;font-weight:700;color:var(--gold)" id="monthNewPats">0</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">🎯 Performance</div></div>
+            <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div style="padding:12px;border-radius:10px;background:#D8F3DC">
+                <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">Completed</div>
+                <div style="font-size:1.8rem;font-weight:700;color:var(--success)" id="completedAppts">0</div>
+              </div>
+              <div style="padding:12px;border-radius:10px;background:#FDECEA">
+                <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">Pending</div>
+                <div style="font-size:1.8rem;font-weight:700;color:var(--error)" id="pendingAppts">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-3">
+            <!-- Left col: Today Appts + New Inquiries + Recent Patients + Upcoming Alerts -->
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="card">
+                <div class="card-header">
+                  <div><div class="card-title">📅 Today's Appointments</div><div class="card-subtitle" id="todayDateLabel"></div></div>
+                  <button class="btn btn-secondary btn-sm" onclick="showSection('appointments')">View All →</button>
+                </div>
+                <div class="card-body" id="todayApptList"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">🔴 New Patient Inquiries</div>
+                  <button class="btn btn-secondary btn-sm" onclick="showSection('inquiries')">View All →</button>
+                </div>
+                <div class="card-body" id="adm-newInqList"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">👥 Recent Patients</div>
+                  <button class="btn btn-secondary btn-sm" onclick="showSection('patients')">All Patients →</button>
+                </div>
+                <div class="card-body" id="adm-recentPats"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">⏰ Upcoming This Week</div>
+                </div>
+                <div class="card-body" id="upcomingWeek"></div>
+              </div>
+            </div>
+
+            <!-- Right col -->
+            <div style="display:flex;flex-direction:column;gap:12px">
+                <div class="card">
+                    <div class="card-header"><div class="card-title">📅 Calendar</div></div>
+                    <div class="card-body">
+                        <div id="calendarWidget"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><div class="card-title">⚡ Quick Actions</div></div>
+                    <div class="card-body" style="display: flex; flex-direction: column; gap: 10px;">
+                        <button class="btn btn-primary" onclick="showSection('inquiries')" style="width:100%; justify-content:center;"><i class="fas fa-inbox"></i> Patient Inquiries</button>
+                        <button class="btn btn-secondary" onclick="showSection('messages')" style="width:100%; justify-content:center;"><i class="fas fa-paper-plane"></i> Send Message</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">👨‍⚕️ Staff on Duty</div>
+                    <span id="admLiveClock" style="font-size:.72rem;color:#999"></span>
+                  </div>
+                  <div class="card-body" id="adm-staffDuty"></div>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">📢 Alerts</div>
+                  </div>
+                  <div class="card-body" id="alertsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PATIENTS SECTION -->
+    <div class="section" id="patientsSection">
+        <div class="toolbar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="patientSearch" placeholder="Search by name, email, or phone..." oninput="filterPatients()">
+            </div>
+            <select class="filter-select" id="statusFilter" onchange="filterPatients()">
+                <option value="all">All Patients</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">Patient Records</div>
+                    <div class="card-subtitle" id="patientCount"></div>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Patient ID</th>
+                            <th>Phone</th>
+                            <th>Last Visit</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPOINTMENTS SECTION -->
+    <div class="section" id="appointmentsSection">
+        <div class="toolbar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="apptSearch" placeholder="Search by patient name..." oninput="filterAppointments()">
+            </div>
+            <select class="filter-select" id="apptFilter" onchange="filterAppointments()">
+                <option value="all">All</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">All Appointments</div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="apptTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- INQUIRIES SECTION -->
+    <div class="section" id="inquiriesSection">
+        <div class="toolbar">
+            <div style="position:relative;flex:1;max-width:300px">
+                <i class="fas fa-search" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#999;font-size:.82rem"></i>
+                <input type="text" style="width:100%;padding:9px 12px 9px 33px;border:1px solid var(--border);border-radius:9px;font-family:inherit;font-size:.85rem;outline:none" id="inqSearch" placeholder="Search name, concern..." oninput="renderInquiries()">
+            </div>
+            <select style="padding:9px 13px;border:1px solid var(--border);border-radius:9px;font-family:inherit;font-size:.83rem;background:#fff;outline:none" id="inqFilter" onchange="renderInquiries()">
+                <option value="all">All Status</option><option value="new">New</option>
+                <option value="in_review">In Review</option><option value="scheduled">Scheduled</option><option value="closed">Closed</option>
+            </select>
+            <select style="padding:9px 13px;border:1px solid var(--border);border-radius:9px;font-family:inherit;font-size:.83rem;background:#fff;outline:none" id="urgFilter" onchange="renderInquiries()">
+                <option value="all">All Urgency</option>
+                <option value="urgent">🔴 Urgent</option><option value="soon">🟡 Soon</option><option value="routine">🟢 Routine</option>
+            </select>
+        </div>
+        <div id="inqList"></div>
+    </div>
+
+    <!-- MESSAGES SECTION -->
+    <div class="section" id="messagesSection">
+        <div class="toolbar">
+            <div style="flex:1"></div>
+            <button class="btn btn-primary" onclick="openNewMessageModal()">
+                <i class="fas fa-paper-plane"></i> New Message
+            </button>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Inbox</div>
+                </div>
+                <div class="card-body" id="messagesList"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Broadcast</div>
+                    <div class="card-subtitle">Send to all patients</div>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" class="form-control" id="broadcastSubject" placeholder="e.g. Holiday Notice">
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea class="form-control" id="broadcastBody" rows="4" placeholder="Type your message here..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="sendBroadcast()">
+                        <i class="fas fa-broadcast-tower"></i> Send to All Patients
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REPORTS SECTION -->
+    <div class="section" id="reportsSection">
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Monthly Overview</div>
+                    <div class="card-subtitle" id="reportMonth"></div>
+                </div>
+                <div class="card-body" id="monthlyStats"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Appointment Breakdown</div>
+                </div>
+                <div class="card-body" id="apptBreakdown"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Activity Log</div>
+            </div>
+            <div class="card-body" id="fullActivityLog"></div>
+        </div>
+    </div>
+
+</main>
+
+<!-- ── MODALS ── -->
+
+<!-- Add Patient -->
+<div class="modal-overlay" id="addPatientModal">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h3><i class="fas fa-user-plus" style="color:var(--brown);margin-right:8px"></i> New Patient</h3>
+            <button class="modal-close" onclick="closeModal('addPatientModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input class="form-control" id="addName" placeholder="Juan Dela Cruz">
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" class="form-control" id="addDob">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" class="form-control" id="addEmail" placeholder="patient@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" class="form-control" id="addPhone" placeholder="0917-123-4567">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Address</label>
+                <textarea class="form-control" id="addAddress" rows="2" placeholder="Complete address"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('addPatientModal')">Cancel</button>
+            <button class="btn btn-primary" onclick="addNewPatient()"><i class="fas fa-save"></i> Create Record</button>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Appointment -->
+<div class="modal-overlay" id="scheduleModal">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h3 id="scheduleModalTitle"><i class="fas fa-calendar-plus" style="color:var(--gold);margin-right:8px"></i> Schedule Appointment</h3>
+            <button class="modal-close" onclick="closeModal('scheduleModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Patient *</label>
+                <select class="form-control" id="schedulePatient">
+                    <option value="">Select a patient</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Service Type *</label>
+                    <select class="form-control" id="scheduleType">
+                        <option value="">Select service</option>
+                        <option>Regular Check-up</option>
+                        <option>Teeth Cleaning</option>
+                        <option>Dental Filling</option>
+                        <option>Tooth Extraction</option>
+                        <option>Teeth Whitening</option>
+                        <option>Emergency</option>
+                        <option>Orthodontic Consultation</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="date" class="form-control" id="scheduleDate">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Time Slot *</label>
+                <select class="form-control" id="scheduleTime">
+                    <option value="">Select time</option>
+                    <option value="09:00">9:00 AM</option>
+                    <option value="09:30">9:30 AM</option>
+                    <option value="10:00">10:00 AM</option>
+                    <option value="10:30">10:30 AM</option>
+                    <option value="11:00">11:00 AM</option>
+                    <option value="11:30">11:30 AM</option>
+                    <option value="14:00">2:00 PM</option>
+                    <option value="14:30">2:30 PM</option>
+                    <option value="15:00">3:00 PM</option>
+                    <option value="16:00">4:00 PM</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Notes</label>
+                <textarea class="form-control" id="scheduleNotes" rows="2" placeholder="Special instructions..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('scheduleModal')">Cancel</button>
+            <button class="btn btn-gold" id="scheduleSubmitBtn" onclick="scheduleAppointment()"><i class="fas fa-calendar-check"></i> Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- View Patient -->
+<div class="modal-overlay" id="viewPatientModal">
+    <div class="modal-box" style="max-width: 580px;">
+        <div class="modal-head">
+            <h3><i class="fas fa-user-edit" style="color:var(--brown);margin-right:8px"></i> Edit Patient Record</h3>
+            <button class="modal-close" onclick="closeModal('viewPatientModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" class="form-control" id="editPatientName" placeholder="Full name">
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" class="form-control" id="editPatientDob">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" class="form-control" id="editPatientEmail" placeholder="patient@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" class="form-control" id="editPatientPhone" placeholder="0917-123-4567">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Address</label>
+                <textarea class="form-control" id="editPatientAddress" rows="2" placeholder="Complete address"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('viewPatientModal')">Cancel</button>
+            <button class="btn btn-primary" onclick="savePatientChanges()"><i class="fas fa-save"></i> Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- View Appointment -->
+<div class="modal-overlay" id="viewApptModal">
+    <div class="modal-box" style="max-width:560px;">
+        <div class="modal-head">
+            <h3>Appointment Details</h3>
+            <button class="modal-close" onclick="closeModal('viewApptModal')">&times;</button>
+        </div>
+        <div class="modal-body" id="viewApptBody"></div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('viewApptModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- New Message -->
+<div class="modal-overlay" id="newMessageModal">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h3><i class="fas fa-envelope" style="color:var(--info);margin-right:8px"></i> New Message</h3>
+            <button class="modal-close" onclick="closeModal('newMessageModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>To (Patient)</label>
+                <select class="form-control" id="msgRecipient">
+                    <option value="">Select patient</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Subject</label>
+                <input class="form-control" id="msgSubject" placeholder="Message subject">
+            </div>
+            <div class="form-group">
+                <label>Message</label>
+                <textarea class="form-control" id="msgBody" rows="4" placeholder="Write your message..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('newMessageModal')">Cancel</button>
+            <button class="btn btn-primary" onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+    <i id="toastIcon"></i>
+    <span id="toastMsg"></span>
+</div>
+<div class="stat-help-popup" id="statHelpPopup" aria-live="polite">
+    <div class="stat-help-title" id="statHelpTitle">Metric meaning</div>
+    <div class="stat-help-text" id="statHelpText"></div>
+</div>
+
+<script>
+// ── DATA STORE ──
+const API_BASE = '/api';
+
+let state = {
+    selectedInquiryId: null,
+    patients: [
+        { id: 1, patientId: 'GD1001', name: 'Juan Dela Cruz', email: 'juan@email.com', phone: '0917-111-1111', dob: '1985-05-15', address: 'Quezon City', status: 'active', lastVisit: '2024-01-15' },
+        { id: 2, patientId: 'GD1002', name: 'Maria Santos', email: 'maria@email.com', phone: '0917-222-2222', dob: '1990-08-22', address: 'Pasig, Philippines', status: 'active', lastVisit: '2024-01-10' },
+        { id: 3, patientId: 'GD1003', name: 'Pedro Reyes', email: 'pedro@email.com', phone: '0917-333-3333', dob: '1978-12-03', address: 'Makati, Philippines', status: 'active', lastVisit: '2024-01-05' },
+        { id: 4, patientId: 'GD1004', name: 'Ana Lopez', email: 'ana@email.com', phone: '0917-444-4444', dob: '1995-03-18', address: 'Pasig, Philippines', status: 'active', lastVisit: '2023-12-20' },
+        { id: 5, patientId: 'GD1005', name: 'Miguel Torres', email: 'miguel@email.com', phone: '0917-555-5555', dob: '1982-11-30', address: 'Mandaluyong, Philippines', status: 'inactive', lastVisit: '2023-11-15' }
+    ],
+    appointments: [
+        { id: 1, patientId: 1, patientName: 'Juan Dela Cruz', type: 'Regular Check-up', date: new Date().toISOString().split('T')[0], time: '10:00', status: 'scheduled', notes: 'Annual dental check-up' },
+        { id: 2, patientId: 2, patientName: 'Maria Santos', type: 'Teeth Cleaning', date: new Date(Date.now() + 86400000).toISOString().split('T')[0], time: '14:00', status: 'confirmed', notes: 'Regular cleaning' },
+        { id: 3, patientId: 3, patientName: 'Pedro Reyes', type: 'Tooth Extraction', date: new Date(Date.now() + 172800000).toISOString().split('T')[0], time: '11:30', status: 'scheduled', notes: 'Wisdom tooth extraction' },
+        { id: 4, patientId: 4, patientName: 'Ana Lopez', type: 'Dental Filling', date: new Date(Date.now() - 86400000).toISOString().split('T')[0], time: '09:00', status: 'completed', notes: 'Cavity filling' }
+    ],
+    messages: [
+        { id: 1, from: 'System', to: 'All Patients', subject: 'Clinic Holiday Notice', body: 'Our clinic will be closed on January 30 for a local holiday.', date: '2025-01-25', read: true },
+        { id: 2, from: 'Dr. Bambina Guerrero', to: 'Juan Dela Cruz', subject: 'Appointment Reminder', body: 'Reminder for your appointment tomorrow at 10:00 AM.', date: '2025-01-14', read: false },
+        { id: 3, from: 'Ana Lopez', to: 'Admin', subject: 'Request to Reschedule', body: 'Could I reschedule my appointment to next week?', date: '2025-02-01', read: false }
+    ],
+    activities: [
+        { icon: 'fas fa-user-plus', iconBg: '#D8F3DC', iconColor: '#2D6A4F', text: 'New patient <strong>Ana Lopez</strong> registered', time: '2 hours ago' },
+        { icon: 'fas fa-calendar-check', iconBg: '#D6EAF8', iconColor: '#1A5276', text: 'Appointment confirmed for <strong>Juan Dela Cruz</strong>', time: '4 hours ago' },
+        { icon: 'fas fa-envelope', iconBg: '#FFF3CD', iconColor: '#9C6A00', text: 'Holiday notice sent to all patients', time: 'Yesterday' },
+        { icon: 'fas fa-check-circle', iconBg: '#D8F3DC', iconColor: '#2D6A4F', text: 'Appointment completed: <strong>Pedro Reyes</strong>', time: 'Yesterday' }
+    ],
+    currentSection: 'dashboard',
+    editingAppointmentId: null
+};
+
+// ── INIT ──
+function initStatCardTooltips() {
+    const statsGrid = document.getElementById('statsGrid');
+    if (!statsGrid || statsGrid.dataset.tooltipBound === '1') return;
+    const popup = document.getElementById('statHelpPopup');
+    const popupTitle = document.getElementById('statHelpTitle');
+    const popupText = document.getElementById('statHelpText');
+    let hideTimer = null;
+    statsGrid.dataset.tooltipBound = '1';
+
+    const showPopup = (card) => {
+        if (!popup || !popupText || !card) return;
+        popupTitle.textContent = card.querySelector('.stat-label')?.textContent || 'Metric meaning';
+        popupText.textContent = card.dataset.tooltip || '';
+        popup.classList.add('open');
+        if (hideTimer) clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => popup.classList.remove('open'), 4500);
+    };
+
+    statsGrid.addEventListener('click', (event) => {
+        const card = event.target.closest('.stat-card[data-tooltip]');
+        if (!card) return;
+        showPopup(card);
+    });
+
+    statsGrid.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        const card = event.target.closest('.stat-card[data-tooltip]');
+        if (!card) return;
+        event.preventDefault();
+        showPopup(card);
+    });
+
+    document.addEventListener('click', (event) => {
+        if (statsGrid.contains(event.target)) return;
+        popup?.classList.remove('open');
+    });
+}
+
+window.onload = function() {
+    // Auth check
+    if (!localStorage.getItem('adminLoggedIn') && !sessionStorage.getItem('gd_token')) {
+        window.location.href = '/gd-admin/login'; return;
+    }
+    const name = sessionStorage.getItem('gd_name') || 'Dr. Bambina Guerrero';
+    const sidebarNameEl = document.getElementById('sidebarName');
+    const adminNameTopEl = document.getElementById('adminNameTop');
+    const sidebarAvatarEl = document.getElementById('sidebarAvatar');
+    if (sidebarNameEl) sidebarNameEl.textContent = name;
+    if (adminNameTopEl) adminNameTopEl.textContent = name.split(' ').pop();
+    if (sidebarAvatarEl) sidebarAvatarEl.textContent = name.split(' ').filter(Boolean).map(n => n[0]).join('').slice(0,2).toUpperCase();
+
+    const now = new Date();
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('todayDateLabel').textContent = now.toLocaleDateString('en-PH', { weekday: 'long', month: 'long', day: 'numeric' });
+    document.getElementById('reportMonth').textContent = now.toLocaleDateString('en-PH', { month: 'long', year: 'numeric' });
+
+    // Live date and time for dashboard
+    function updateDateTime(){
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const timeStr = now.toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit'});
+      document.getElementById('currentDate').textContent=`${dateStr} · ${timeStr}`;
+    }
+    updateDateTime();setInterval(updateDateTime,60000);
+
+    // Initialize calendar widget
+    function initCalendar() {
+      const calendarEl = document.getElementById('calendarWidget');
+      if (!calendarEl) return;
+
+      const today = new Date();
+      const todayYear = today.getFullYear();
+      const todayMonth = today.getMonth();
+      const todayDate = today.getDate();
+      const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      let viewYear = todayYear;
+      let viewMonth = todayMonth;
+
+      function renderCalendar() {
+        const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+        const lastDate = new Date(viewYear, viewMonth + 1, 0).getDate();
+        const prevLastDate = new Date(viewYear, viewMonth, 0).getDate();
+        const totalCells = Math.ceil((firstDay + lastDate) / 7) * 7;
+        const remainingCells = totalCells - (firstDay + lastDate);
+        let daysHtml = '';
+
+        dayNames.forEach((day) => {
+          daysHtml += `<div class="calendar-day-header">${day}</div>`;
+        });
+
+        for (let i = firstDay - 1; i >= 0; i--) {
+          daysHtml += `<div class="calendar-day other-month">${prevLastDate - i}</div>`;
+        }
+
+        for (let date = 1; date <= lastDate; date++) {
+          const isToday = viewYear === todayYear && viewMonth === todayMonth && date === todayDate;
+          daysHtml += `<div class="calendar-day ${isToday ? 'today' : ''}">${date}</div>`;
+        }
+
+        for (let i = 1; i <= remainingCells; i++) {
+          daysHtml += `<div class="calendar-day other-month">${i}</div>`;
+        }
+
+        calendarEl.innerHTML = `
+          <div class="calendar-widget">
+            <div class="calendar-header">
+              <div class="calendar-title">${monthNames[viewMonth]} ${viewYear}</div>
+              <div class="calendar-nav">
+                <button class="calendar-nav-btn" id="calPrevBtn" title="Previous Month"><i class="fas fa-chevron-left"></i></button>
+                <button class="calendar-nav-btn" id="calTodayBtn" title="Go to Current Month"><i class="fas fa-circle-dot"></i></button>
+                <button class="calendar-nav-btn" id="calNextBtn" title="Next Month"><i class="fas fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="calendar-grid">${daysHtml}</div>
+          </div>
+        `;
+
+        document.getElementById('calPrevBtn').addEventListener('click', () => {
+          viewMonth -= 1;
+          if (viewMonth < 0) {
+            viewMonth = 11;
+            viewYear -= 1;
+          }
+          renderCalendar();
+        });
+
+        document.getElementById('calNextBtn').addEventListener('click', () => {
+          viewMonth += 1;
+          if (viewMonth > 11) {
+            viewMonth = 0;
+            viewYear += 1;
+          }
+          renderCalendar();
+        });
+
+        document.getElementById('calTodayBtn').addEventListener('click', () => {
+          viewMonth = todayMonth;
+          viewYear = todayYear;
+          renderCalendar();
+        });
+      }
+
+      renderCalendar();
+    }
+    
+    // Initialize digital clock
+    function initDigitalClock(){
+      const topbarClockEl = document.getElementById('topbarClock');
+      const clockEl = document.getElementById('digitalClock');
+      const dateEl = document.getElementById('digitalDate');
+      if(!topbarClockEl && !clockEl) return;
+
+      function updateClock(){
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', {
+          hour12: false,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        const dateStr = now.toLocaleDateString('en-PH', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+
+        if (topbarClockEl) topbarClockEl.textContent = timeStr;
+        if (clockEl) clockEl.textContent = timeStr;
+        if (dateEl) dateEl.textContent = dateStr;
+      }
+      
+      updateClock();
+      setInterval(updateClock, 1000); // Update every second
+    }
+    
+    // Initialize widgets
+    initCalendar();
+    initDigitalClock();
+
+    // Attempt to load from API
+    initStatCardTooltips();
+    loadFromAPI();
+    renderAll();
+};
+
+async function loadFromAPI() {
+    try {
+        const token = sessionStorage.getItem('gd_token');
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const [pRes, aRes, cRes] = await Promise.all([
+            fetch(`${API_BASE}/patients`, { headers }),
+            fetch(`${API_BASE}/appointments`, { headers }),
+            fetch(`${API_BASE}/complaints`, { headers })
+        ]);
+        if (pRes.ok) state.patients = await pRes.json();
+        if (aRes.ok) state.appointments = await aRes.json();
+        if (cRes.ok) state.complaints = await cRes.json();
+        renderAll();
+    } catch {
+        // Use demo data silently
+    }
+}
+
+function renderAll() {
+    renderStats();
+    renderTodayAppts();
+    renderAdmNewInq();
+    renderAdmRecentPats();
+    renderAdmStaffDuty();
+    renderRecentActivity();
+    renderPatientsTable();
+    renderApptTable();
+    renderMessages();
+    renderReports();
+    updateUnreadBadge();
+    renderInquiries();
+    updateInqBadge();
+}
+
+// ── STATS ──
+function renderStats() {
+    const today = new Date().toISOString().split('T')[0];
+    const todayAppts = state.appointments.filter(a => a.date === today).length;
+    const upcomingAppts = state.appointments.filter(a => a.date >= today).length;
+    const activePatients = state.patients.filter(p => p.status === 'active').length;
+    const unread = state.messages.filter(m => !m.read).length;
+
+    document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card" tabindex="0" role="button" data-tooltip="Shows all patients in the system, including active and inactive records.">
+            <div class="stat-header">
+                <div><div class="stat-label">Total Patients</div><div class="stat-number">${state.patients.length}</div></div>
+                <div class="stat-icon brown"><i class="fas fa-users"></i></div>
+            </div>
+            <div class="stat-trend"><i class="fas fa-arrow-up"></i> ${activePatients} active</div>
+        </div>
+        <div class="stat-card" tabindex="0" role="button" data-tooltip="Counts appointments scheduled for today based on the clinic calendar date.">
+            <div class="stat-header">
+                <div><div class="stat-label">Today's Appointments</div><div class="stat-number">${todayAppts}</div></div>
+                <div class="stat-icon gold"><i class="fas fa-calendar-day"></i></div>
+            </div>
+            <div class="stat-trend"><i class="fas fa-clock"></i> Scheduled for today</div>
+        </div>
+        <div class="stat-card" tabindex="0" role="button" data-tooltip="Shows appointments from today forward so staff can track the upcoming queue.">
+            <div class="stat-header">
+                <div><div class="stat-label">Upcoming</div><div class="stat-number">${upcomingAppts}</div></div>
+                <div class="stat-icon green"><i class="fas fa-calendar-check"></i></div>
+            </div>
+            <div class="stat-trend"><i class="fas fa-arrow-right"></i> Next 7 days</div>
+        </div>
+        <div class="stat-card" tabindex="0" role="button" data-tooltip="Shows messages that are still unread and may need immediate follow-up.">
+            <div class="stat-header">
+                <div><div class="stat-label">Unread Messages</div><div class="stat-number">${unread}</div></div>
+                <div class="stat-icon blue"><i class="fas fa-envelope"></i></div>
+            </div>
+            <div class="stat-trend ${unread > 0 ? '' : 'down'}"><i class="fas fa-${unread > 0 ? 'bell' : 'check'}"></i> ${unread > 0 ? 'Need attention' : 'All read'}</div>
+        </div>
+    `;
+
+    // Render secondary stats
+    const currentMonth = today.substring(0, 7);
+    const monthAppts = state.appointments.filter(a => a.date.startsWith(currentMonth)).length;
+    const monthNewPats = state.patients.filter(p => p.createdAt && p.createdAt.startsWith(currentMonth)).length;
+    const completedCount = state.appointments.filter(a => a.status === 'completed').length;
+    const pendingCount = state.appointments.filter(a => a.status === 'pending').length;
+    
+    document.getElementById('monthAppts').textContent = monthAppts;
+    document.getElementById('monthNewPats').textContent = monthNewPats;
+    document.getElementById('completedAppts').textContent = completedCount;
+    document.getElementById('pendingAppts').textContent = pendingCount;
+
+    renderUpcomingWeek();
+    renderAlerts();
+}
+
+// ── TODAY'S APPOINTMENTS ──
+function renderTodayAppts() {
+    const today = new Date().toISOString().split('T')[0];
+    const list = state.appointments.filter(a => a.date === today);
+    const el = document.getElementById('todayApptList');
+    if (!list.length) {
+        el.innerHTML = '<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No appointments today</p></div>';
+        return;
+    }
+    el.innerHTML = list.map(a => {
+        const [h, m] = a.time.split(':');
+        const hour = parseInt(h); const ampm = hour >= 12 ? 'PM' : 'AM'; const h12 = hour > 12 ? hour - 12 : hour;
+        return `<div class="appt-card">
+            <div class="appt-time-block"><div class="time">${h12}:${m}</div><div class="ampm">${ampm}</div></div>
+            <div class="appt-info">
+                <h4>${a.patientName}</h4>
+                <p>${a.type}</p>
+            </div>
+            ${statusBadge(a.status)}
+        </div>`;
+    }).join('');
+}
+
+// ── RECENT ACTIVITY ──
+function renderRecentActivity() {
+    const recentActivityEl = document.getElementById('recentActivity');
+    if (!recentActivityEl) return;
+    recentActivityEl.innerHTML = state.activities.slice(0,4).map(a => `
+        <div class="activity-item">
+            <div class="activity-icon" style="background:${a.iconBg};color:${a.iconColor}"><i class="${a.icon}"></i></div>
+            <div>
+                <div style="font-size:0.83rem;line-height:1.4">${a.text}</div>
+                <div style="font-size:0.72rem;color:var(--muted);margin-top:3px">${a.time}</div>
+            </div>
+        </div>`).join('');
+}
+
+// ── UPCOMING WEEK ──
+function renderUpcomingWeek() {
+    const today = new Date();
+    const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const todayStr = today.toISOString().split('T')[0];
+    const weekAppts = state.appointments.filter(a => a.date > todayStr && a.date <= nextWeek.toISOString().split('T')[0]).slice(0, 5);
+    const el = document.getElementById('upcomingWeek');
+    if (!weekAppts.length) {
+        el.innerHTML = '<div class="empty-state"><i class="fas fa-calendar"></i><p>No appointments next week</p></div>';
+        return;
+    }
+    el.innerHTML = weekAppts.map(a => {
+        const d = new Date(a.date + 'T00:00:00');
+        const dayName = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+        const dateNum = d.getDate();
+        return `<div style="display:flex;gap:12px;padding:10px;border-radius:8px;background:#F9F6F3;margin-bottom:8px;border-left:3px solid var(--gold)">
+            <div style="font-size:0.7rem;color:var(--muted);min-width:40px">
+                <div style="font-weight:700;color:var(--brown)">${dayName}</div>
+                <div>${dateNum}</div>
+            </div>
+            <div style="flex:1;min-width:0">
+                <div style="font-size:0.82rem;font-weight:600">${a.patientName}</div>
+                <div style="font-size:0.7rem;color:var(--muted)">${a.time} • ${a.type}</div>
+            </div>
+            <div>${statusBadge(a.status)}</div>
+        </div>`;
+    }).join('');
+}
+
+// ── ALERTS ──
+function renderAlerts() {
+    const today = new Date().toISOString().split('T')[0];
+    const alerts = [];
+    
+    // Pending inquiries
+    const pendingInq = state.complaints.filter(c => c.status === 'new').length;
+    if (pendingInq > 0) {
+        alerts.push({ type: 'warning', icon: 'fa-bell', text: `${pendingInq} pending inquiries` });
+    }
+    
+    // Late appointments
+    const lateAppts = state.appointments.filter(a => a.date < today && a.status === 'pending').length;
+    if (lateAppts > 0) {
+        alerts.push({ type: 'danger', icon: 'fa-exclamation-triangle', text: `${lateAppts} overdue appointments` });
+    }
+    
+    // Unread messages
+    const unreadMsgs = state.messages.filter(m => !m.read).length;
+    if (unreadMsgs > 0) {
+        alerts.push({ type: 'info', icon: 'fa-envelope', text: `${unreadMsgs} unread messages` });
+    }
+    
+    // No active issues
+    if (!alerts.length) {
+        alerts.push({ type: 'success', icon: 'fa-check-circle', text: 'All clear!' });
+    }
+    
+    const el = document.getElementById('alertsList');
+    el.innerHTML = alerts.map(a => {
+        const bgMap = { warning: '#FFF3CD', danger: '#FDECEA', info: '#D6EAF8', success: '#D8F3DC' };
+        const colorMap = { warning: '#9C6A00', danger: '#C0392B', info: '#1A5276', success: '#2D6A4F' };
+        return `<div style="display:flex;gap:10px;padding:10px;border-radius:8px;background:${bgMap[a.type]};margin-bottom:8px;align-items:center">
+            <i class="fas ${a.icon}" style="color:${colorMap[a.type]};font-size:0.9rem"></i>
+            <div style="font-size:0.82rem;color:${colorMap[a.type]};font-weight:500">${a.text}</div>
+        </div>`;
+    }).join('');
+}
+
+// ── PATIENTS TABLE ──
+function renderPatientsTable(patients) {
+    const list = patients || state.patients;
+    document.getElementById('patientCount').textContent = `${list.length} records`;
+    document.getElementById('patientsTableBody').innerHTML = list.map(p => `
+        <tr onclick="editPatient(${p.id})" style="cursor:pointer">
+            <td><div class="patient-cell">
+                <div class="avatar">${initials(p.name)}</div>
+                <div>
+                    <div style="font-weight:600">${p.name}</div>
+                    <div style="font-size:0.78rem;color:var(--muted)">${p.email}</div>
+                </div>
+            </div></td>
+            <td style="color:var(--muted);font-size:0.82rem">${p.patientId}</td>
+            <td style="font-size:0.85rem">${p.phone}</td>
+            <td style="font-size:0.82rem;color:var(--muted)">${p.lastVisit ? fmtDate(p.lastVisit) : '—'}</td>
+            <td>${statusBadge(p.status)}</td>
+        </tr>`).join('');
+}
+
+function filterPatients() {
+    const q = document.getElementById('patientSearch').value.toLowerCase();
+    const s = document.getElementById('statusFilter').value;
+    const filtered = state.patients.filter(p =>
+        (s === 'all' || p.status === s) &&
+        (p.name.toLowerCase().includes(q) || p.email.toLowerCase().includes(q) || p.phone.includes(q))
+    );
+    renderPatientsTable(filtered);
+}
+
+// ── APPOINTMENTS TABLE ──
+function renderApptTable(appts) {
+    const list = appts || state.appointments;
+    document.getElementById('apptTableBody').innerHTML = list.map(a => `
+        <tr onclick="viewAppointment(${a.id})" style="cursor:pointer">
+            <td><div class="patient-cell">
+                <div class="avatar">${initials(a.patientName)}</div>
+                <span>${a.patientName}</span>
+            </div></td>
+            <td style="font-size:0.85rem">${a.type}</td>
+            <td style="font-size:0.85rem">${fmtDate(a.date)}</td>
+            <td style="font-size:0.85rem">${fmtTime(a.time)}</td>
+            <td>${statusBadge(a.status)}</td>
+        </tr>`).join('');
+}
+
+function filterAppointments() {
+    const q = document.getElementById('apptSearch').value.toLowerCase();
+    const s = document.getElementById('apptFilter').value;
+    const filtered = state.appointments.filter(a =>
+        (s === 'all' || a.status === s) && a.patientName.toLowerCase().includes(q)
+    );
+    renderApptTable(filtered);
+}
+
+// ── MESSAGES ──
+function renderMessages() {
+    const el = document.getElementById('messagesList');
+    el.innerHTML = state.messages.map(m => `
+        <div class="msg-item" onclick="markRead(${m.id})">
+            <div class="msg-dot ${m.read ? 'read' : ''}"></div>
+            <div style="flex:1">
+                <div class="msg-subject">${m.subject}</div>
+                <div class="msg-preview">${m.body.substring(0, 80)}${m.body.length > 80 ? '…' : ''}</div>
+                <div class="msg-meta">From: ${m.from} · ${m.date}</div>
+            </div>
+        </div>`).join('');
+}
+
+function updateUnreadBadge() {
+    const unread = state.messages.filter(m => !m.read).length;
+    const badge = document.getElementById('unreadBadge');
+    badge.textContent = unread; badge.style.display = unread ? '' : 'none';
+}
+
+function markRead(id) {
+    const msg = state.messages.find(m => m.id === id);
+    if (msg) { msg.read = true; renderMessages(); updateUnreadBadge(); renderStats(); }
+}
+
+// ── REPORTS ──
+function renderReports() {
+    const total = state.appointments.length;
+    const byStatus = {};
+    state.appointments.forEach(a => { byStatus[a.status] = (byStatus[a.status] || 0) + 1; });
+    const active = state.patients.filter(p => p.status === 'active').length;
+
+    document.getElementById('monthlyStats').innerHTML = `
+        <div class="report-metric"><span class="label">Total Patients</span><span class="value">${state.patients.length}</span></div>
+        <div class="report-metric"><span class="label">Active Patients</span><span class="value">${active}</span></div>
+        <div class="report-metric"><span class="label">Total Appointments</span><span class="value">${total}</span></div>
+        <div class="report-metric"><span class="label">Completed Appointments</span><span class="value">${byStatus['completed'] || 0}</span></div>
+        <div class="report-metric"><span class="label">Cancellation Rate</span><span class="value">${total > 0 ? Math.round(((byStatus['cancelled']||0)/total)*100) : 0}%</span></div>
+    `;
+
+    document.getElementById('apptBreakdown').innerHTML = Object.entries(byStatus).map(([s, c]) =>
+        `<div class="report-metric"><span class="label" style="text-transform:capitalize">${s}</span><div style="display:flex;align-items:center;gap:10px"><span class="value">${c}</span>${statusBadge(s)}</div></div>`
+    ).join('');
+
+    document.getElementById('fullActivityLog').innerHTML = [
+        ...state.activities,
+        { icon: 'fas fa-cog', iconBg: '#F0EBE5', iconColor: '#8A7A6A', text: 'System backup completed', time: '3 days ago' }
+    ].map(a => `<div class="activity-item">
+        <div class="activity-icon" style="background:${a.iconBg};color:${a.iconColor}"><i class="${a.icon}"></i></div>
+        <div><div style="font-size:0.83rem">${a.text}</div><div style="font-size:0.72rem;color:var(--muted);margin-top:2px">${a.time}</div></div>
+    </div>`).join('');
+}
+
+// ── ACTIONS ──
+function addNewPatient() {
+    const name = document.getElementById('addName').value.trim();
+    const email = document.getElementById('addEmail').value.trim();
+    const phone = document.getElementById('addPhone').value.trim();
+    if (!name || !email || !phone) { toast('Please fill in all required fields.', 'error'); return; }
+
+    const newId = state.patients.length + 1;
+    const patient = {
+        id: newId, patientId: `GD${1000 + newId}`,
+        name, email, phone,
+        dob: document.getElementById('addDob').value,
+        address: document.getElementById('addAddress').value,
+        status: 'active', lastVisit: null
+    };
+
+    // Try API first
+    fetch(`${API_BASE}/patients`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${sessionStorage.getItem('gd_token') || ''}` },
+        body: JSON.stringify(patient)
+    }).then(r => r.json()).then(d => { if (d.id) patient.id = d.id; }).catch(() => {});
+
+    state.patients.unshift(patient);
+    state.activities.unshift({ icon: 'fas fa-user-plus', iconBg: '#D8F3DC', iconColor: '#2D6A4F', text: `New patient <strong>${name}</strong> added`, time: 'Just now' });
+    closeModal('addPatientModal');
+    renderAll();
+    toast(`Patient ${name} added successfully!`, 'success');
+    document.getElementById('addName').value = '';
+    document.getElementById('addEmail').value = '';
+    document.getElementById('addPhone').value = '';
+    document.getElementById('addDob').value = '';
+    document.getElementById('addAddress').value = '';
+}
+
+function scheduleAppointment() {
+    const pid = document.getElementById('schedulePatient').value;
+    const type = document.getElementById('scheduleType').value;
+    const date = document.getElementById('scheduleDate').value;
+    const time = document.getElementById('scheduleTime').value;
+    if (!pid || !type || !date || !time) { toast('Please fill in all required fields.', 'error'); return; }
+
+    const patient = state.patients.find(p => p.id == pid);
+    if (state.editingAppointmentId) {
+        const idx = state.appointments.findIndex(a => a.id == state.editingAppointmentId);
+        if (idx === -1) return;
+        const updated = {
+            ...state.appointments[idx],
+            patientId: parseInt(pid, 10),
+            patientName: patient.name,
+            type, date, time,
+            notes: document.getElementById('scheduleNotes').value || '',
+            status: state.appointments[idx].status || 'scheduled'
+        };
+        state.appointments[idx] = updated;
+        fetch(`${API_BASE}/appointments/${state.editingAppointmentId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${sessionStorage.getItem('gd_token') || ''}` },
+            body: JSON.stringify(updated)
+        }).catch(() => {});
+        state.activities.unshift({ icon: 'fas fa-calendar-alt', iconBg: '#FFF3CD', iconColor: '#9C6A00', text: `Appointment updated for <strong>${patient.name}</strong>`, time: 'Just now' });
+        closeModal('scheduleModal');
+        renderAll();
+        toast(`Appointment updated for ${patient.name}.`, 'info');
+        resetScheduleForm();
+        return;
+    }
+
+    const appt = {
+        id: state.appointments.length + 1, patientId: parseInt(pid, 10),
+        patientName: patient.name, type, date, time, status: 'scheduled',
+        notes: document.getElementById('scheduleNotes').value
+    };
+
+    fetch(`${API_BASE}/appointments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${sessionStorage.getItem('gd_token') || ''}` },
+        body: JSON.stringify(appt)
+    }).catch(() => {});
+
+    state.appointments.unshift(appt);
+    state.activities.unshift({ icon: 'fas fa-calendar-check', iconBg: '#D6EAF8', iconColor: '#1A5276', text: `Appointment scheduled for <strong>${patient.name}</strong>`, time: 'Just now' });
+    closeModal('scheduleModal');
+    renderAll();
+    toast(`Appointment scheduled for ${patient.name}!`, 'success');
+    resetScheduleForm();
+}
+
+function updateApptStatus(id, status) {
+    const appt = state.appointments.find(a => a.id == id);
+    if (!appt) return;
+    appt.status = status;
+    fetch(`${API_BASE}/appointments/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${sessionStorage.getItem('gd_token') || ''}` },
+        body: JSON.stringify({ status })
+    }).catch(() => {});
+    renderAll();
+    toast(`Appointment marked as ${status}.`, 'info');
+}
+
+function deleteAppointment(id) {
+    const appt = state.appointments.find(a => a.id == id);
+    if (!appt) return;
+    if (!confirm(`Delete appointment for ${appt.patientName}?`)) return;
+
+    state.appointments = state.appointments.filter(a => a.id != id);
+    fetch(`${API_BASE}/appointments/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem('gd_token') || ''}` }
+    }).catch(() => {});
+    renderAll();
+    toast('Appointment deleted.', 'error');
+}
+
+function viewAppointment(id) {
+    const appt = state.appointments.find(a => a.id == id);
+    if (!appt) return;
+    const confirmAction = appt.status === 'confirmed' ? 'completed' : 'confirmed';
+    const confirmLabel = appt.status === 'confirmed' ? 'Complete' : 'Confirm';
+    const isCancelable = appt.status !== 'cancelled' && appt.status !== 'completed';
+    document.getElementById('viewApptBody').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;background:var(--bg);border-radius:10px;padding:16px;">
+            <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Patient</div><div style="font-size:0.92rem;font-weight:600">${appt.patientName}</div></div>
+            <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Status</div><div>${statusBadge(appt.status)}</div></div>
+            <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Service</div><div style="font-size:0.9rem">${appt.type}</div></div>
+            <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Date / Time</div><div style="font-size:0.9rem">${fmtDate(appt.date)} at ${fmtTime(appt.time)}</div></div>
+            <div style="grid-column:1/-1"><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Notes</div><div style="font-size:0.86rem;color:var(--ink)">${appt.notes || 'No notes'}</div></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px">
+            ${appt.status !== 'completed' ? `<button class="btn btn-primary btn-sm" onclick="updateApptStatus(${appt.id}, '${confirmAction}')"><i class="fas fa-check"></i> ${confirmLabel}</button>` : ''}
+            ${isCancelable ? `<button class="btn btn-secondary btn-sm" onclick="updateApptStatus(${appt.id}, 'cancelled')"><i class="fas fa-times"></i> Cancel</button>` : ''}
+            <button class="btn btn-gold btn-sm" onclick="editAppointment(${appt.id});closeModal('viewApptModal')"><i class="fas fa-pen"></i> Reschedule</button>
+        </div>
+    `;
+    openModal('viewApptModal');
+}
+
+function editAppointment(id) {
+    const appt = state.appointments.find(a => a.id == id);
+    if (!appt) return;
+    state.editingAppointmentId = appt.id;
+    populatePatientDropdowns();
+    document.getElementById('schedulePatient').value = appt.patientId || '';
+    document.getElementById('scheduleType').value = appt.type || '';
+    document.getElementById('scheduleDate').value = appt.date || '';
+    document.getElementById('scheduleTime').value = appt.time || '';
+    document.getElementById('scheduleNotes').value = appt.notes || '';
+    document.getElementById('scheduleModalTitle').innerHTML = '<i class="fas fa-pen" style="color:var(--gold);margin-right:8px"></i> Edit Appointment';
+    document.getElementById('scheduleSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Save Changes';
+    openModal('scheduleModal');
+}
+
+function deletePatient(id) {
+    if (!confirm('Delete this patient? This action cannot be undone.')) return;
+    state.patients = state.patients.filter(p => p.id !== id);
+    fetch(`${API_BASE}/patients/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem('gd_token') || ''}` }
+    }).catch(() => {});
+    renderAll();
+    toast('Patient removed.', 'error');
+}
+
+let currentEditingPatientId = null;
+
+function editPatient(id) {
+    const p = state.patients.find(pt => pt.id === id);
+    if (!p) return;
+    currentEditingPatientId = id;
+    document.getElementById('editPatientName').value = p.name || '';
+    document.getElementById('editPatientEmail').value = p.email || '';
+    document.getElementById('editPatientPhone').value = p.phone || '';
+    document.getElementById('editPatientDob').value = p.dob ? p.dob.split('T')[0] : '';
+    document.getElementById('editPatientAddress').value = p.address || '';
+    openModal('viewPatientModal');
+}
+
+function savePatientChanges() {
+    if (currentEditingPatientId === null) return;
+    const name = document.getElementById('editPatientName').value.trim();
+    const email = document.getElementById('editPatientEmail').value.trim();
+    const phone = document.getElementById('editPatientPhone').value.trim();
+    const dob = document.getElementById('editPatientDob').value;
+    const address = document.getElementById('editPatientAddress').value.trim();
+    
+    if (!name || !email || !phone) {
+        toast('Please fill in all required fields.', 'error');
+        return;
+    }
+    
+    const updatedData = { name, email, phone, dob, address };
+    fetch(`${API_BASE}/patients/${currentEditingPatientId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('gd_token') || ''}`
+        },
+        body: JSON.stringify(updatedData)
+    })
+    .then(r => r.json())
+    .then(data => {
+        const patientIndex = state.patients.findIndex(p => p.id === currentEditingPatientId);
+        if (patientIndex !== -1) {
+            state.patients[patientIndex] = { ...state.patients[patientIndex], ...updatedData };
+        }
+        renderPatientsTable();
+        closeModal('viewPatientModal');
+        currentEditingPatientId = null;
+        toast('Patient record updated successfully!', 'success');
+    })
+    .catch(err => {
+        console.error('Error updating patient:', err);
+        toast('Error updating patient record.', 'error');
+    });
+}
+
+function viewPatient(id) {
+    const p = state.patients.find(pt => pt.id === id);
+    if (!p) return;
+    const appts = state.appointments.filter(a => a.patientId === id);
+    document.getElementById('patientDetailsBody').innerHTML = `
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
+            <div class="avatar" style="width:52px;height:52px;font-size:1rem">${initials(p.name)}</div>
+            <div>
+                <div style="font-size:1.2rem;font-weight:600">${p.name}</div>
+                <div style="font-size:0.8rem;color:var(--muted)">${p.patientId} · ${statusBadge(p.status)}</div>
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;background:var(--bg);border-radius:10px;padding:18px;margin-bottom:18px">
+            <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Email</div><div style="font-size:0.88rem">${p.email}</div></div>
+            <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Phone</div><div style="font-size:0.88rem">${p.phone}</div></div>
+            <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Date of Birth</div><div style="font-size:0.88rem">${p.dob ? fmtDate(p.dob) : '—'}</div></div>
+            <div><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Last Visit</div><div style="font-size:0.88rem">${p.lastVisit ? fmtDate(p.lastVisit) : '—'}</div></div>
+            ${p.address ? `<div style="grid-column:1/-1"><div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Address</div><div style="font-size:0.88rem">${p.address}</div></div>` : ''}
+        </div>
+        <div style="font-weight:600;margin-bottom:12px">Appointment History</div>
+        ${appts.length ? appts.map(a => `<div style="background:var(--bg);border-radius:8px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:0.88rem;font-weight:500">${a.type}</div><div style="font-size:0.78rem;color:var(--muted)">${fmtDate(a.date)} at ${fmtTime(a.time)}</div></div>${statusBadge(a.status)}</div>`).join('') : '<div class="empty-state" style="padding:20px"><i class="fas fa-calendar-times"></i><p>No appointment history</p></div>'}
+    `;
+    openModal('viewPatientModal');
+}
+
+function scheduleForPatient(id, name) {
+    document.getElementById('schedulePatient').value = id;
+    closeModal('viewPatientModal');
+    openModal('scheduleModal');
+}
+
+function sendMessage() {
+    const rid = document.getElementById('msgRecipient').value;
+    const subject = document.getElementById('msgSubject').value.trim();
+    const body = document.getElementById('msgBody').value.trim();
+    if (!rid || !subject || !body) { toast('Please fill in all fields.', 'error'); return; }
+    const patient = state.patients.find(p => p.id == rid);
+    state.messages.unshift({ id: state.messages.length + 1, from: sessionStorage.getItem('gd_name') || 'Admin', to: patient.name, subject, body, date: new Date().toISOString().split('T')[0], read: true });
+    closeModal('newMessageModal');
+    renderAll();
+    toast(`Message sent to ${patient.name}!`, 'success');
+    document.getElementById('msgSubject').value = '';
+    document.getElementById('msgBody').value = '';
+}
+
+function sendBroadcast() {
+    const subject = document.getElementById('broadcastSubject').value.trim();
+    const body = document.getElementById('broadcastBody').value.trim();
+    if (!subject || !body) { toast('Please fill subject and message.', 'error'); return; }
+    state.messages.unshift({ id: state.messages.length + 1, from: sessionStorage.getItem('gd_name') || 'Admin', to: 'All Patients', subject, body, date: new Date().toISOString().split('T')[0], read: true });
+    state.activities.unshift({ icon: 'fas fa-broadcast-tower', iconBg: '#FFF3CD', iconColor: '#9C6A00', text: `Broadcast sent: <strong>${subject}</strong>`, time: 'Just now' });
+    document.getElementById('broadcastSubject').value = '';
+    document.getElementById('broadcastBody').value = '';
+    renderAll();
+    toast('Broadcast sent to all patients!', 'success');
+}
+
+// ── NAVIGATION ──
+const sectionMeta = {
+    dashboard: { title: 'Dashboard', subtitle: null, action: { label: 'Inquiries', fn: "showSection('inquiries')" } },
+    patients: { title: 'Patient Records', action: { label: 'Inquiries', fn: "showSection('inquiries')" } },
+    appointments: { title: 'Appointments', action: null },
+    messages: { title: 'Messages', action: { label: 'New Message', fn: 'openNewMessageModal()' } },
+    reports: { title: 'Reports & Analytics', action: { label: 'Export', fn: 'exportReport()' } }
+};
+
+function showSection(id) {
+    if(id==='inquiries'){
+        document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+        document.getElementById('inquiriesSection').classList.add('active');
+        document.getElementById('pageTitle').textContent='Patient Inquiries';
+        const subtitleEl=document.getElementById('pageSubtitle');
+        if(subtitleEl) subtitleEl.textContent='Review and manage patient inquiries';
+        renderInquiries();
+        return;
+    }
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(id + 'Section').classList.add('active');
+    const navItems = document.querySelectorAll('.nav-item');
+    const navMap = { dashboard: 0, patients: 1, appointments: 2, messages: 3, reports: 4 };
+    navItems[navMap[id]]?.classList.add('active');
+    const meta = sectionMeta[id] || {};
+    document.getElementById('pageTitle').textContent = meta.title || id;
+    const btn = document.getElementById('topbarAction');
+    if (meta.action) {
+        btn.style.display = '';
+        btn.innerHTML = `<i class="fas fa-plus"></i> ${meta.action.label}`;
+        btn.onclick = new Function(meta.action.fn);
+    } else {
+        btn.style.display = 'none';
+        btn.innerHTML = '';
+        btn.onclick = null;
+    }
+    // Populate dropdowns on demand
+    if (id === 'appointments' || id === 'messages') populatePatientDropdowns();
+    if (id === 'patients') renderPatientsTable();
+    if (id === 'appointments') renderApptTable();
+    if (id === 'messages') renderMessages();
+    if (id === 'dashboard') renderAll();
+    state.currentSection = id;
+}
+
+function populatePatientDropdowns() {
+    ['schedulePatient', 'msgRecipient'].forEach(selectId => {
+        const el = document.getElementById(selectId);
+        if (!el) return;
+        const current = el.value;
+        el.innerHTML = `<option value="">Select a patient</option>` + state.patients.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+        if (current) el.value = current;
+    });
+}
+
+// ── MODALS ──
+function openModal(id) { document.getElementById(id).classList.add('open'); populatePatientDropdowns(); }
+function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    if (id === 'scheduleModal') resetScheduleForm();
+}
+function openAddPatientModal() { openModal('addPatientModal'); }
+function openScheduleModal() {
+    resetScheduleForm();
+    document.getElementById('scheduleDate').min = new Date().toISOString().split('T')[0];
+    openModal('scheduleModal');
+}
+function openNewMessageModal() { openModal('newMessageModal'); }
+
+function resetScheduleForm() {
+    state.editingAppointmentId = null;
+    document.getElementById('scheduleModalTitle').innerHTML = '<i class="fas fa-calendar-plus" style="color:var(--gold);margin-right:8px"></i> Schedule Appointment';
+    document.getElementById('scheduleSubmitBtn').innerHTML = '<i class="fas fa-calendar-check"></i> Confirm';
+    document.getElementById('schedulePatient').value = '';
+    document.getElementById('scheduleType').value = '';
+    document.getElementById('scheduleDate').value = '';
+    document.getElementById('scheduleTime').value = '';
+    document.getElementById('scheduleNotes').value = '';
+}
+
+document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ── AUTH ──
+function logout() {
+    if (!confirm('Log out of the admin panel?')) return;
+    localStorage.removeItem('adminLoggedIn');
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminName');
+    window.location.href = '/gd-admin/login';
+}
+
+// ── UTILS ──
+function initials(name) { return name.split(' ').filter(Boolean).map(n => n[0]).join('').slice(0,2).toUpperCase(); }
+function fmtDate(d) { return d ? new Date(d + 'T00:00:00').toLocaleDateString('en-PH', { year:'numeric', month:'short', day:'numeric' }) : '—'; }
+function fmtTime(t) { if (!t) return '—'; const [h,m] = t.split(':'); const hour = parseInt(h); return `${hour > 12 ? hour-12 : hour}:${m} ${hour >= 12 ? 'PM' : 'AM'}`; }
+
+function statusBadge(s) {
+    const map = { active: 'badge-green', inactive: 'badge-gray', scheduled: 'badge-blue', confirmed: 'badge-green', completed: 'badge-gray', cancelled: 'badge-red', pending: 'badge-yellow' };
+    return `<span class="badge ${map[s] || 'badge-gray'}">${s.charAt(0).toUpperCase()+s.slice(1)}</span>`;
+}
+
+function toast(msg, type = 'success') {
+    const el = document.getElementById('toast');
+    const icons = { success: 'fas fa-check-circle', error: 'fas fa-exclamation-circle', info: 'fas fa-info-circle' };
+    el.className = `toast ${type}`;
+    document.getElementById('toastIcon').className = icons[type] || icons.success;
+    document.getElementById('toastMsg').textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+function exportReport() { toast('Report export started — check your downloads.', 'info'); }
+
+
+// ── INQUIRY SECTION (admin) ──
+let currentAdminInq = null;
+
+function renderInquiries() {
+    const q = (document.getElementById('inqSearch')?.value || '').toLowerCase();
+    const st = document.getElementById('inqFilter')?.value || 'all';
+    const urg = document.getElementById('urgFilter')?.value || 'all';
+    let list = state.complaints.filter(c =>
+        (st === 'all' || c.status === st) &&
+        (urg === 'all' || c.urgency === urg) &&
+        (c.name.toLowerCase().includes(q) || (c.concern || '').toLowerCase().includes(q) || (c.phone || '').includes(q))
+    );
+    const el = document.getElementById('inqList');
+    if (!el) return;
+    if (!list.length) { el.innerHTML = '<div style="text-align:center;padding:44px;color:#999"><i class="fas fa-inbox" style="font-size:2rem;opacity:.2;display:block;margin-bottom:12px"></i>No inquiries found</div>'; return; }
+    const urgColor = {urgent:'#C0392B', soon:'#9C6A00', routine:'#2D6A4F'};
+    const urgBg = {urgent:'#FDECEA', soon:'#FFF3CD', routine:'#D8F3DC'};
+    const urgIcon = {urgent:'🔴', soon:'🟡', routine:'🟢'};
+    const stColor = {new:'#C0392B', in_review:'#9C6A00', scheduled:'#1A5276', closed:'#999'};
+    const stBg = {new:'#FDECEA', in_review:'#FFF3CD', scheduled:'#D6EAF8', closed:'#F0F0F0'};
+    el.innerHTML = list.map(c => {
+        const selected = state.selectedInquiryId === c.id;
+        return `
+        <div onclick="selectAdminInquiry(${c.id})" style="background:#fff;border:1px solid ${selected?'#38A169':'#E5DDD3'};border-radius:12px;padding:16px 18px;margin-bottom:12px;border-left:4px solid ${urgColor[c.urgency]||'#ddd'};cursor:pointer;${selected?'box-shadow:0 0 0 2px rgba(46,125,50,.12);background:rgba(72,187,120,.06);':''}">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+                <div><div style="font-weight:600;font-size:.9rem">${c.name}</div><div style="font-size:.76rem;color:#999;margin-top:2px">${c.phone||''}${c.email?' · '+c.email:''}</div></div>
+                <div style="display:flex;gap:6px;align-items:center">
+                    <span style="padding:3px 9px;border-radius:99px;font-size:.7rem;font-weight:500;background:${urgBg[c.urgency]||'#f0f0f0'};color:${urgColor[c.urgency]||'#999'}">${urgIcon[c.urgency]||''} ${(c.urgency||'').replace(/\b\w/g,x=>x.toUpperCase())}</span>
+                    <span style="padding:3px 9px;border-radius:99px;font-size:.7rem;font-weight:500;background:${stBg[c.status]||'#f0f0f0'};color:${stColor[c.status]||'#999'}">${(c.status||'').replace('_',' ').replace(/\b\w/g,x=>x.toUpperCase())}</span>
+                </div>
+            </div>
+            <div style="font-size:.83rem;font-weight:600;margin-bottom:6px">${c.concern||'General Inquiry'}</div>
+            ${c.description?`<div style="font-size:.79rem;color:#999;line-height:1.55;background:#F8F5F0;padding:9px 11px;border-radius:7px;margin-bottom:10px">${c.description}</div>`:''}
+            ${c.assignedDoctor?`<div style="font-size:.8rem;color:#2D6A4F;margin-bottom:8px"><i class="fas fa-user-md"></i> Doctor: <strong>${c.assignedDoctor}</strong></div>`:''}
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+                <div style="font-size:.76rem;color:#999">${c.preferredDate?'📅 '+c.preferredDate+' ':''}</div>
+                <div style="display:flex;gap:7px">
+                    <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();viewAdminInquiry(${c.id})"><i class="fas fa-edit"></i> Update</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+    // update badge
+    const nb = state.complaints.filter(c=>c.status==='new').length;
+    const badge = document.getElementById('inqNavBadge');
+    if(badge){badge.textContent=nb;badge.style.display=nb?'':'none';}
+    document.getElementById('notifDot').style.display = nb ? 'flex' : 'none';
+}
+
+function selectAdminInquiry(id){
+    state.selectedInquiryId = id;
+    renderInquiries();
+}
+
+function updateInqBadge() {
+    const nb = state.complaints.filter(c=>c.status==='new').length;
+    const badge = document.getElementById('inqNavBadge');
+    if(badge){badge.textContent=nb;badge.style.display=nb?'':'none';}
+    document.getElementById('notifDot').style.display = nb ? 'flex' : 'none';
+    renderNotifPanel();
+}
+
+function renderNotifPanel() {
+    const list = state.complaints.filter(c=>c.status==='new');
+    const el = document.getElementById('notifList');
+    if(!el) return;
+    if(!list.length){el.innerHTML='<div style="padding:22px;text-align:center;color:#999;font-size:.85rem">✅ No new inquiries</div>';return;}
+    el.innerHTML = list.map(c=>`
+        <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0;cursor:pointer;background:#FFFBF5" onclick="openNotifInq(${c.id})">
+            <div style="font-size:.85rem;font-weight:600;color:#1A1209">${c.name}</div>
+            <div style="font-size:.78rem;color:#999;margin-top:2px">${c.concern||'General Inquiry'}</div>
+            <div style="font-size:.72rem;color:#999;margin-top:3px">${c.urgency==='urgent'?'🔴':c.urgency==='soon'?'🟡':'🟢'} ${(c.urgency||'').replace(/\b\w/g,x=>x.toUpperCase())}</div>
+        </div>`).join('');
+}
+
+function toggleNotif(){
+    const panel = document.getElementById('notifPanel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function openNotifInq(id) {
+    document.getElementById('notifPanel').style.display = 'none';
+    showSection('inquiries');
+    setTimeout(() => viewAdminInquiry(id), 150);
+}
+
+function scheduleSelectedInquiry(){
+  const q=(document.getElementById('inqSearch').value||'').toLowerCase();
+  const st=document.getElementById('inqFilter').value;
+  const urg=document.getElementById('urgFilter').value;
+  const selectedId = state.selectedInquiryId;
+  const filtered = state.complaints.filter(c=>(st==='all'||c.status===st)&&(urg==='all'||c.urgency===urg)&&(c.name.toLowerCase().includes(q)||(c.concern||'').toLowerCase().includes(q)||(c.phone||'').includes(q)));
+  const selected = filtered.find(c=>c.id===selectedId);
+  if(selected){quickScheduleAdmin(selected.id);return}
+  if(filtered.length===1){quickScheduleAdmin(filtered[0].id);return}
+  if(filtered.length){alert('Multiple inquiries found. Please select one by clicking on it first.');return}
+  alert('No inquiries to schedule');
+}
+
+function quickScheduleAdmin(cid){
+  const c=state.complaints.find(x=>x.id===cid);if(!c)return;
+  if(c.preferredDate)document.getElementById('apptDateInput').value=c.preferredDate;
+  document.getElementById('apptPatientInput').value=c.name;
+  showSection('appointments');
+}
+
+document.addEventListener('click', e => {
+    const panel = document.getElementById('notifPanel');
+    const btn = document.getElementById('bellBtn');
+    if(panel && btn && !panel.contains(e.target) && !btn.contains(e.target))
+        panel.style.display = 'none';
+});
+
+function viewAdminInquiry(id) {
+    const c = state.complaints.find(x=>x.id===id); if(!c) return;
+    currentAdminInq = c;
+    document.getElementById('adminInqBody').innerHTML = `
+        <div style="background:#F8F5F0;border-radius:10px;padding:16px;margin-bottom:18px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div><div style="font-size:.68rem;text-transform:uppercase;color:#999;margin-bottom:3px">Name</div><div style="font-weight:600">${c.name}</div></div>
+                <div><div style="font-size:.68rem;text-transform:uppercase;color:#999;margin-bottom:3px">Phone</div><div>${c.phone||'—'}</div></div>
+                <div><div style="font-size:.68rem;text-transform:uppercase;color:#999;margin-bottom:3px">Email</div><div style="word-break:break-all">${c.email||'—'}</div></div>
+                <div><div style="font-size:.68rem;text-transform:uppercase;color:#999;margin-bottom:3px">Preferred Date</div><div>${c.preferredDate||'—'}</div></div>
+            </div>
+            ${c.description?`<div style="margin-top:12px"><div style="font-size:.68rem;text-transform:uppercase;color:#999;margin-bottom:5px">Description</div><div style="font-size:.83rem;line-height:1.6">${c.description}</div></div>`:''}
+        </div>
+        <div style="margin-bottom:16px">
+            <label style="display:block;font-size:.7rem;font-weight:500;text-transform:uppercase;color:#999;margin-bottom:6px">Assign Doctor</label>
+            <select id="adm-inq-doctor" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:.88rem;outline:none">
+                <option value="">— No doctor assigned —</option>
+                <option ${c.assignedDoctor==='Dr. Bambina Guerrero'?'selected':''}>Dr. Bambina Guerrero</option>
+                <option ${c.assignedDoctor==='Dr. Carlos Reyes'?'selected':''}>Dr. Carlos Reyes</option>
+                <option ${c.assignedDoctor==='Dr. Lena Santos'?'selected':''}>Dr. Lena Santos</option>
+            </select>
+        </div>
+        <div style="margin-bottom:16px">
+            <label style="display:block;font-size:.7rem;font-weight:500;text-transform:uppercase;color:#999;margin-bottom:6px">Update Status</label>
+            <select id="adm-inq-status" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:.88rem;outline:none">
+                <option value="new" ${c.status==='new'?'selected':''}>New</option>
+                <option value="in_review" ${c.status==='in_review'?'selected':''}>In Review</option>
+                <option value="scheduled" ${c.status==='scheduled'?'selected':''}>Scheduled</option>
+                <option value="closed" ${c.status==='closed'?'selected':''}>Closed</option>
+            </select>
+        </div>
+        <div style="margin-bottom:16px">
+            <label style="display:block;font-size:.7rem;font-weight:500;text-transform:uppercase;color:#999;margin-bottom:6px">Staff Notes</label>
+            <textarea id="adm-inq-notes" rows="3" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:.88rem;outline:none;resize:vertical" placeholder="Add notes...">${c.staffNotes||''}</textarea>
+        </div>
+        ${c.email?`<button class="btn btn-secondary" onclick="openAdminEmailModal()" style="width:100%;justify-content:center"><i class="fas fa-envelope"></i> Email Patient (${c.email})</button>`:'<div style="font-size:.78rem;color:#999;text-align:center">No email on file for this patient</div>'}`;
+    document.getElementById('adminInqModal').style.display = 'flex';
+}
+
+function closeInqModal() { document.getElementById('adminInqModal').style.display = 'none'; }
+
+async function saveAdminInquiry() {
+    const c = currentAdminInq; if(!c) return;
+    const token = sessionStorage.getItem('gd_token');
+    const payload = {
+        status: document.getElementById('adm-inq-status').value,
+        staffNotes: document.getElementById('adm-inq-notes').value,
+        assignedDoctor: document.getElementById('adm-inq-doctor').value
+    };
+    try {
+        const res = await fetch(`${API_BASE}/complaints/${c.id}`, {method:'PUT', headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`}, body:JSON.stringify(payload)});
+        const data = await res.json();
+        const i = state.complaints.findIndex(x=>x.id===c.id); if(i>-1) state.complaints[i]=data;
+        closeInqModal(); renderAll(); showToast('Inquiry updated successfully');
+    } catch { showToast('Failed to save'); }
+}
+
+function openAdminEmailModal() {
+    const c = currentAdminInq; if(!c||!c.email) return;
+    document.getElementById('adm-em-to').value = `${c.name} <${c.email}>`;
+    const date = c.preferredDate || '';
+    const doctor = c.assignedDoctor || '';
+    document.getElementById('adm-em-subj').value = `Your Appointment at Guerrero Dental${date?' – '+date:''}`;
+    document.getElementById('adm-em-body').value = `Dear ${c.name},\n\nWe are pleased to confirm your appointment${date?' on '+date:''}${doctor?' with '+doctor:''}.\n\nPlease arrive 10 minutes before your scheduled time.\nFor changes or questions, call us at 0917-5850-158.\n\nThank you for choosing Guerrero Dental!\n\nWarm regards,\nGuerrero Dental Team\n📞 0917-5850-158 | 📧 info@guerrerodental.com`;
+    closeInqModal();
+    document.getElementById('adminEmailModal').style.display = 'flex';
+}
+
+async function sendAdminEmail() {
+    const c = currentAdminInq; if(!c) return;
+    const token = sessionStorage.getItem('gd_token');
+    const subject = document.getElementById('adm-em-subj').value.trim();
+    const body = document.getElementById('adm-em-body').value.trim();
+    if(!subject||!body){showToast('Subject and message required'); return;}
+    try {
+        await fetch(`${API_BASE}/complaints/${c.id}/email-patient`, {method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`}, body:JSON.stringify({subject,body})});
+        document.getElementById('adminEmailModal').style.display='none';
+        showToast(`Email sent to ${c.name}!`);
+    } catch { showToast('Failed to send email'); }
+}
+
+// PDF Download Function for Admin Dashboard
+async function downloadPDF(type){
+  const endpointMap={
+    patients:'/api/export/patients/pdf',
+    appointments:'/api/export/appointments/pdf',
+    inquiries:'/api/export/inquiries/pdf'
+  };
+  const endpoint=endpointMap[type];
+  if(!endpoint){showToast('Invalid record type.');return;}
+  try{
+    const token=sessionStorage.getItem('gd_token');
+    const response=await fetch(endpoint,{headers:{'Authorization':`Bearer ${token}`}});
+    if(!response.ok){showToast('Failed to generate PDF.');return;}
+    const blob=await response.blob();
+    const url=window.URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=`${type}_backup_${new Date().toISOString().split('T')[0]}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    showToast(`${type} PDF downloaded successfully!`);
+  }catch(e){
+    console.error('PDF download error:',e);
+    showToast('Error downloading PDF.');
+  }
+}
+
+</script>
+
+<!-- INQUIRY MODAL (admin) -->
+<div class="modal-overlay" id="adminInqModal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);z-index:500;display:none;align-items:center;justify-content:center;padding:18px">
+  <div style="background:#fff;border-radius:17px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.2)">
+    <div style="padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <h3 style="font-weight:600;font-size:1rem">Patient Inquiry</h3>
+      <button onclick="closeInqModal()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:#999">&times;</button>
+    </div>
+    <div style="padding:22px 24px" id="adminInqBody"></div>
+    <div style="padding:14px 24px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border)">
+      <button onclick="closeInqModal()" class="btn btn-secondary">Cancel</button>
+      <button onclick="adminSaveAndConvert()" class="btn btn-primary"><i class="fas fa-user-check"></i> Save & Add to Patients</button>
+    </div>
+  </div>
+</div>
+
+<!-- EMAIL PATIENT MODAL (admin) -->
+<div class="modal-overlay" id="adminEmailModal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);z-index:500;display:none;align-items:center;justify-content:center;padding:18px">
+  <div style="background:#fff;border-radius:17px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.2)">
+    <div style="padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <h3 style="font-weight:600;font-size:1rem"><i class="fas fa-envelope" style="color:#1A5276;margin-right:7px"></i>Email Patient</h3>
+      <button onclick="document.getElementById('adminEmailModal').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:#999">&times;</button>
+    </div>
+    <div style="padding:22px 24px">
+      <div style="margin-bottom:14px"><label style="display:block;font-size:.7rem;font-weight:500;text-transform:uppercase;color:#999;margin-bottom:5px">To</label><input id="adm-em-to" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:.88rem;background:#f8f8f8" readonly></div>
+      <div style="margin-bottom:14px"><label style="display:block;font-size:.7rem;font-weight:500;text-transform:uppercase;color:#999;margin-bottom:5px">Subject</label><input id="adm-em-subj" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:.88rem;outline:none" placeholder="Your Appointment at Guerrero Dental"></div>
+      <div style="margin-bottom:14px"><label style="display:block;font-size:.7rem;font-weight:500;text-transform:uppercase;color:#999;margin-bottom:5px">Message</label><textarea id="adm-em-body" rows="6" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:.88rem;outline:none;resize:vertical"></textarea></div>
+      <div style="background:#D6EAF8;border:1px solid rgba(26,82,118,.2);border-radius:9px;padding:10px 13px;font-size:.78rem;color:#1A5276"><i class="fas fa-info-circle"></i> This message will be logged in the inquiry record.</div>
+    </div>
+    <div style="padding:14px 24px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border)">
+      <button onclick="document.getElementById('adminEmailModal').style.display='none'" class="btn btn-secondary">Cancel</button>
+      <button onclick="sendAdminEmail()" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send Email</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN: CONVERT INQUIRY TO PATIENT + APPOINTMENT -->
+<div id="adminConvertModal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);z-index:600;display:none;align-items:center;justify-content:center;padding:18px">
+  <div style="background:#fff;border-radius:17px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.2)">
+    <div style="padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <h3 style="font-weight:600;font-size:1rem"><i class="fas fa-user-check" style="color:#2D6A4F;margin-right:7px"></i>Add to Patients & Schedule</h3>
+      <button onclick="document.getElementById('adminConvertModal').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:#999">&times;</button>
+    </div>
+    <div style="padding:22px 24px">
+      <div style="background:#D8F3DC;border-radius:9px;padding:11px 14px;font-size:.81rem;color:#2D6A4F;margin-bottom:18px"><strong><i class="fas fa-info-circle"></i> This will:</strong> Create a patient record from this inquiry and optionally schedule an appointment.</div>
+      <div id="adminConvertInfo" style="background:#F8F5F0;border-radius:10px;padding:14px;margin-bottom:16px;font-size:.85rem"></div>
+      <div style="margin-bottom:14px">
+        <label style="display:block;font-size:.7rem;font-weight:500;text-transform:uppercase;color:#999;margin-bottom:5px">Schedule Appointment? (optional)</label>
+        <select id="adm-cv-type" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:.88rem;outline:none">
+          <option value="">— No appointment —</option>
+          <option>Regular Check-up</option><option>Teeth Cleaning</option><option>Dental Filling</option>
+          <option>Tooth Extraction</option><option>Teeth Whitening</option><option>Emergency</option>
+          <option>Orthodontic Consultation</option><option>Dental Implant Consultation</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label style="display:block;font-size:.7rem;font-weight:500;text-transform:uppercase;color:#999;margin-bottom:5px">Date</label><input id="adm-cv-date" type="date" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:.88rem;outline:none"></div>
+        <div><label style="display:block;font-size:.7rem;font-weight:500;text-transform:uppercase;color:#999;margin-bottom:5px">Time</label>
+          <select id="adm-cv-time" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:.88rem;outline:none">
+            <option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option>
+            <option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option>
+            <option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option>
+            <option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option>
+            <option value="15:00">3:00 PM</option><option value="16:00">4:00 PM</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div style="padding:14px 24px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border)">
+      <button onclick="document.getElementById('adminConvertModal').style.display='none'" class="btn btn-secondary">Cancel</button>
+      <button onclick="doAdminConvert()" id="admCvBtn" class="btn btn-primary"><i class="fas fa-check"></i> Create Patient Record</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+async function adminSaveAndConvert(){
+  const c=currentAdminInq;if(!c)return;
+  const token=sessionStorage.getItem('gd_token');
+  const payload={
+    status:document.getElementById('adm-inq-status').value,
+    staffNotes:document.getElementById('adm-inq-notes').value,
+    assignedDoctor:document.getElementById('adm-inq-doctor').value
+  };
+  try{
+    const r=await fetch(`${API_BASE}/complaints/${c.id}`,{method:'PUT',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify(payload)});
+    const d=await r.json();
+    const i=state.complaints.findIndex(x=>x.id===c.id);if(i>-1)state.complaints[i]=d;
+  }catch{}
+  closeInqModal();
+  openAdminConvertModal();
+}
+function openAdminConvertModal(){
+  const c=currentAdminInq;if(!c)return;
+  document.getElementById('adminConvertInfo').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><div style="font-size:.65rem;text-transform:uppercase;color:#999;margin-bottom:2px">Name</div><strong>${c.name}</strong></div>
+      <div><div style="font-size:.65rem;text-transform:uppercase;color:#999;margin-bottom:2px">Phone</div>${c.phone||'—'}</div>
+      <div><div style="font-size:.65rem;text-transform:uppercase;color:#999;margin-bottom:2px">Email</div>${c.email||'—'}</div>
+      <div><div style="font-size:.65rem;text-transform:uppercase;color:#999;margin-bottom:2px">Concern</div>${c.concern||'—'}</div>
+    </div>`;
+  if(c.preferredDate)document.getElementById('adm-cv-date').value=c.preferredDate;
+  document.getElementById('adm-cv-type').value=c.concern||'';
+  closeInqModal();
+  document.getElementById('adminConvertModal').style.display='flex';
+}
+
+async function doAdminConvert(){
+  const c=currentAdminInq;if(!c)return;
+  const token=sessionStorage.getItem('gd_token');
+  const appointment_type=document.getElementById('adm-cv-type').value;
+  const appointment_date=document.getElementById('adm-cv-date').value;
+  const appointment_time=document.getElementById('adm-cv-time').value;
+  const btn=document.getElementById('admCvBtn');
+  const orig=btn.innerHTML;
+  btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Creating…';
+  // Remove prior error
+  const prev=document.getElementById('admCvErr');if(prev)prev.remove();
+  try{
+    const payload={};
+    // Only schedule if appointment type is selected
+    if(appointment_type){
+      payload.schedule_appointment=true;
+      payload.appointment_type=appointment_type;
+      payload.appointment_date=appointment_date;
+      payload.appointment_time=appointment_time;
+    }
+    const res=await fetch(`${API_BASE}/complaints/${c.id}/convert`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},
+      body:JSON.stringify(payload)
+    });
+    const data=await res.json();
+    if(!res.ok){
+      const err=document.createElement('div');
+      err.id='admCvErr';
+      err.style.cssText='background:#FEF2F2;border:1px solid #FCA5A5;color:#C0392B;padding:9px 13px;border-radius:8px;font-size:.8rem;margin:0 24px 10px';
+      err.innerHTML='<i class="fas fa-exclamation-circle"></i> '+(data.message||'Conversion failed.');
+      document.getElementById('adminConvertModal').querySelector('[style*="padding:22px"]').appendChild(err);
+      btn.disabled=false;btn.innerHTML=orig;return;
+    }
+    // Success - update state with new patient and appointment
+    const pi=state.complaints.findIndex(x=>x.id===c.id);
+    if(pi>-1)state.complaints[pi]=data.inquiry;
+    if(data.patient){
+      const px=state.patients.findIndex(p=>p.id===data.patient.id);
+      if(px>-1)state.patients[px]=data.patient;
+      else state.patients.unshift(data.patient);
+    }
+    if(data.appointment){
+      const ax=state.appointments.findIndex(a=>a.id===data.appointment.id);
+      if(ax>-1)state.appointments[ax]=data.appointment;
+      else state.appointments.unshift(data.appointment);
+    }
+    document.getElementById('adminConvertModal').style.display='none';
+    renderAll();
+    showToast(`✅ ${c.name} added to patients${data.appointment?' & appointment scheduled':''}!`);
+    setTimeout(()=>showSection('patients'), 600);
+  }catch(e){
+    console.error('Admin convert error:',e);
+    showToast('Server error: '+e.message);
+  }finally{btn.disabled=false;btn.innerHTML=orig;}
+}
+
+// Fix admin logout to use replace
+const _origLogout = typeof logout !== 'undefined' ? logout : null;
+function logout(){
+  if(!confirm('Sign out?'))return;
+  sessionStorage.removeItem('gd_token');
+  sessionStorage.removeItem('gd_name');
+  sessionStorage.removeItem('gd_email');
+  sessionStorage.removeItem('gd_role');
+  sessionStorage.removeItem('gd_id');
+  window.location.replace('/gd-admin/login');
+}
+</script>
+
+
+<script>
+function renderAdmNewInq(){
+  const el=document.getElementById('adm-newInqList');if(!el)return;
+  const list=state.complaints.filter(c=>c.status==='new').slice(0,5);
+  if(!list.length){el.innerHTML='<div style="text-align:center;padding:20px;color:#999;font-size:.82rem"><i class="fas fa-check-circle" style="color:#52B788;font-size:1.2rem;display:block;margin-bottom:6px"></i>All inquiries handled</div>';return}
+  el.innerHTML=list.map(c=>`<div style="padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="viewAdminInquiry(${c.id})">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="font-weight:600;font-size:.86rem">${c.name}</div>
+      <span style="font-size:.7rem;padding:2px 8px;border-radius:20px;background:${c.urgency==='urgent'?'#FEE2E2':c.urgency==='soon'?'#FEF3C7':'#D1FAE5'};color:${c.urgency==='urgent'?'#DC2626':c.urgency==='soon'?'#D97706':'#059669'}">${c.urgency||'routine'}</span>
+    </div>
+    <div style="font-size:.77rem;color:#888;margin-top:2px">${c.concern||'General Inquiry'}</div>
+    <div style="font-size:.7rem;color:#aaa;margin-top:2px">${c.phone||''} · ${c.email||''}</div>
+  </div>`).join('');
+}
+
+function renderAdmRecentPats(){
+  const el=document.getElementById('adm-recentPats');if(!el)return;
+  const list=state.patients.slice(0,4);
+  if(!list.length){el.innerHTML='<div style="text-align:center;padding:20px;color:#999;font-size:.82rem">No patients yet</div>';return}
+  el.innerHTML=list.map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)">
+    <div style="width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0">${p.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:.84rem;font-weight:600">${p.name}</div>
+      <div style="font-size:.71rem;color:#888">${p.patientId} · ${p.phone||'—'}</div>
+    </div>
+    <span style="font-size:.7rem;padding:2px 7px;border-radius:20px;background:${p.status==='active'?'#D1FAE5':'#F3F4F6'};color:${p.status==='active'?'#059669':'#6B7280'}">${p.status}</span>
+  </div>`).join('');
+}
+
+function renderAdmStaffDuty(){
+  const el=document.getElementById('adm-staffDuty');if(!el)return;
+  const now=new Date();const day=now.getDay();const hr=now.getHours();
+  const isOpen=(day>0&&day<6&&hr>=8&&hr<18)||(day===6&&hr>=9&&hr<14);
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const clk=document.getElementById('admLiveClock');
+  if(clk)clk.textContent=now.toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit'});
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="width:10px;height:10px;border-radius:50%;background:${isOpen?'#52B788':'#EF4444'};flex-shrink:0"></div>
+      <div><div style="font-size:.84rem;font-weight:600">Clinic ${isOpen?'Open':'Closed'}</div>
+      <div style="font-size:.71rem;color:#888">${days[day]}</div></div>
+    </div>
+    <div style="padding:8px 0;font-size:.78rem;color:#888;line-height:1.7">
+      Mon–Fri <strong style="color:#1A1209">8:00 AM – 6:00 PM</strong><br>
+      Saturday <strong style="color:#1A1209">9:00 AM – 2:00 PM</strong><br>
+      Sunday <strong style="color:#EF4444">Closed</strong>
+    </div>
+    <div style="padding-top:8px;border-top:1px solid var(--border)">
+      <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:7px">Doctors</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:.82rem">
+        <div style="display:flex;align-items:center;gap:7px">
+          <div style="width:26px;height:26px;border-radius:50%;background:#C9933C;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:700;flex-shrink:0">BG</div>
+          <div><div style="font-weight:600">Dr. Bambina Guerrero</div><div style="font-size:.68rem;color:#888">General & Cosmetic</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px">
+          <div style="width:26px;height:26px;border-radius:50%;background:#7B5EA7;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:700;flex-shrink:0">CR</div>
+          <div><div style="font-weight:600">Dr. Carlos Reyes</div><div style="font-size:.68rem;color:#888">Orthodontics</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px">
+          <div style="width:26px;height:26px;border-radius:50%;background:#2D6A4F;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:700;flex-shrink:0">LS</div>
+          <div><div style="font-weight:600">Dr. Lena Santos</div><div style="font-size:.68rem;color:#888">Pediatric & Implants</div></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// Auto-refresh inquiries every 30s for admin too
+setInterval(async()=>{
+  const token=sessionStorage.getItem('gd_token');
+  if(!token)return;
+  try{
+    const r=await fetch(`${API_BASE}/complaints`,{headers:{'Authorization':`Bearer ${token}`}});
+    if(r.ok){const d=await r.json();if(Array.isArray(d)){const prev=state.complaints.filter(c=>c.status==='new').length;state.complaints=d;const curr=d.filter(c=>c.status==='new').length;if(curr>prev){showToast(`🔔 ${curr-prev} new inquiry received!`);}renderAdmNewInq();renderStats();updateInqBadge();}}
+  }catch{}
+},30000);
+
+// Live clock tick
+setInterval(()=>renderAdmStaffDuty(),60000);
+</script>
+</body>
+</html>

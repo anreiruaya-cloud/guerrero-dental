@@ -1,0 +1,162 @@
+# 🦷 Guerrero Dental — Deployment Guide
+## How to Put Your Website Online (Free)
+
+---
+
+## WHAT YOU NEED FIRST
+- A computer with internet
+- A free GitHub account → https://github.com
+- A free Railway account → https://railway.app
+
+---
+
+## STEP 1 — Set Up Your Files on Your Computer
+
+1. Download all the files I provided (the ZIP)
+2. Unzip it — you will see this folder structure:
+
+```
+guerrero-dental/
+├── app.py
+├── requirements.txt
+├── Procfile
+├── railway.json
+├── .gitignore
+└── templates/
+    ├── index.html
+    ├── staff_login.html
+    ├── admin_dashboard.html
+    ├── nurse_dashboard.html
+    └── superadmin_dashboard.html
+```
+
+✅ Make sure the templates/ folder is inside guerrero-dental/
+✅ Do NOT include your .venv folder or .db file
+
+---
+
+## STEP 2 — Create a GitHub Account (if you don't have one)
+
+1. Go to https://github.com
+2. Click "Sign up"
+3. Enter your email, password, username
+4. Verify your email
+5. You're done!
+
+---
+
+## STEP 3 — Install Git on Your Computer
+
+Git is the tool that uploads your files to GitHub.
+
+**Windows:**
+1. Go to https://git-scm.com/download/win
+2. Download and install (click Next on everything, defaults are fine)
+3. After install, open "Git Bash" (search it in Start menu)
+
+---
+
+## STEP 4 — Upload Your Files to GitHub
+
+Open Git Bash (or Terminal on Mac), then type these commands ONE BY ONE:
+
+```bash
+# Go into your project folder (change the path to where you unzipped it)
+cd "C:/Users/Dell Laptop/guerrero-dental"
+
+# Set up git (only need to do this once ever)
+git config --global user.email "your@email.com"
+git config --global user.name "Your Name"
+
+# Initialize the project
+git init
+git add .
+git commit -m "Guerrero Dental first upload"
+git branch -M main
+```
+
+Then:
+1. Go to https://github.com/new
+2. Repository name: guerrero-dental
+3. Set to Public
+4. Click "Create repository"
+5. GitHub will show you a page — copy the URL that looks like:
+   https://github.com/YOURUSERNAME/guerrero-dental.git
+
+Back in Git Bash:
+```bash
+git remote add origin https://github.com/YOURUSERNAME/guerrero-dental.git
+git push -u origin main
+```
+
+It will ask for your GitHub username and password.
+⚠️ For password, use a GitHub "Personal Access Token" not your actual password:
+- Go to GitHub → Settings → Developer Settings → Personal Access Tokens → Tokens (classic)
+- Click "Generate new token" → check "repo" → Generate
+- Copy that token and paste it as your password
+
+---
+
+## STEP 5 — Deploy on Railway
+
+1. Go to https://railway.app
+2. Click "Start a New Project"
+3. Click "Sign in with GitHub" and authorize Railway
+4. Click "Deploy from GitHub repo"
+5. Select your "guerrero-dental" repository
+6. Railway will automatically start building your app (takes 1-2 minutes)
+
+---
+
+## STEP 6 — Set Your Environment Variables on Railway
+
+In your Railway project dashboard:
+1. Click on your app (the box that appeared)
+2. Click the "Variables" tab
+3. Add these one by one (click "New Variable"):
+
+| Name | Value |
+|------|-------|
+| JWT_SECRET | type any long random text e.g. MyDentalSecret2025XYZ |
+| FLASK_SECRET | type any long random text e.g. FlaskSecret2025ABC |
+| ANTHROPIC_API_KEY | your Anthropic key (optional — only for AI chat) |
+
+4. Click "Deploy" after adding variables
+
+---
+
+## STEP 7 — Get Your Public URL
+
+1. In Railway dashboard, click your app
+2. Click "Settings" tab
+3. Under "Networking" click "Generate Domain"
+4. You'll get a URL like: guerrero-dental.up.railway.app
+
+🎉 That's your live website! Share it with anyone.
+
+---
+
+## YOUR LOGIN CREDENTIALS (don't lose these!)
+
+| Role | Email | Password |
+|------|-------|----------|
+| Superadmin | superadmin@guerrerodental.com | SuperAdmin2025! |
+| Admin | admin@guerrerodental.com | Admin2025! |
+| Nurse | nurse@guerrerodental.com | NurseAna2025! |
+
+Staff login page: yoursite.up.railway.app/gd-admin/login
+
+---
+
+## TROUBLESHOOTING
+
+**App won't start?**
+- Click "View Logs" in Railway to see the error
+
+**Database resets after redeploy?**
+- This is normal with the free SQLite setup
+- To fix permanently: add a PostgreSQL database in Railway (still free)
+
+**Need help?**
+- Railway docs: https://docs.railway.app
+- Or ask Claude!

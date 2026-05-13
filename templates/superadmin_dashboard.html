@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Admin — Guerrero Dental</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--br:#7C3D12;--brm:#A0522D;--go:#C9933C;--gop:#F5E6C8;--bg:#F3EDE4;--cr:#FAF6F0;--ink:#1A1209;--inks:#4A3728;--mu:#8A7A6A;--bd:#E5DDD3;--wh:#fff;--ok:#2D6A4F;--okb:#D8F3DC;--wa:#9C6A00;--wab:#FFF3CD;--er:#C0392B;--erb:#FDECEA;--in:#1A5276;--inb:#D6EAF8;--pu:#6C3483;--pub:#EBD5F5;--sw:260px;--th:64px;}
+html,body{height:100%}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--inks);display:flex}
+.sidebar{width:var(--sw);background:#1A0D04;height:100vh;position:fixed;left:0;top:0;display:flex;flex-direction:column;z-index:200;overflow:hidden}
+.sb-brand{padding:20px 22px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px}
+.sb-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--go),var(--brm));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;overflow:hidden}
+.sb-icon img{width:100%;height:100%;object-fit:contain}
+.sb-name{font-family:'Cormorant Garamond',serif;color:var(--gop);font-size:1.05rem;line-height:1.2}
+.sb-name span{display:block;font-family:'Outfit',sans-serif;font-size:.64rem;font-weight:300;color:#5C4A38;letter-spacing:.1em;text-transform:uppercase}
+.sb-nav{flex:1;padding:14px 0;overflow-y:auto}
+.sb-sect{padding:5px 22px 7px;font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#3D2817;margin-top:10px}
+.sb-item{display:flex;align-items:center;gap:11px;padding:11px 22px;color:#7A5C3E;cursor:pointer;transition:all .18s;border-left:3px solid transparent;font-size:.88rem}
+.sb-item:hover,.sb-item.active{color:var(--gop);background:rgba(201,147,60,.1);border-left-color:var(--go)}
+.sb-item i{width:17px;text-align:center;font-size:.88rem}
+.sb-badge{margin-left:auto;background:var(--go);color:var(--ink);font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:99px}
+.sb-foot{padding:14px 22px;border-top:1px solid rgba(255,255,255,.06)}
+.sb-user{display:flex;align-items:center;gap:10px}
+.sb-av{width:34px;height:34px;background:linear-gradient(135deg,var(--go),#E6B96A);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink);font-weight:700;font-size:.78rem;flex-shrink:0}
+.sb-uinfo{flex:1;min-width:0}
+.sb-uinfo strong{display:block;font-size:.8rem;color:var(--gop);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-uinfo span{font-size:.64rem;background:rgba(201,147,60,.2);color:var(--go);padding:1px 7px;border-radius:99px}
+.sb-logout{background:none;border:none;color:#5C4A38;cursor:pointer;padding:6px;border-radius:6px;transition:all .2s;font-size:.82rem}
+.sb-logout:hover{color:var(--er);background:rgba(192,57,43,.1)}
+.topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:#fff;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:100}
+.tb-left h1{font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:var(--ink)}
+.tb-left p{font-size:.78rem;color:var(--mu);margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:10px;position:relative}
+.tb-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--bd);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mu);transition:all .2s;font-size:.88rem;position:relative}
+.tb-btn:hover{border-color:var(--br);color:var(--br)}
+.tb-clock{font-family:'Courier New',monospace;font-size:1rem;color:var(--ink);font-weight:600;padding:0 12px;white-space:nowrap}
+.notif-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;background:var(--er);border-radius:50%;border:2px solid #fff;display:none}
+.role-chip{padding:5px 14px;border-radius:99px;background:rgba(201,147,60,.12);color:var(--go);font-size:.72rem;font-weight:600;border:1px solid rgba(201,147,60,.3)}
+/* NOTIF DROPDOWN */
+.notif-panel{position:absolute;top:calc(100% + 10px);right:0;width:320px;background:#fff;border:1px solid var(--bd);border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.14);z-index:300;display:none;overflow:hidden}
+.notif-panel.open{display:block}
+.notif-hd{padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.notif-hd span{font-weight:600;font-size:.88rem}
+.notif-mark{background:none;border:none;font-size:.72rem;color:var(--go);cursor:pointer;font-family:'Outfit',sans-serif}
+.notif-list{max-height:300px;overflow-y:auto}
+.notif-item{padding:12px 16px;border-bottom:1px solid #F5F0EA;cursor:pointer;transition:background .15s}
+.notif-item:hover{background:var(--bg)}
+.notif-item:last-child{border-bottom:none}
+.notif-item.unread{background:#FFFBF5}
+.ni-name{font-size:.85rem;font-weight:600;color:var(--ink)}
+.ni-concern{font-size:.78rem;color:var(--mu);margin-top:2px}
+.ni-meta{font-size:.72rem;color:var(--mu);margin-top:3px;display:flex;align-items:center;gap:6px}
+.notif-empty{padding:24px;text-align:center;color:var(--mu);font-size:.85rem}
+.main{margin-left:var(--sw);margin-top:var(--th);padding:26px;min-height:calc(100vh - var(--th));flex:1}
+.section{display:none}.section.active{display:block}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:16px;margin-bottom:22px}
+.stat-card{background:transparent;border-radius:0;padding:8px 6px;border:none;transition:none}
+.stat-card:hover{box-shadow:none}
+.stat-card[data-tooltip]{cursor:default;position:relative}
+.stat-card[data-tooltip]::after{display:none!important}
+.stat-card[data-tooltip]:hover::after,.stat-card[data-tooltip]:focus-visible::after,.stat-card.tooltip-pinned::after{display:none!important}
+.sc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.sc-icon{width:auto;height:auto;border-radius:0;display:flex;align-items:center;justify-content:center;font-size:1rem;background:transparent}
+.ic-br{background:transparent;color:var(--br)}.ic-go{background:transparent;color:var(--go)}
+.ic-ok{background:transparent;color:var(--ok)}.ic-in{background:transparent;color:var(--in)}
+.ic-er{background:transparent;color:var(--er)}.ic-pu{background:transparent;color:var(--pu)}
+.sc-lbl{font-size:.7rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mu)}
+.sc-num{font-size:2.2rem;font-weight:600;color:var(--ink);line-height:1;margin:5px 0}
+.sc-sub{font-size:.75rem;color:var(--mu)}
+.card{background:#fff;border-radius:13px;border:1px solid var(--bd);overflow:hidden;margin-bottom:20px}
+.card-head{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.card-title{font-weight:600;font-size:.92rem;color:var(--ink)}
+.card-body{padding:18px 20px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:22px}
+.g3{display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:22px}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:180px}
+.search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--mu);font-size:.82rem}
+.search-wrap input{width:100%;padding:9px 12px 9px 33px;border:1px solid var(--bd);border-radius:9px;font-family:'Outfit',sans-serif;font-size:.85rem;background:#fff;color:var(--ink);outline:none;transition:border-color .2s}
+.search-wrap input:focus{border-color:var(--br)}
+.f-select{padding:9px 13px;border:1px solid var(--bd);border-radius:9px;font-family:'Outfit',sans-serif;font-size:.83rem;background:#fff;outline:none;cursor:pointer}
+.btn{padding:8px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:.83rem;font-weight:500;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-br{background:var(--br);color:#fff}.btn-br:hover{background:var(--brm)}
+.btn-go{background:var(--go);color:#fff}.btn-go:hover{opacity:.9}
+.btn-sec{background:var(--bg);color:var(--ink);border:1px solid var(--bd)}.btn-sec:hover{background:var(--bd)}
+.btn-er{background:var(--erb);color:var(--er)}.btn-er:hover{background:#F5C6C6}
+.btn-ok{background:var(--okb);color:var(--ok)}.btn-ok:hover{background:#C7EDD1}
+.btn-pu{background:var(--pub);color:var(--pu)}.btn-pu:hover{background:#DEC2F0}
+.btn-in{background:var(--inb);color:var(--in)}.btn-in:hover{opacity:.85}
+.btn-sm{padding:6px 11px;font-size:.77rem}
+
+.btn, .topbar-btn, .notif-item, .sb-item, .act-btn, .logout-btn, .modal-close {
+    transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+.btn:hover, .topbar-btn:hover, .notif-item:hover, .sb-item:hover, .act-btn:hover, .logout-btn:hover, .modal-close:hover {
+    transform: translateY(-1px);
+}
+.btn:active, .topbar-btn:active, .notif-item:active, .sb-item:active, .act-btn:active, .logout-btn:active, .modal-close:active {
+    transform: scale(0.97);
+}
+
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:9px 13px;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--bd)}
+td{padding:12px 13px;font-size:.85rem;border-bottom:1px solid #F5F0EA;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FDFAF7}
+.p-cell{display:flex;align-items:center;gap:9px}
+.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--br),var(--brm));display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:600;flex-shrink:0}
+.av-go{background:linear-gradient(135deg,var(--go),#E6B96A)}
+.badge{padding:3px 9px;border-radius:99px;font-size:.7rem;font-weight:500}
+.bg-ok{background:var(--okb);color:var(--ok)}.bg-wa{background:var(--wab);color:var(--wa)}
+.bg-er{background:var(--erb);color:var(--er)}.bg-in{background:var(--inb);color:var(--in)}
+.bg-gy{background:#F0EBE5;color:var(--mu)}.bg-pu{background:var(--pub);color:var(--pu)}
+.act-row{display:flex;gap:5px}
+.act-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--bd);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.78rem;color:var(--mu);transition:all .14s}
+.act-btn:hover{border-color:var(--br);color:var(--br)}
+.act-btn.danger:hover{border-color:var(--er);color:var(--er)}
+.cc{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.cc.urgent{border-left:4px solid var(--er)}.cc.soon{border-left:4px solid var(--wa)}.cc.routine{border-left:4px solid var(--ok)}
+.cc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.cc-name{font-weight:600;font-size:.9rem}.cc-meta{font-size:.76rem;color:var(--mu);margin-top:2px}
+.cc-concern{font-size:.83rem;margin-bottom:6px}.cc-desc{font-size:.79rem;color:var(--mu);line-height:1.55;background:var(--bg);padding:9px 11px;border-radius:7px;margin-bottom:10px}
+.cc-foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.user-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.user-card{background:#fff;border-radius:13px;border:1px solid var(--bd);padding:20px 22px;transition:box-shadow .2s}
+.user-card:hover{box-shadow:0 4px 18px rgba(0,0,0,.07)}
+.uc-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.uc-av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;flex-shrink:0}
+.uc-av.super{background:linear-gradient(135deg,var(--go),#E6B96A);color:var(--ink)}
+.uc-av.admin-role{background:linear-gradient(135deg,var(--pu),#9B59B6);color:#fff}
+.uc-av.nurse{background:linear-gradient(135deg,var(--br),var(--brm));color:#fff}
+.uc-name{font-weight:600;font-size:.95rem;color:var(--ink)}
+.uc-email{font-size:.78rem;color:var(--mu);margin-top:2px;word-break:break-all}
+.uc-meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--bd)}
+.uc-actions{display:flex;gap:7px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);z-index:500;display:none;align-items:center;justify-content:center;padding:18px}
+.modal-overlay.open{display:flex}
+.modal-box{background:#fff;border-radius:17px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.2)}
+.modal-head{padding:20px 24px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{font-weight:600;font-size:1rem}
+.modal-close{background:none;border:none;cursor:pointer;color:var(--mu);font-size:1.1rem;padding:4px}
+.modal-body{padding:22px 24px}
+.modal-foot{padding:14px 24px 20px;display:flex;gap:10px;justify-content:flex-end}
+.mf-group{margin-bottom:16px}
+.mf-label{display:block;font-size:.7rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
+.mf-input{width:100%;padding:10px 13px;border:1.5px solid var(--bd);border-radius:9px;font-family:'Outfit',sans-serif;font-size:.88rem;color:var(--ink);outline:none;background:#fff;transition:border-color .2s}
+.mf-input:focus{border-color:var(--br)}
+textarea.mf-input{resize:vertical;min-height:75px}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pw-wrap{position:relative}
+.pw-wrap .mf-input{padding-right:38px}
+.pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#C4B8AC;font-size:.85rem}
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 18px;border-radius:11px;font-size:.86rem;font-weight:500;box-shadow:0 8px 28px rgba(0,0,0,.18);display:none;align-items:center;gap:9px;z-index:999;max-width:320px;transform:translateY(16px);opacity:0;transition:all .3s;color:#fff}
+.toast.show{display:flex;transform:translateY(0);opacity:1}
+.toast.ok{background:var(--ok)}.toast.er{background:var(--er)}.toast.in{background:var(--in)}
+.empty{text-align:center;padding:44px 20px;color:var(--mu)}
+.empty i{font-size:2.2rem;opacity:.25;display:block;margin-bottom:12px}
+.empty p{font-size:.88rem}
+.appt-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--bd)}
+.appt-row:last-child{border-bottom:none}
+.appt-time{text-align:center;min-width:52px;background:var(--bg);border-radius:8px;padding:7px 5px}
+.appt-time .t{font-size:.92rem;font-weight:600;color:var(--ink)}
+.appt-time .am{font-size:.6rem;color:var(--mu);text-transform:uppercase}
+.appt-inf{flex:1}.appt-inf h4{font-size:.86rem;font-weight:600;margin-bottom:2px}.appt-inf p{font-size:.76rem;color:var(--mu)}
+@media(max-width:768px){.g2,.g3{grid-template-columns:1fr}.mf-row{grid-template-columns:1fr}}
+
+/* Calendar Widget Styles */
+.calendar-widget{font-family:'Outfit',sans-serif}
+.calendar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding:0 10px}
+.calendar-title{font-size:1.1rem;font-weight:600;color:var(--ink)}
+.calendar-nav{display:flex;gap:10px}
+.calendar-nav-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--bd);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mu);transition:all .2s;font-size:.9rem}
+.calendar-nav-btn:hover{border-color:var(--br);color:var(--br)}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.calendar-day-header{text-align:center;padding:8px 0;font-size:.75rem;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em}
+.calendar-day{text-align:center;padding:10px 0;font-size:.9rem;color:var(--ink);cursor:pointer;border-radius:6px;transition:background .2s;position:relative}
+.calendar-day:hover{background:var(--bg)}
+.calendar-day.today{background:var(--go);color:#fff;font-weight:600}
+.calendar-day.other-month{color:var(--mu);opacity:.5}
+.calendar-day.today::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#fff;border-radius:50%}
+
+/* Match admin dashboard format for calendar + clock block */
+.admin-clock-calendar{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.admin-clock-calendar .card{border-radius:14px;margin-bottom:0}
+.admin-clock-calendar .card-head{padding:14px 16px}
+.admin-clock-calendar .card-title{font-size:.95rem}
+.admin-clock-calendar .card-body{padding:14px 16px}
+.admin-clock-calendar .calendar-widget{font-family:'DM Sans',sans-serif}
+.admin-clock-calendar #digitalClock{font-size:2rem!important;font-weight:700!important}
+.admin-clock-calendar #digitalDate{font-size:1.05rem!important}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-icon"><img src="/static/logo.svg" alt="Guerrero Dental logo"></div>
+    <div class="sb-name">Guerrero Dental<span>Super Admin</span></div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sect">Overview</div>
+    <div class="sb-item active" onclick="show('dashboard')"><i class="fas fa-th-large"></i> Dashboard</div>
+    <div class="sb-sect">Administration</div>
+    <div class="sb-item" onclick="show('users')"><i class="fas fa-users-cog"></i> Staff & Users</div>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-user">
+      <div class="sb-av" id="sbAv">SA</div>
+      <div class="sb-uinfo"><strong id="sbName">Admin</strong><span>superadmin</span></div>
+      <button class="sb-logout" onclick="logout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </div>
+</aside>
+
+<header class="topbar">
+  <div class="tb-left">
+    <h1 id="pageTitle">Dashboard</h1>
+    <p>Super Admin · <span id="todayDate"></span></p>
+  </div>
+  <div class="tb-right">
+    <span class="role-chip">⭐ Super Admin</span>
+    <div class="tb-clock" id="topbarClock">00:00:00</div>
+    <div style="position:relative">
+      <button class="tb-btn" id="bellBtn" onclick="toggleNotif()" title="Notifications">
+        <i class="fas fa-bell"></i>
+        <span class="notif-dot" id="notifDot"></span>
+      </button>
+      <div class="notif-panel" id="notifPanel">
+        <div class="notif-hd">
+          <span>New Inquiries</span>
+          <button class="notif-mark" onclick="markAllRead()">Mark all read</button>
+        </div>
+        <div class="notif-list" id="notifList"></div>
+      </div>
+    </div>
+    <button class="btn btn-br btn-sm" onclick="openUserModal()"><i class="fas fa-user-plus"></i> Add Staff</button>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- DASHBOARD -->
+<div class="section active" id="sec-dashboard">
+  <div class="g3">
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-head"><div class="card-title">Quick Actions</div></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn btn-br" style="justify-content:center;width:100%" onclick="openUserModal()"><i class="fas fa-user-plus"></i> Add Staff User</button>
+          <button class="btn btn-sec" style="justify-content:center;width:100%" onclick="show('users')"><i class="fas fa-users-cog"></i> Manage All Staff</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Calendar -->
+    <div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">📅 Calendar</div>
+        </div>
+        <div class="card-body">
+          <div id="calendarWidget"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INQUIRIES -->
+<div class="section" id="sec-inquiries">
+  <div class="toolbar">
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="inqSearch" placeholder="Search name, concern..." oninput="renderInquiries()"></div>
+    <select class="f-select" id="inqFilter" onchange="renderInquiries()">
+      <option value="all">All Status</option><option value="new">New</option>
+      <option value="in_review">In Review</option><option value="scheduled">Scheduled</option><option value="closed">Closed</option>
+    </select>
+    <select class="f-select" id="urgFilter" onchange="renderInquiries()">
+      <option value="all">All Urgency</option>
+      <option value="urgent">🔴 Urgent</option><option value="soon">🟡 Soon</option><option value="routine">🟢 Routine</option>
+    </select>
+  </div>
+  <div id="inqList"></div>
+</div>
+
+<!-- APPOINTMENTS -->
+<div class="section" id="sec-appointments">
+  <div class="toolbar">
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="apptSearch" placeholder="Search patient..." oninput="renderAppts()"></div>
+    <select class="f-select" id="apptFilter" onchange="renderAppts()">
+      <option value="all">All</option><option value="scheduled">Scheduled</option>
+      <option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option>
+    </select>
+    <button class="btn btn-br" onclick="openApptModal()"><i class="fas fa-plus"></i> Schedule</button>
+  </div>
+  <div class="card">
+    <div class="card-head"><div class="card-title">All Appointments</div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Patient</th><th>Type</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead><tbody id="apptTbody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- PATIENTS -->
+<div class="section" id="sec-patients">
+  <div class="toolbar">
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="patSearch" placeholder="Search patients..." oninput="renderPatients()"></div>
+    <select class="f-select" id="patFilter" onchange="renderPatients()">
+      <option value="all">All</option><option value="active">Active</option><option value="inactive">Inactive</option>
+    </select>
+    <button class="btn btn-br" onclick="openPatModal()"><i class="fas fa-plus"></i> Add Patient</button>
+  </div>
+  <div class="card">
+    <div class="card-head"><div class="card-title">Patient Records</div><div id="patCount" style="font-size:.8rem;color:var(--mu)"></div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Patient</th><th>ID</th><th>Phone</th><th>Last Visit</th><th>Status</th><th>Actions</th></tr></thead><tbody id="patTbody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- STAFF & USERS -->
+<div class="section" id="sec-users">
+  <div class="toolbar">
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="userSearch" placeholder="Search staff..." oninput="renderUsers()"></div>
+    <select class="f-select" id="roleFilter" onchange="renderUsers()">
+      <option value="all">All Roles</option>
+      <option value="superadmin">⭐ Super Admin</option>
+      <option value="admin">🛡 Admin</option>
+      <option value="nurse">🩺 Nurse / Staff</option>
+    </select>
+    <button class="btn btn-br" onclick="openUserModal()"><i class="fas fa-user-plus"></i> New Account</button>
+  </div>
+  <div id="userGrid" class="user-grid"></div>
+</div>
+
+<!-- REPORTS -->
+<div class="section" id="sec-reports">
+  <div class="g2">
+    <div class="card"><div class="card-head"><div class="card-title">Practice Overview</div></div><div class="card-body" id="rptOverview"></div></div>
+    <div class="card"><div class="card-head"><div class="card-title">Inquiry Breakdown</div></div><div class="card-body" id="rptInq"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div class="card-title">Appointment Status Summary</div></div>
+    <div class="card-body" id="rptAppt"></div>
+  </div>
+</div>
+
+</main>
+
+<!-- INQUIRY MODAL -->
+<div class="modal-overlay" id="inqModal">
+  <div class="modal-box" style="max-width:600px">
+    <div class="modal-head"><h3>Patient Inquiry</h3><button class="modal-close" onclick="closeM('inqModal')">&times;</button></div>
+    <div class="modal-body" id="inqModalBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-er btn-sm" onclick="deleteInquiry()"><i class="fas fa-trash"></i> Delete</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-sec" onclick="closeM('inqModal')">Cancel</button>
+      <button class="btn btn-br" onclick="saveInquiry()"><i class="fas fa-save"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- APPT MODAL -->
+<div class="modal-overlay" id="apptModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3><i class="fas fa-calendar-plus" style="color:var(--go);margin-right:7px"></i>Schedule Appointment</h3><button class="modal-close" onclick="closeM('apptModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="mf-group"><label class="mf-label">Patient *</label><select class="mf-input" id="am-pat"></select></div>
+      <div class="mf-row">
+        <div class="mf-group"><label class="mf-label">Service *</label>
+          <select class="mf-input" id="am-type">
+            <option value="">Select service</option>
+            <option>Regular Check-up</option><option>Teeth Cleaning</option><option>Dental Filling</option>
+            <option>Tooth Extraction</option><option>Teeth Whitening</option><option>Emergency</option>
+            <option>Orthodontic Consultation</option><option>Dental Implant Consultation</option>
+          </select>
+        </div>
+        <div class="mf-group"><label class="mf-label">Date *</label><input class="mf-input" type="date" id="am-date"></div>
+      </div>
+      <div class="mf-group"><label class="mf-label">Time *</label>
+        <select class="mf-input" id="am-time">
+          <option value="">Select time</option>
+          <option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option>
+          <option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option>
+          <option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option>
+          <option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option>
+          <option value="15:00">3:00 PM</option><option value="16:00">4:00 PM</option>
+        </select>
+      </div>
+      <div class="mf-group"><label class="mf-label">Notes</label><textarea class="mf-input" id="am-notes" rows="2"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-sec" onclick="closeM('apptModal')">Cancel</button>
+      <button class="btn btn-go" onclick="saveAppt()"><i class="fas fa-check"></i> Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- PATIENT MODAL -->
+<div class="modal-overlay" id="patModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="patModalTitle">Add Patient</h3><button class="modal-close" onclick="closeM('patModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="mf-row">
+        <div class="mf-group"><label class="mf-label">Full Name *</label><input class="mf-input" id="pm-name" placeholder="Juan Dela Cruz"></div>
+        <div class="mf-group"><label class="mf-label">Phone *</label><input class="mf-input" id="pm-phone" placeholder="0917-000-0000"></div>
+      </div>
+      <div class="mf-row">
+        <div class="mf-group"><label class="mf-label">Email</label><input class="mf-input" id="pm-email" type="email"></div>
+        <div class="mf-group"><label class="mf-label">Date of Birth</label><input class="mf-input" id="pm-dob" type="date"></div>
+      </div>
+      <div class="mf-group"><label class="mf-label">Address</label><input class="mf-input" id="pm-address"></div>
+      <div class="mf-group"><label class="mf-label">Status</label>
+        <select class="mf-input" id="pm-status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-sec" onclick="closeM('patModal')">Cancel</button>
+      <button class="btn btn-br" onclick="savePat()"><i class="fas fa-save"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- STAFF USER MODAL — superadmin can create/edit ALL roles -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="userModalTitle">New Staff Account</h3><button class="modal-close" onclick="closeM('userModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="mf-row">
+        <div class="mf-group"><label class="mf-label">Full Name *</label><input class="mf-input" id="um-name" placeholder="e.g. Nurse Ana Reyes"></div>
+        <div class="mf-group"><label class="mf-label">Role *</label>
+          <select class="mf-input" id="um-role">
+            <option value="nurse">🩺 Nurse / Staff</option>
+            <option value="admin">🛡 Admin</option>
+            <option value="superadmin">⭐ Super Admin</option>
+          </select>
+        </div>
+      </div>
+      <div class="mf-group"><label class="mf-label">Email Address *</label><input class="mf-input" id="um-email" type="email" placeholder="staff@guerrerodental.com"></div>
+      <div class="mf-group">
+        <label class="mf-label">Password <span id="um-pw-hint" style="font-size:.68rem;color:var(--mu);text-transform:none;letter-spacing:0">(required for new accounts)</span></label>
+        <div class="pw-wrap">
+          <input class="mf-input" id="um-password" type="password" placeholder="Min. 8 characters">
+          <button type="button" class="pw-eye" onclick="togglePw('um-password')"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
+      <div class="mf-group" id="um-active-wrap" style="display:none">
+        <label class="mf-label">Account Status</label>
+        <select class="mf-input" id="um-active"><option value="1">Active</option><option value="0">Deactivated</option></select>
+      </div>
+      <div style="background:var(--wab);border:1px solid rgba(156,106,0,.3);border-radius:9px;padding:11px 13px;font-size:.78rem;color:var(--wa)">
+        <strong>⚠ Note:</strong> Super Admins have full system access including user management and deletion of records.
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-sec" onclick="closeM('userModal')">Cancel</button>
+      <button class="btn btn-br" id="userSaveBtn" onclick="saveUser()"><i class="fas fa-save"></i> Save Account</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i id="toastIco"></i><span id="toastMsg"></span></div>
+
+<script>
+const API='/api';
+let state={complaints:[],appointments:[],patients:[],users:[],currentInq:null,editingUser:null,editingPat:null};
+
+// Live staff accounts from the database
+state.users = [];
+
+function initStatCardTooltips(){
+  const statsGrid=document.getElementById('statsGrid');
+  if(!statsGrid||statsGrid.dataset.tooltipBound==='1') return;
+  statsGrid.dataset.tooltipBound='1';
+
+  statsGrid.addEventListener('click',(event)=>{
+    const card=event.target.closest('.stat-card[data-tooltip]');
+    if(!card) return;
+    const wasPinned=card.classList.contains('tooltip-pinned');
+    statsGrid.querySelectorAll('.stat-card.tooltip-pinned').forEach(c=>c.classList.remove('tooltip-pinned'));
+    if(!wasPinned) card.classList.add('tooltip-pinned');
+  });
+
+  statsGrid.addEventListener('keydown',(event)=>{
+    if(event.key!=='Enter'&&event.key!==' ') return;
+    const card=event.target.closest('.stat-card[data-tooltip]');
+    if(!card) return;
+    event.preventDefault();
+    card.click();
+  });
+
+  document.addEventListener('click',(event)=>{
+    if(statsGrid.contains(event.target)) return;
+    statsGrid.querySelectorAll('.stat-card.tooltip-pinned').forEach(c=>c.classList.remove('tooltip-pinned'));
+  });
+}
+
+window.onload=async()=>{
+  const role=sessionStorage.getItem('gd_role');
+  const name=sessionStorage.getItem('gd_name');
+  const token=sessionStorage.getItem('gd_token');
+  if(!token||role!=='superadmin'){window.location.replace('/gd-admin/login');return}
+  // Verify token is still valid
+  try{
+    const chk=await fetch('/api/auth/me',{headers:{'Authorization':`Bearer ${token}`}});
+    if(!chk.ok){sessionStorage.clear();window.location.replace('/gd-admin/login');return}
+  }catch{}
+  document.getElementById('sbName').textContent=name||'Admin';
+  document.getElementById('sbAv').textContent=(name||'SA').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('am-date').min=new Date().toISOString().split('T')[0];
+  initStatCardTooltips();
+  try{
+    await fetchAll();
+  }catch(e){
+    console.error('Initial data load failed:',e);
+  }
+  // Live date and time for dashboard
+  function updateDateTime(){
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    const timeStr = now.toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('todayDate').textContent=`${dateStr} · ${timeStr}`;
+  }
+  updateDateTime();setInterval(updateDateTime,60000);
+  
+  // Initialize calendar widget (matched to admin behavior)
+  function initCalendar(){
+    const calendarEl = document.getElementById('calendarWidget');
+    if(!calendarEl) return;
+
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth();
+    const todayDate = today.getDate();
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    let viewYear = todayYear;
+    let viewMonth = todayMonth;
+
+    function renderCalendar(){
+      const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+      const lastDate = new Date(viewYear, viewMonth + 1, 0).getDate();
+      const prevLastDate = new Date(viewYear, viewMonth, 0).getDate();
+      const totalCells = Math.ceil((firstDay + lastDate) / 7) * 7;
+      const remainingCells = totalCells - (firstDay + lastDate);
+      let daysHtml = '';
+
+      dayNames.forEach((day) => {
+        daysHtml += `<div class="calendar-day-header">${day}</div>`;
+      });
+
+      for(let i = firstDay - 1; i >= 0; i--){
+        daysHtml += `<div class="calendar-day other-month">${prevLastDate - i}</div>`;
+      }
+
+      for(let date = 1; date <= lastDate; date++){
+        const isToday = viewYear === todayYear && viewMonth === todayMonth && date === todayDate;
+        daysHtml += `<div class="calendar-day ${isToday ? 'today' : ''}">${date}</div>`;
+      }
+
+      for(let i = 1; i <= remainingCells; i++){
+        daysHtml += `<div class="calendar-day other-month">${i}</div>`;
+      }
+
+      calendarEl.innerHTML = `
+        <div class="calendar-widget">
+          <div class="calendar-header">
+            <div class="calendar-title">${monthNames[viewMonth]} ${viewYear}</div>
+            <div class="calendar-nav">
+              <button class="calendar-nav-btn" id="calPrevBtn" title="Previous Month"><i class="fas fa-chevron-left"></i></button>
+              <button class="calendar-nav-btn" id="calTodayBtn" title="Go to Current Month"><i class="fas fa-circle-dot"></i></button>
+              <button class="calendar-nav-btn" id="calNextBtn" title="Next Month"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+          <div class="calendar-grid">${daysHtml}</div>
+        </div>
+      `;
+
+      document.getElementById('calPrevBtn').addEventListener('click', () => {
+        viewMonth -= 1;
+        if(viewMonth < 0){
+          viewMonth = 11;
+          viewYear -= 1;
+        }
+        renderCalendar();
+      });
+
+      document.getElementById('calNextBtn').addEventListener('click', () => {
+        viewMonth += 1;
+        if(viewMonth > 11){
+          viewMonth = 0;
+          viewYear += 1;
+        }
+        renderCalendar();
+      });
+
+      document.getElementById('calTodayBtn').addEventListener('click', () => {
+        viewMonth = todayMonth;
+        viewYear = todayYear;
+        renderCalendar();
+      });
+    }
+
+    renderCalendar();
+  }
+
+  // Initialize digital clock (matched to admin behavior)
+  function initDigitalClock(){
+    const topbarClockEl = document.getElementById('topbarClock');
+    if(!topbarClockEl) return;
+
+    function updateClock(){
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+
+      topbarClockEl.textContent = timeStr;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  }
+  
+  // Initialize widgets
+  initCalendar();
+  initDigitalClock();
+  
+  // Auto-refresh inquiries every 30 seconds
+  setInterval(async()=>{
+    try{
+      const r=await fetch(`${API}/complaints`,{headers:hdr()});
+      if(r.ok){const d=await r.json();if(Array.isArray(d)){const prev=state.complaints.filter(c=>c.status==='new').length;state.complaints=d;const curr=d.filter(c=>c.status==='new').length;if(curr>prev){toast(`🔔 ${curr-prev} new inquiry received!`,'ok');}renderAll();}}
+    }catch{}
+  },30000);
+};
+
+const hdr=()=>({'Content-Type':'application/json','Authorization':`Bearer ${sessionStorage.getItem('gd_token')}`});
+
+async function fetchAll(){
+  try{
+    const fetchJ=async(url)=>{
+      const r=await fetch(url,{headers:hdr()});
+      if(!r.ok){
+        console.error('Fetch failed:',url,r.status,r.statusText);
+        if(r.status===401||r.status===403){
+          // Token expired — redirect to login
+          sessionStorage.clear();
+          window.location.replace('/gd-admin/login');
+          return [];
+        }
+        return [];
+      }
+      const d=await r.json();return Array.isArray(d)?d:[];
+    };
+    const [c,a,p,u]=await Promise.all([
+      fetchJ(`${API}/complaints`),
+      fetchJ(`${API}/appointments`),
+      fetchJ(`${API}/patients`),
+      fetchJ(`${API}/users`),
+    ]);
+    state.complaints=c;
+    state.appointments=a;
+    state.patients=p;
+    state.users=u;
+    console.log('Fetched users:',u.length,'complaints:',c.length);
+    if(u.length===0) console.warn('⚠ No users returned — check token or /api/users endpoint');
+  }catch(e){console.error('fetchAll error:',e);toast('Cannot reach server.','er')}
+  renderAll();
+}
+
+function renderAll(){
+  const renderers=[
+    renderStats,renderTodayAppts,renderNewInq,renderRecentPats,renderStaffOverview,
+    renderInquiries,renderAppts,renderPatients,renderUsers,renderReports,renderNotifPanel
+  ];
+  renderers.forEach((fn)=>{
+    try{fn();}catch(e){console.error(`Render failed: ${fn.name}`,e);}
+  });
+}
+
+// ── STATS ──
+function renderStats(){
+  const today=new Date().toISOString().split('T')[0];
+  const newInq=state.complaints.filter(c=>c.status==='new').length;
+  const urgInq=state.complaints.filter(c=>c.urgency==='urgent'&&c.status==='new').length;
+  const todayA=state.appointments.filter(a=>a.date===today).length;
+  const staffCount=state.users.filter(u=>u.is_active).length;
+  const statsGrid=document.getElementById('statsGrid');
+  if(statsGrid){
+    statsGrid.innerHTML=`
+      <div class="stat-card" tabindex="0" role="button" data-tooltip="Counts inquiries with status set to new, including how many are urgent."><div class="sc-head"><div><div class="sc-lbl">New Inquiries</div><div class="sc-num">${newInq}</div></div><div class="sc-icon ic-er"><i class="fas fa-inbox"></i></div></div><div class="sc-sub" style="color:${urgInq>0?'var(--er)':'var(--mu)'}">⚡ ${urgInq} urgent</div></div>
+      <div class="stat-card" tabindex="0" role="button" data-tooltip="Counts all appointments scheduled for today."><div class="sc-head"><div><div class="sc-lbl">Today's Appts</div><div class="sc-num">${todayA}</div></div><div class="sc-icon ic-go"><i class="fas fa-calendar-day"></i></div></div><div class="sc-sub">Scheduled today</div></div>
+      <div class="stat-card" tabindex="0" role="button" data-tooltip="Shows total registered patients across the system."><div class="sc-head"><div><div class="sc-lbl">Total Patients</div><div class="sc-num">${state.patients.length}</div></div><div class="sc-icon ic-br"><i class="fas fa-users"></i></div></div><div class="sc-sub">${state.patients.filter(p=>p.status==='active').length} active</div></div>
+      <div class="stat-card" tabindex="0" role="button" data-tooltip="Shows active staff accounts currently available in the platform."><div class="sc-head"><div><div class="sc-lbl">Staff Accounts</div><div class="sc-num">${staffCount}</div></div><div class="sc-icon ic-pu"><i class="fas fa-users-cog"></i></div></div><div class="sc-sub">${state.users.filter(u=>u.role==='superadmin').length} superadmin · ${state.users.filter(u=>u.role==='admin').length} admin</div></div>
+      <div class="stat-card" tabindex="0" role="button" data-tooltip="Shows appointments from today onward to track upcoming workload."><div class="sc-head"><div><div class="sc-lbl">Upcoming Appts</div><div class="sc-num">${state.appointments.filter(a=>a.date>=today).length}</div></div><div class="sc-icon ic-ok"><i class="fas fa-calendar-check"></i></div></div><div class="sc-sub">Next appointments</div></div>`;
+  }
+  const nb=state.complaints.filter(c=>c.status==='new').length;
+  const badge=document.getElementById('inqBadge');
+  badge.textContent=nb;badge.style.display=nb?'':'none';
+  document.getElementById('notifDot').style.display=nb?'flex':'none';
+}
+
+function renderTodayAppts(){
+  const today=new Date().toISOString().split('T')[0];
+  const el=document.getElementById('todayAppts');
+  if(!el) return;
+  const list=state.appointments.filter(a=>a.date===today);
+  if(!list.length){el.innerHTML='<div class="empty"><i class="fas fa-calendar-times"></i><p>No appointments today</p></div>';return}
+  el.innerHTML=list.slice(0,4).map(a=>{const[h,m]=a.time.split(':');const hr=parseInt(h);return`<div class="appt-row"><div class="appt-time"><div class="t">${hr>12?hr-12:hr}:${m}</div><div class="am">${hr>=12?'PM':'AM'}</div></div><div class="appt-inf"><h4>${a.patientName}</h4><p>${a.type}</p></div>${sbadge(a.status)}</div>`;}).join('');
+}
+
+function renderNewInq(){
+  const list=state.complaints.filter(c=>c.status==='new').slice(0,5);
+  const el=document.getElementById('newInqList');
+  if(!el) return;
+  if(!list.length){el.innerHTML='<div class="empty"><i class="fas fa-check-circle"></i><p>No new inquiries</p></div>';return}
+  el.innerHTML=list.map(c=>`<div style="padding:10px 0;border-bottom:1px solid var(--bd);cursor:pointer" onclick="viewInquiry(${c.id})"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:600;font-size:.86rem">${c.name}</div>${urgBadge(c.urgency)}</div><div style="font-size:.77rem;color:var(--mu);margin-top:2px">${c.concern||'—'}</div></div>`).join('');
+}
+
+function renderRecentPats(){
+  const el=document.getElementById('recentPatList');
+  if(!el)return;
+  const list=state.patients.slice(0,4);
+  if(!list.length){el.innerHTML='<div class="empty"><i class="fas fa-users"></i><p>No patients yet</p></div>';return}
+  el.innerHTML=list.map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)"><div class="av">${ini(p.name)}</div><div style="flex:1;min-width:0"><div style="font-size:.84rem;font-weight:600">${p.name}</div><div style="font-size:.72rem;color:var(--mu)">${p.patientId} · ${p.phone||'—'}</div></div><span style="font-size:.7rem;padding:2px 7px;border-radius:20px;background:${p.status==='active'?'#D8F3DC':'#F0F0F0'};color:${p.status==='active'?'#2D6A4F':'#999'}">${p.status}</span></div>`).join('');
+}
+
+function renderStaffOverview(){
+  const el=document.getElementById('staffOverview');
+  if(!el) return;
+  const all=state.users.filter(u=>u.is_active);
+  if(!all.length){el.innerHTML='<div class="empty"><i class="fas fa-users"></i><p>No staff yet</p></div>';return}
+  // Get current hour for "on duty" determination (Mon-Fri 8am-6pm, Sat 9am-2pm)
+  const now=new Date();
+  const day=now.getDay(); // 0=Sun
+  const hr=now.getHours();
+  const onDuty=(day>0&&day<6&&hr>=8&&hr<18)||(day===6&&hr>=9&&hr<14);
+  el.innerHTML=all.map(u=>{
+    const roleColor=u.role==='superadmin'?'var(--go)':u.role==='admin'?'#7B5EA7':'#2D6A4F';
+    const dotColor=onDuty?'#52B788':'#CCC';
+    const dotLabel=onDuty?'On Duty':'Off Duty';
+    return `<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--bd)">
+      <div style="position:relative">
+        <div class="av" style="background:${roleColor};color:#fff">${ini(u.name)}</div>
+        <span style="position:absolute;bottom:-1px;right:-1px;width:9px;height:9px;border-radius:50%;background:${dotColor};border:2px solid #fff"></span>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.84rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${u.name}</div>
+        <div style="font-size:.7rem;color:var(--mu);display:flex;align-items:center;gap:5px">
+          <span>${u.role}</span>
+          <span style="color:${dotColor}">· ${dotLabel}</span>
+        </div>
+      </div>
+      ${roleBadge(u.role)}
+    </div>`;
+  }).join('');
+}
+
+// ── BELL / NOTIF PANEL ──
+function toggleNotif(){
+  const panel=document.getElementById('notifPanel');
+  panel.classList.toggle('open');
+}
+function renderNotifPanel(){
+  const list=state.complaints.filter(c=>c.status==='new');
+  const el=document.getElementById('notifList');
+  if(!list.length){el.innerHTML='<div class="notif-empty">✅ No new inquiries</div>';return}
+  el.innerHTML=list.map(c=>`
+    <div class="notif-item unread" onclick="openNotifInq(${c.id})">
+      <div class="ni-name">${c.name}</div>
+      <div class="ni-concern">${c.concern||'General Inquiry'}</div>
+      <div class="ni-meta">${urgBadge(c.urgency)} <span>${fmtDt(c.createdAt)}</span></div>
+    </div>`).join('');
+}
+function openNotifInq(id){
+  document.getElementById('notifPanel').classList.remove('open');
+  show('inquiries');
+  setTimeout(()=>viewInquiry(id),150);
+}
+async function markAllRead(){
+  // Mark all new as in_review
+  const news=state.complaints.filter(c=>c.status==='new');
+  for(const c of news){
+    try{await fetch(`${API}/complaints/${c.id}`,{method:'PUT',headers:hdr(),body:JSON.stringify({status:'in_review'})});}catch{}
+    const i=state.complaints.findIndex(x=>x.id===c.id);
+    if(i>-1)state.complaints[i].status='in_review';
+  }
+  renderAll();
+  document.getElementById('notifPanel').classList.remove('open');
+  toast('All marked as In Review','ok');
+}
+// Close notif panel when clicking outside
+document.addEventListener('click',e=>{
+  const panel=document.getElementById('notifPanel');
+  const btn=document.getElementById('bellBtn');
+  if(panel&&btn&&!panel.contains(e.target)&&!btn.contains(e.target))panel.classList.remove('open');
+});
+
+// ── INQUIRIES ──
+function renderInquiries(){
+  const q=(document.getElementById('inqSearch').value||'').toLowerCase();
+  const st=document.getElementById('inqFilter').value;
+  const urg=document.getElementById('urgFilter').value;
+  let list=state.complaints.filter(c=>(st==='all'||c.status===st)&&(urg==='all'||c.urgency===urg)&&(c.name.toLowerCase().includes(q)||(c.concern||'').toLowerCase().includes(q)||(c.phone||'').includes(q)));
+  const el=document.getElementById('inqList');
+  if(!list.length){el.innerHTML='<div class="empty"><i class="fas fa-inbox"></i><p>No inquiries found</p></div>';return}
+  el.innerHTML=list.map(c=>`
+    <div class="cc ${c.urgency}">
+      <div class="cc-head">
+        <div><div class="cc-name">${c.name}</div><div class="cc-meta">${c.phone||''}${c.email?' · '+c.email:''} · ${fmtDt(c.createdAt)}</div></div>
+        <div style="display:flex;gap:7px;align-items:center">${urgBadge(c.urgency)} ${sbadge(c.status)}</div>
+      </div>
+      <div class="cc-concern"><strong>${c.concern||'General Inquiry'}</strong></div>
+      ${c.description?`<div class="cc-desc">${c.description}</div>`:''}
+      ${c.assignedDoctor?`<div style="font-size:.8rem;color:var(--ok);margin-bottom:8px"><i class="fas fa-user-md"></i> Assigned: <strong>${c.assignedDoctor}</strong></div>`:''}
+      <div class="cc-foot">
+        <div style="display:flex;gap:10px;font-size:.76rem;color:var(--mu)">
+          ${c.preferredDate?`<span>📅 ${c.preferredDate}</span>`:''}
+          ${c.preferredTime?`<span>🕐 ${c.preferredTime}</span>`:''}
+        </div>
+        <div style="display:flex;gap:7px">
+          <button class="btn btn-br btn-sm" onclick="viewInquiry(${c.id})"><i class="fas fa-edit"></i> Update</button>
+          <button class="btn btn-ok btn-sm" onclick="quickSchedule(${c.id})"><i class="fas fa-calendar-plus"></i> Schedule</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function viewInquiry(id){
+  const c=state.complaints.find(x=>x.id===id);if(!c)return;
+  state.currentInq=c;
+  document.getElementById('inqModalBody').innerHTML=`
+    <div style="background:var(--bg);border-radius:10px;padding:16px;margin-bottom:18px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><div style="font-size:.68rem;text-transform:uppercase;color:var(--mu);margin-bottom:3px">Name</div><div style="font-weight:600">${c.name}</div></div>
+        <div><div style="font-size:.68rem;text-transform:uppercase;color:var(--mu);margin-bottom:3px">Phone</div><div>${c.phone||'—'}</div></div>
+        <div><div style="font-size:.68rem;text-transform:uppercase;color:var(--mu);margin-bottom:3px">Email</div><div style="word-break:break-all">${c.email||'—'}</div></div>
+        <div><div style="font-size:.68rem;text-transform:uppercase;color:var(--mu);margin-bottom:3px">Urgency</div>${urgBadge(c.urgency)}</div>
+        <div><div style="font-size:.68rem;text-transform:uppercase;color:var(--mu);margin-bottom:3px">Concern</div><div>${c.concern||'—'}</div></div>
+        <div><div style="font-size:.68rem;text-transform:uppercase;color:var(--mu);margin-bottom:3px">Preferred Date</div><div>${c.preferredDate||'—'}</div></div>
+      </div>
+      ${c.description?`<div style="margin-top:12px"><div style="font-size:.68rem;text-transform:uppercase;color:var(--mu);margin-bottom:5px">Patient Description</div><div style="font-size:.83rem;line-height:1.6">${c.description}</div></div>`:''}
+    </div>
+    <div class="mf-group">
+      <label class="mf-label">Assign Doctor</label>
+      <select class="mf-input" id="inq-doctor">
+        <option value="">— No doctor assigned —</option>
+        <option ${c.assignedDoctor==='Dr. Bambina Guerrero'?'selected':''}>Dr. Bambina Guerrero</option>
+        <option ${c.assignedDoctor==='Dr. Carlos Reyes'?'selected':''}>Dr. Carlos Reyes</option>
+        <option ${c.assignedDoctor==='Dr. Lena Santos'?'selected':''}>Dr. Lena Santos</option>
+      </select>
+    </div>
+    <div class="mf-group">
+      <label class="mf-label">Update Status</label>
+      <select class="mf-input" id="inq-status">
+        <option value="new" ${c.status==='new'?'selected':''}>New</option>
+        <option value="in_review" ${c.status==='in_review'?'selected':''}>In Review</option>
+        <option value="scheduled" ${c.status==='scheduled'?'selected':''}>Scheduled</option>
+        <option value="closed" ${c.status==='closed'?'selected':''}>Closed</option>
+      </select>
+    </div>
+    <div class="mf-group">
+      <label class="mf-label">Staff Notes</label>
+      <textarea class="mf-input" id="inq-notes" rows="3" placeholder="Add staff notes...">${c.staffNotes||''}</textarea>
+    </div>`;
+  openM('inqModal');
+}
+
+async function saveInquiry(){
+  const c=state.currentInq;if(!c)return;
+  const payload={status:document.getElementById('inq-status').value,staffNotes:document.getElementById('inq-notes').value,assignedDoctor:document.getElementById('inq-doctor').value};
+  try{
+    const res=await fetch(`${API}/complaints/${c.id}`,{method:'PUT',headers:hdr(),body:JSON.stringify(payload)});
+    const data=await res.json();
+    const i=state.complaints.findIndex(x=>x.id===c.id);if(i>-1)state.complaints[i]=data;
+    closeM('inqModal');renderAll();toast('Inquiry updated','ok');
+  }catch{toast('Save failed','er')}
+}
+
+async function deleteInquiry(){
+  const c=state.currentInq;if(!c)return;
+  if(!confirm(`Delete inquiry from ${c.name}? This cannot be undone.`))return;
+  try{
+    await fetch(`${API}/complaints/${c.id}`,{method:'DELETE',headers:hdr()});
+    state.complaints=state.complaints.filter(x=>x.id!==c.id);
+    closeM('inqModal');renderAll();toast('Inquiry deleted','ok');
+  }catch{toast('Delete failed','er')}
+}
+
+function quickSchedule(cid){
+  const c=state.complaints.find(x=>x.id===cid);if(!c)return;
+  if(c.preferredDate)document.getElementById('am-date').value=c.preferredDate;
+  populatePatSelect();openM('apptModal');
+}
+
+// ── APPOINTMENTS ──
+function renderAppts(){
+  const q=(document.getElementById('apptSearch').value||'').toLowerCase();
+  const st=document.getElementById('apptFilter').value;
+  const list=state.appointments.filter(a=>(st==='all'||a.status===st)&&a.patientName.toLowerCase().includes(q));
+  document.getElementById('apptTbody').innerHTML=list.map(a=>`<tr><td><div class="p-cell"><div class="av">${ini(a.patientName)}</div><span>${a.patientName}</span></div></td><td>${a.type}</td><td>${fmtD(a.date)}</td><td>${fmtT(a.time)}</td><td>${sbadge(a.status)}</td><td><div class="act-row"><button class="act-btn" onclick="setApptSt(${a.id},'confirmed')" title="Confirm"><i class="fas fa-check"></i></button><button class="act-btn" onclick="setApptSt(${a.id},'completed')" title="Complete"><i class="fas fa-check-double"></i></button><button class="act-btn" onclick="setApptSt(${a.id},'cancelled')" title="Cancel"><i class="fas fa-times"></i></button><button class="act-btn danger" onclick="delAppt(${a.id})" title="Delete"><i class="fas fa-trash-alt"></i></button></div></td></tr>`).join('');
+}
+
+async function saveAppt(){
+  const pid=document.getElementById('am-pat').value,type=document.getElementById('am-type').value,date=document.getElementById('am-date').value,time=document.getElementById('am-time').value;
+  if(!pid||!type||!date||!time){toast('Fill all required fields','er');return}
+  try{
+    const res=await fetch(`${API}/appointments`,{method:'POST',headers:hdr(),body:JSON.stringify({patientId:parseInt(pid),type,date,time,notes:document.getElementById('am-notes').value})});
+    const data=await res.json();state.appointments.unshift(data);closeM('apptModal');renderAll();toast('Appointment scheduled!','ok');
+    ['am-type','am-date','am-time','am-notes'].forEach(id=>document.getElementById(id).value='');
+  }catch{toast('Failed to schedule','er')}
+}
+
+async function setApptSt(id,status){
+  try{const res=await fetch(`${API}/appointments/${id}`,{method:'PUT',headers:hdr(),body:JSON.stringify({status})});const data=await res.json();const i=state.appointments.findIndex(a=>a.id===id);if(i>-1)state.appointments[i]=data;renderAll();toast(`Marked as ${status}`,'ok');}catch{toast('Update failed','er')}
+}
+
+async function delAppt(id){
+  if(!confirm('Delete this appointment?'))return;
+  try{await fetch(`${API}/appointments/${id}`,{method:'DELETE',headers:hdr()});state.appointments=state.appointments.filter(a=>a.id!==id);renderAll();toast('Deleted','ok');}catch{toast('Delete failed','er')}
+}
+
+// ── PATIENTS ──
+function renderPatients(){
+  const q=(document.getElementById('patSearch').value||'').toLowerCase();
+  const st=document.getElementById('patFilter').value;
+  const list=state.patients.filter(p=>(st==='all'||p.status===st)&&(p.name.toLowerCase().includes(q)||(p.phone||'').includes(q)));
+  document.getElementById('patCount').textContent=`${list.length} records`;
+  document.getElementById('patTbody').innerHTML=list.map(p=>`<tr><td><div class="p-cell"><div class="av">${ini(p.name)}</div><div><div style="font-weight:600">${p.name}</div><div style="font-size:.75rem;color:var(--mu)">${p.email||''}</div></div></div></td><td style="color:var(--mu);font-size:.79rem">${p.patientId}</td><td style="font-size:.83rem">${p.phone||'—'}</td><td style="font-size:.79rem;color:var(--mu)">${p.lastVisit?fmtD(p.lastVisit):'—'}</td><td>${sbadge(p.status)}</td><td><div class="act-row"><button class="act-btn" onclick="editPat(${p.id})" title="Edit"><i class="fas fa-edit"></i></button><button class="act-btn" onclick="schedForPat(${p.id})" title="Schedule"><i class="fas fa-calendar-plus"></i></button><button class="act-btn danger" onclick="delPat(${p.id})" title="Delete"><i class="fas fa-trash-alt"></i></button></div></td></tr>`).join('');
+}
+
+function openPatModal(){state.editingPat=null;document.getElementById('patModalTitle').textContent='Add Patient';['pm-name','pm-phone','pm-email','pm-address'].forEach(id=>document.getElementById(id).value='');document.getElementById('pm-dob').value='';document.getElementById('pm-status').value='active';openM('patModal');}
+function editPat(id){const p=state.patients.find(x=>x.id===id);if(!p)return;state.editingPat=id;document.getElementById('patModalTitle').textContent='Edit Patient';document.getElementById('pm-name').value=p.name||'';document.getElementById('pm-phone').value=p.phone||'';document.getElementById('pm-email').value=p.email||'';document.getElementById('pm-dob').value=p.dob||'';document.getElementById('pm-address').value=p.address||'';document.getElementById('pm-status').value=p.status||'active';openM('patModal');}
+
+async function savePat(){
+  const name=document.getElementById('pm-name').value.trim();const phone=document.getElementById('pm-phone').value.trim();
+  if(!name||!phone){toast('Name and phone required','er');return}
+  const payload={name,phone,email:document.getElementById('pm-email').value,dob:document.getElementById('pm-dob').value,address:document.getElementById('pm-address').value,status:document.getElementById('pm-status').value};
+  try{
+    let res,data;
+    if(state.editingPat){res=await fetch(`${API}/patients/${state.editingPat}`,{method:'PUT',headers:hdr(),body:JSON.stringify(payload)});data=await res.json();const i=state.patients.findIndex(x=>x.id===state.editingPat);if(i>-1)state.patients[i]=data;toast(`${name} updated!`,'ok');}
+    else{res=await fetch(`${API}/patients`,{method:'POST',headers:hdr(),body:JSON.stringify(payload)});data=await res.json();state.patients.unshift(data);toast(`${name} added!`,'ok');}
+    closeM('patModal');renderAll();
+  }catch{toast('Failed to save','er')}
+}
+
+async function delPat(id){
+  const p=state.patients.find(x=>x.id===id);if(!p)return;
+  if(!confirm(`Delete ${p.name}?`))return;
+  try{await fetch(`${API}/patients/${id}`,{method:'DELETE',headers:hdr()});state.patients=state.patients.filter(x=>x.id!==id);renderAll();toast('Patient deleted','ok');}catch{toast('Delete failed','er')}
+}
+function schedForPat(id){document.getElementById('am-pat').value=id;populatePatSelect();openM('apptModal');}
+
+// ── USERS (superadmin can create/edit/delete ALL roles) ──
+function renderUsers(){
+  const q=(document.getElementById('userSearch').value||'').toLowerCase();
+  const rf=document.getElementById('roleFilter').value;
+  const list=state.users.filter(u=>(rf==='all'||u.role===rf)&&(u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)));
+  const el=document.getElementById('userGrid');
+  if(!list.length){
+    if(state.users.length===0){
+      el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 20px"><div style="font-size:2.5rem;margin-bottom:12px">👥</div><div style="font-weight:600;color:var(--ink);margin-bottom:6px">Loading staff accounts...</div><div style="font-size:.82rem;color:var(--mu);margin-bottom:16px">If this persists, the session may have expired.</div><button class="btn btn-br btn-sm" onclick="fetchAll()"><i class="fas fa-sync-alt"></i> Reload</button></div>';
+    } else {
+      el.innerHTML='<div class="empty" style="grid-column:1/-1"><i class="fas fa-users-cog"></i><p>No staff accounts match your search</p></div>';
+    }
+    return;
+  }
+  el.innerHTML=list.map(u=>`
+    <div class="user-card">
+      <div class="uc-head">
+        <div class="uc-av ${u.role==='superadmin'?'super':u.role==='admin'?'admin-role':'nurse'}">${ini(u.name)}</div>
+        <div><div class="uc-name">${u.name}</div><div class="uc-email">${u.email}</div></div>
+      </div>
+      <div style="font-size:.79rem;color:var(--mu);margin-bottom:12px">Created: ${fmtDt(u.created_at)||'—'}</div>
+      <div class="uc-meta">
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          ${roleBadge(u.role)}
+          ${u.is_active?'<span class="badge bg-ok">Active</span>':'<span class="badge bg-er">Inactive</span>'}
+        </div>
+        <div class="uc-actions">
+          <button class="act-btn" onclick="editUser(${u.id})" title="Edit"><i class="fas fa-edit"></i></button>
+          <button class="act-btn danger" onclick="delUser(${u.id},'${u.name.replace(/'/g,"\\'")}','${u.role}')" title="Delete"><i class="fas fa-trash-alt"></i></button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openUserModal(){
+  state.editingUser=null;
+  document.getElementById('userModalTitle').textContent='New Staff Account';
+  document.getElementById('userSaveBtn').innerHTML='<i class="fas fa-save"></i> Create Account';
+  ['um-name','um-email','um-password'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('um-role').value='nurse';
+  document.getElementById('um-password').placeholder='Min. 8 characters';
+  document.getElementById('um-pw-hint').textContent='(required for new accounts)';
+  document.getElementById('um-active-wrap').style.display='none';
+  document.getElementById('um-active').value='1';
+  document.getElementById('um-pw-hint').textContent='(required for new accounts)';
+  document.getElementById('um-active-wrap').style.display='none';
+  openM('userModal');
+}
+
+function editUser(id){
+  const u=state.users.find(x=>x.id===id);if(!u)return;
+  state.editingUser=id;
+  document.getElementById('userModalTitle').textContent='Edit Staff Account';
+  document.getElementById('userSaveBtn').innerHTML='<i class="fas fa-save"></i> Save Changes';
+  document.getElementById('um-name').value=u.name;
+  document.getElementById('um-email').value=u.email;
+  document.getElementById('um-role').value=u.role;
+  document.getElementById('um-password').value='';
+  document.getElementById('um-active').value=u.is_active?'1':'0';
+  document.getElementById('um-pw-hint').textContent='(leave blank to keep current password)';
+  document.getElementById('um-active-wrap').style.display='block';
+  document.getElementById('um-password').placeholder='Leave blank to keep current';
+  openM('userModal');
+}
+
+async function saveUser(){
+  const name=document.getElementById('um-name').value.trim();
+  const email=document.getElementById('um-email').value.trim();
+  const pw=document.getElementById('um-password').value;
+  const role=document.getElementById('um-role').value;
+  const active=document.getElementById('um-active').value==='1';
+  if(!name||!email){toast('Name and email required','er');return}
+  if(!state.editingUser&&!pw){toast('Password required for new accounts','er');return}
+  const payload={name,email,role,is_active:active};
+  if(pw){if(pw.length<8){toast('Password min 8 characters','er');return}payload.password=pw;}
+  try{
+    let res,data;
+    if(state.editingUser){
+      res=await fetch(`${API}/users/${state.editingUser}`,{method:'PUT',headers:hdr(),body:JSON.stringify(payload)});
+      data=await res.json();
+      if(!res.ok){toast(data.message||'Update failed','er');return}
+      const i=state.users.findIndex(x=>x.id===state.editingUser);if(i>-1)state.users[i]=data;
+      toast(`✅ ${name} updated successfully!`,'ok');
+    }else{
+      res=await fetch(`${API}/users`,{method:'POST',headers:hdr(),body:JSON.stringify(payload)});
+      data=await res.json();
+      if(!res.ok){toast(data.message||'Create failed','er');return}
+      state.users.unshift(data);
+      toast(`✅ Account for ${name} created!`,'ok');
+    }
+    closeM('userModal');renderAll();
+  }catch{toast('Server error','er')}
+}
+
+async function delUser(id,name,role){
+  const myId=parseInt(sessionStorage.getItem('gd_id'));
+  if(id===myId){toast('Cannot delete your own account','er');return}
+  if(!confirm(`Delete ${role} account for ${name}? This cannot be undone.`))return;
+  try{
+    const res=await fetch(`${API}/users/${id}`,{method:'DELETE',headers:hdr()});
+    const data=await res.json();
+    if(!res.ok){toast(data.message||'Cannot delete','er');return}
+    state.users=state.users.filter(x=>x.id!==id);renderAll();toast(`${name} removed`,'ok');
+  }catch{toast('Delete failed','er')}
+}
+
+// ── REPORTS ──
+function renderReports(){
+  const today=new Date().toISOString().split('T')[0];
+  const metric=(l,v)=>`<div style="background:var(--bg);border-radius:9px;padding:13px 15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:.85rem;color:var(--mu)">${l}</span><span style="font-weight:600;font-size:1.05rem">${v}</span></div>`;
+  document.getElementById('rptOverview').innerHTML=[metric('Total Patients',state.patients.length),metric('Active Patients',state.patients.filter(p=>p.status==='active').length),metric('Total Appointments',state.appointments.length),metric("Today's Appointments",state.appointments.filter(a=>a.date===today).length),metric('Active Staff',state.users.filter(u=>u.is_active).length)].join('');
+  document.getElementById('rptInq').innerHTML=[metric('Total Inquiries',state.complaints.length),metric('New',state.complaints.filter(c=>c.status==='new').length),metric('In Review',state.complaints.filter(c=>c.status==='in_review').length),metric('Scheduled',state.complaints.filter(c=>c.status==='scheduled').length),metric('Closed',state.complaints.filter(c=>c.status==='closed').length),metric('Urgent',state.complaints.filter(c=>c.urgency==='urgent').length)].join('');
+  document.getElementById('rptAppt').innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">${['scheduled','confirmed','completed','cancelled'].map(s=>{const cnt=state.appointments.filter(a=>a.status===s).length;return`<div style="background:var(--bg);border-radius:10px;padding:16px;text-align:center"><div style="font-size:1.8rem;font-weight:700;color:var(--ink)">${cnt}</div><div style="font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin-top:5px">${s}</div></div>`}).join('')}</div>`;
+}
+
+// ── HELPERS ──
+function populatePatSelect(){const el=document.getElementById('am-pat'),cur=el.value;el.innerHTML='<option value="">Select patient</option>'+state.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');if(cur)el.value=cur;}
+function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('active'));const sec=document.getElementById('sec-'+id);if(sec)sec.classList.add('active');const map={dashboard:0,users:1};const items=document.querySelectorAll('.sb-item');if(items[map[id]])items[map[id]].classList.add('active');const titles={dashboard:'Dashboard',users:'Staff & Users'};document.getElementById('pageTitle').textContent=titles[id]||id;if(id==='dashboard')renderAll();if(id==='users')renderUsers();}
+function openM(id){document.getElementById(id).classList.add('open')}
+function closeM(id){document.getElementById(id).classList.remove('open')}
+function openApptModal(){populatePatSelect();openM('apptModal')}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+function togglePw(id){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';}
+function logout(){
+  if(!confirm('Sign out?'))return;
+  sessionStorage.removeItem('gd_token');
+  sessionStorage.removeItem('gd_name');
+  sessionStorage.removeItem('gd_email');
+  sessionStorage.removeItem('gd_role');
+  sessionStorage.removeItem('gd_id');
+  window.location.replace('/gd-admin/login');
+}
+function ini(n){return(n||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function fmtD(d){return d?new Date(d+'T00:00:00').toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'}):'—'}
+function fmtDt(d){return d?new Date(d).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'}):'—'}
+function fmtT(t){if(!t)return'—';const[h,m]=t.split(':');const hr=parseInt(h);return`${hr>12?hr-12:hr}:${m} ${hr>=12?'PM':'AM'}`}
+function sbadge(s){const map={active:'bg-ok',inactive:'bg-gy',scheduled:'bg-in',confirmed:'bg-ok',completed:'bg-gy',cancelled:'bg-er',new:'bg-er',in_review:'bg-wa',closed:'bg-gy'};return`<span class="badge ${map[s]||'bg-gy'}">${s.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase())}</span>`;}
+function urgBadge(u){const map={urgent:'bg-er',soon:'bg-wa',routine:'bg-ok'};const icons={urgent:'🔴',soon:'🟡',routine:'🟢'};return`<span class="badge ${map[u]||'bg-gy'}">${icons[u]||''} ${(u||'').replace(/\b\w/g,c=>c.toUpperCase())}</span>`;}
+function roleBadge(r){const map={superadmin:'bg-pu',admin:'bg-in',nurse:'bg-ok'};const labels={superadmin:'⭐ Super Admin',admin:'🛡 Admin',nurse:'🩺 Nurse'};return`<span class="badge ${map[r]||'bg-gy'}">${labels[r]||r}</span>`;}
+function toast(msg,type='ok'){const el=document.getElementById('toast');const icons={ok:'fas fa-check-circle',er:'fas fa-exclamation-circle',in:'fas fa-info-circle'};const colors={ok:'var(--ok)',er:'var(--er)',in:'var(--in)'};el.style.background=colors[type]||colors.ok;el.className='toast '+type;document.getElementById('toastIco').className=icons[type]||icons.ok;document.getElementById('toastMsg').textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3500);}
+</script>
+</body>
+</html>

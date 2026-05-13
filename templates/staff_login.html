@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Login — Guerrero Dental</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--br:#7C3D12;--brm:#A0522D;--go:#C9933C;--cr:#FAF6F0;--ink:#1A1209;--mu:#8A7A6A;--bd:#E5DDD3;--er:#C0392B;}
+html,body{height:100%;margin:0}
+body{
+  font-family:'Outfit',sans-serif;
+  background:linear-gradient(160deg,#2A1508 0%,#1A0D04 55%,#0E0802 100%);
+  background-image:
+    linear-gradient(135deg,rgba(42,21,8,0.75) 0%,rgba(26,13,4,0.8) 55%,rgba(14,8,2,0.85) 100%),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.08);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(124,61,18,0.1);stop-opacity:1" /></linearGradient></defs><rect x="80" y="150" width="300" height="400" fill="none" stroke="rgba(201,147,60,0.15)" stroke-width="2" rx="20"/><rect x="420" y="180" width="280" height="350" fill="none" stroke="rgba(160,82,45,0.12)" stroke-width="2" rx="15"/><rect x="750" y="160" width="320" height="380" fill="none" stroke="rgba(201,147,60,0.1)" stroke-width="2" rx="22"/><circle cx="150" cy="220" r="25" fill="none" stroke="rgba(201,147,60,0.08)" stroke-width="1.5"/><circle cx="500" cy="250" r="30" fill="none" stroke="rgba(124,61,18,0.06)" stroke-width="1.5"/><circle cx="850" cy="240" r="28" fill="none" stroke="rgba(201,147,60,0.07)" stroke-width="1.5"/><line x1="100" y1="350" x2="300" y2="350" stroke="rgba(201,147,60,0.06)" stroke-width="1"/><line x1="450" y1="350" x2="650" y2="350" stroke="rgba(160,82,45,0.05)" stroke-width="1"/><line x1="800" y1="360" x2="1000" y2="360" stroke="rgba(201,147,60,0.06)" stroke-width="1"/><path d="M 200 500 L 220 480 L 240 500 L 220 520 Z" fill="none" stroke="rgba(201,147,60,0.07)" stroke-width="1"/><path d="M 600 520 L 620 500 L 640 520 L 620 540 Z" fill="none" stroke="rgba(124,61,18,0.06)" stroke-width="1"/><path d="M 900 510 L 920 490 L 940 510 L 920 530 Z" fill="none" stroke="rgba(201,147,60,0.07)" stroke-width="1"/><rect x="50" y="50" width="1100" height="700" fill="url(%23grad)" rx="40"/></svg>');
+  background-size:cover, 1200px 800px;
+  background-position:center, center;
+  background-attachment:fixed, fixed;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+body::before{content:'';position:fixed;top:0;right:0;width:100%;height:100%;background:
+  radial-gradient(ellipse 900px 600px at 80% 20%, rgba(201,147,60,0.15), transparent 50%),
+  radial-gradient(ellipse 800px 500px at 20% 80%, rgba(124,61,18,0.12), transparent 50%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;bottom:0;left:0;width:100%;height:100%;background:linear-gradient(to top,rgba(0,0,0,0.4),transparent 50%);pointer-events:none;z-index:0}
+
+.card{
+  position:relative;z-index:1;
+  width:100%;max-width:440px;margin:20px;
+  background:linear-gradient(135deg, rgba(250,246,240,0.98) 0%, rgba(255,255,255,0.96) 100%);
+  backdrop-filter:blur(10px);
+  border-radius:28px;
+  padding:48px 44px 40px;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.1),
+    0 32px 64px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+  border:1px solid rgba(255,255,255,0.5);
+  transform:perspective(1000px) rotateX(0deg);
+  transition:transform 0.6s ease, box-shadow 0.6s ease;
+}
+.card:hover{
+  box-shadow:
+    0 12px 48px rgba(0,0,0,0.15),
+    0 40px 80px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+  transform:perspective(1000px) rotateX(1deg) translateY(-2px);
+}
+
+/* brand */
+.brand{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:32px;animation:slideDown 0.6s ease-out}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.brand-icon{width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,var(--go),var(--brm));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;box-shadow:0 4px 15px rgba(124,61,18,0.25),inset 0 1px 0 rgba(255,255,255,0.3);transition:transform 0.3s ease}
+.brand-icon:hover{transform:scale(1.08) rotate(5deg)}
+.brand-text{line-height:1.15;text-align:center}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;color:var(--ink);letter-spacing:0.5px}
+.brand-sub{font-size:.65rem;font-weight:500;color:var(--go);letter-spacing:.16em;text-transform:uppercase;margin-top:2px}
+
+.divider{width:50px;height:2px;background:linear-gradient(90deg,transparent,var(--go),transparent);margin:0 auto 24px;box-shadow:0 1px 3px rgba(124,61,18,0.1)}
+
+.tag{text-align:center;font-size:.7rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--go);margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.tag::before{content:'';width:6px;height:6px;background:var(--go);border-radius:50%}
+.tag::after{content:'';width:6px;height:6px;background:var(--go);border-radius:50%}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--ink);text-align:center;margin-bottom:32px;line-height:1.1;letter-spacing:-0.5px}
+
+.error-box{display:none;align-items:center;gap:8px;background:linear-gradient(135deg,#FEF2F2,#FFF5F5);border:1.5px solid #FCA5A5;color:var(--er);padding:12px 16px;border-radius:11px;font-size:.82rem;margin-bottom:20px;animation:slideIn 0.3s ease-out}
+@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+.error-box i{font-size:1rem}
+
+/* field */
+.field{margin-bottom:18px;animation:fadeIn 0.4s ease-out}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.field:nth-child(1){animation-delay:0.1s}
+.field:nth-child(2){animation-delay:0.15s}
+.field label{display:block;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brm);margin-bottom:8px}
+
+/* input wrapper — icons positioned using flex, not absolute top% */
+.input-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+.input-icon{
+  position:absolute;
+  left:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:18px;
+  color:#B8ACA2;
+  font-size:.85rem;
+  pointer-events:none;
+}
+.input-wrap input{
+  width:100%;
+  padding:13px 14px 13px 44px;
+  background:linear-gradient(to bottom, #fff, #fafaf8);
+  border:1.5px solid var(--bd);
+  border-radius:11px;
+  font-family:'Outfit',sans-serif;
+  font-size:.9rem;
+  color:var(--ink);
+  outline:none;
+  line-height:1.4;
+  transition:all 0.2s ease;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+.input-wrap input:focus{
+  border-color:var(--br);
+  box-shadow:0 0 0 4px rgba(124,61,18,0.12), 0 2px 8px rgba(124,61,18,0.08);
+  background:linear-gradient(to bottom, #fff, #fffbf8);
+}
+.input-wrap input::placeholder{color:#C4B8AC}
+
+.eye-btn{
+  position:absolute;right:12px;
+  background:none;border:none;cursor:pointer;
+  color:#B8ACA2;padding:6px;
+  font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s ease;
+  border-radius:6px;
+}
+.eye-btn:hover{
+  color:var(--br);
+  background:rgba(124,61,18,0.08);
+}
+
+/* submit */
+.btn-login{
+  width:100%;padding:14px;margin-top:8px;
+  background:linear-gradient(135deg,var(--br),var(--brm));
+  color:#fff;border:none;border-radius:11px;
+  font-family:'Outfit',sans-serif;font-size:.92rem;font-weight:600;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:all 0.3s ease;
+  box-shadow:0 4px 15px rgba(124,61,18,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  position:relative;
+  overflow:hidden;
+}
+.btn-login::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transition:left 0.5s ease}
+.btn-login:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 25px rgba(124,61,18,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.btn-login:hover::before{left:100%}
+.btn-login:disabled{opacity:.65;cursor:not-allowed;transform:none;box-shadow:none}
+.spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.note{display:flex;align-items:flex-start;gap:11px;margin-top:22px;padding:14px 15px;background:linear-gradient(135deg,rgba(255,255,255,0.8),rgba(250,246,240,0.9));border:1.5px solid rgba(124,61,18,0.12);border-radius:11px;transition:all 0.3s ease}
+.note:hover{background:linear-gradient(135deg,rgba(255,255,255,0.95),rgba(250,246,240,1));border-color:rgba(124,61,18,0.2);box-shadow:0 4px 12px rgba(124,61,18,0.08)}
+.note i{color:#2D6A4F;font-size:.85rem;margin-top:3px;flex-shrink:0}
+.note p{font-size:.74rem;color:var(--mu);line-height:1.6}
+.foot{margin-top:18px;text-align:center;font-size:.7rem;color:#B8ACA2;letter-spacing:.5px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">
+    <div class="brand-icon">🦷</div>
+    <div class="brand-text">
+      <div class="brand-name">Guerrero Dental</div>
+      <div class="brand-sub">Staff Portal</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="tag">Authorized Staff Only</div>
+  <h1 class="login-title">Sign In</h1>
+  <div class="error-box" id="errBox">
+    <i class="fas fa-exclamation-circle"></i>
+    <span id="errText">Invalid credentials.</span>
+  </div>
+  <div class="field">
+    <label>Email Address</label>
+    <div class="input-wrap">
+      <i class="fas fa-envelope input-icon"></i>
+      <input type="email" id="loginEmail" placeholder="staff@guerrerodental.com" autocomplete="email">
+    </div>
+  </div>
+  <div class="field">
+    <label>Password</label>
+    <div class="input-wrap">
+      <i class="fas fa-lock input-icon"></i>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+      <button type="button" class="eye-btn" onclick="togglePwd()">
+        <i class="fas fa-eye" id="eyeIco"></i>
+      </button>
+    </div>
+  </div>
+  <button class="btn-login" id="loginBtn" onclick="doLogin()">
+    <div class="spinner" id="loginSpin"></div>
+    <span id="loginLbl">Sign In</span>
+    <i class="fas fa-arrow-right"></i>
+  </button>
+  <div class="note">
+    <i class="fas fa-shield-alt"></i>
+    <p>Restricted to <strong style="color:var(--ink)">authorized Guerrero Dental staff</strong> only. Contact your superadmin if you need an account.</p>
+  </div>
+  <div class="foot">Guerrero Dental &copy; <span id="yr"></span> &middot; Secure Staff Portal</div>
+</div>
+<script>
+document.getElementById('yr').textContent=new Date().getFullYear();
+function togglePwd(){
+  const inp=document.getElementById('loginPassword'),ico=document.getElementById('eyeIco');
+  if(inp.type==='password'){inp.type='text';ico.className='fas fa-eye-slash';}
+  else{inp.type='password';ico.className='fas fa-eye';}
+}
+function showErr(msg){
+  document.getElementById('errText').textContent=msg;
+  document.getElementById('errBox').style.display='flex';
+}
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const password=document.getElementById('loginPassword').value;
+  document.getElementById('errBox').style.display='none';
+  if(!email){showErr('Please enter your email address.');return}
+  if(!password){showErr('Please enter your password.');return}
+  const btn=document.getElementById('loginBtn');
+  const spin=document.getElementById('loginSpin');
+  const lbl=document.getElementById('loginLbl');
+  btn.disabled=true;spin.style.display='block';lbl.textContent='Verifying…';
+  try{
+    const res=await fetch('/api/auth/login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,password})
+    });
+    const data=await res.json();
+    if(res.ok&&data.token){
+      sessionStorage.setItem('gd_token',data.token);
+      sessionStorage.setItem('gd_name',data.name);
+      sessionStorage.setItem('gd_email',data.email);
+      sessionStorage.setItem('gd_role',data.role);
+      sessionStorage.setItem('gd_id',String(data.id));
+      const routes={superadmin:'/gd-admin/dashboard/superadmin',admin:'/gd-admin/dashboard/admin',nurse:'/gd-admin/dashboard/nurse'};
+      window.location.replace(routes[data.role]||'/gd-admin/dashboard/nurse');
+    }else{showErr(data.message||'Invalid email or password.');}
+  }catch{showErr('Cannot reach server. Make sure the backend is running (python app.py).');}
+  finally{btn.disabled=false;spin.style.display='none';lbl.textContent='Sign In';}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+</script>
+</body>
+</html>

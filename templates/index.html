@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guerrero Dental — Your Smile, Our Purpose</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --brown:#7C3D12;--brown-mid:#A0522D;--brown-light:#C8845A;
+  --gold:#C9933C;--gold-pale:#F5E6C8;
+  --cream:#FBF7F2;--cream-deep:#F2EBE0;
+  --ink:#231409;--ink-soft:#4A3728;--muted:#8A7060;
+  --border:#E8DDD2;--white:#FFFFFF;
+  --ok:#2D6A4F;--er:#C0392B;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--ink-soft);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;z-index:900;padding:0 5%;background:rgba(251,247,242,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:box-shadow .3s,transform .3s ease}
+header.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.06)}
+header.nav-hidden{transform:translateY(-100%)}
+.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;height:72px;gap:40px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+.brand-tooth{width:42px;height:42px;background:linear-gradient(135deg,var(--brown),var(--brown-light));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--brown);line-height:1.1}
+.brand-name span{display:block;font-size:.62rem;font-family:'Outfit',sans-serif;font-weight:400;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+nav{flex:1}
+nav ul{display:flex;gap:4px;list-style:none}
+nav ul li a{padding:8px 14px;border-radius:8px;text-decoration:none;font-size:.86rem;color:var(--ink-soft);transition:all .15s}
+nav ul li a:hover{color:var(--brown);background:rgba(124,61,18,.06)}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.btn-nav-outline{padding:8px 16px;background:transparent;border:1.5px solid var(--border);border-radius:9px;font-size:.82rem;font-weight:500;color:var(--ink-soft);cursor:pointer;text-decoration:none;transition:all .15s;font-family:'Outfit',sans-serif}
+.btn-nav-outline:hover{border-color:var(--brown);color:var(--brown)}
+.btn-nav-primary{padding:9px 20px;background:linear-gradient(135deg,var(--brown),var(--brown-mid));border:none;border-radius:9px;font-size:.82rem;font-weight:600;color:#fff;cursor:pointer;text-decoration:none;transition:all .15s;font-family:'Outfit',sans-serif}
+.btn-nav-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,61,18,.3)}
+.mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;color:var(--ink-soft)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(28,8,2,.92) 0%,rgba(124,61,18,.82) 50%,rgba(28,8,2,.88) 100%);z-index:1}
+.hero-bg::after{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=1950&q=60') center/cover no-repeat;z-index:0}
+.hero-orb{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(201,147,60,.18),transparent 70%);z-index:2;pointer-events:none}
+.hero-orb-1{width:700px;height:700px;top:-200px;right:-200px}
+.hero-orb-2{width:400px;height:400px;bottom:-100px;left:10%}
+.hero-inner{position:relative;z-index:3;max-width:1280px;margin:0 auto;padding:140px 5% 100px;display:grid;grid-template-columns:1fr 420px;gap:64px;align-items:center;width:100%}
+.hero-content{color:#fff}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-pale);margin-bottom:20px;opacity:.85}
+.hero-tag::before{content:'';width:28px;height:1px;background:var(--gold)}
+.hero-content h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5vw,4rem);font-weight:600;line-height:1.12;margin-bottom:18px}
+.hero-content h1 em{color:var(--gold);font-style:italic}
+.hero-content p{font-size:1rem;line-height:1.75;color:rgba(255,255,255,.72);margin-bottom:32px;max-width:440px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.btn-hero-primary{display:inline-flex;align-items:center;gap:9px;padding:14px 28px;background:var(--gold);border:none;border-radius:10px;color:var(--ink);font-size:.92rem;font-weight:600;text-decoration:none;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
+.btn-hero-primary:hover{background:#D9A54C;transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,147,60,.4)}
+.btn-hero-ghost{display:inline-flex;align-items:center;gap:9px;padding:14px 28px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.3);border-radius:10px;color:#fff;font-size:.92rem;font-weight:500;text-decoration:none;cursor:pointer;transition:all .2s;backdrop-filter:blur(4px);font-family:'Outfit',sans-serif}
+.btn-hero-ghost:hover{border-color:#fff;background:rgba(255,255,255,.15)}
+.hero-stats{display:flex;gap:36px;margin-top:48px;padding-top:36px;border-top:1px solid rgba(255,255,255,.12)}
+.hero-stat .number{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:#fff}
+.hero-stat .label{font-size:.72rem;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:.06em}
+
+/* QUICK CARD */
+.hero-card{background:rgba(251,247,242,.97);border-radius:20px;padding:32px;box-shadow:0 32px 80px rgba(0,0,0,.3);backdrop-filter:blur(8px);position:relative}
+.hero-card-badge{position:absolute;top:-13px;left:24px;background:linear-gradient(135deg,var(--gold),#D9A54C);color:var(--ink);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:20px}
+.hero-card h3{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;color:var(--ink);margin-bottom:5px;margin-top:8px}
+.hero-card p{font-size:.82rem;color:var(--muted);margin-bottom:22px;line-height:1.5}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-field{margin-bottom:14px}
+.form-field label{display:block;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.form-field input,.form-field select{width:100%;background:var(--cream-deep);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-size:.86rem;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .2s}
+.form-field input:focus,.form-field select:focus{border-color:var(--brown);background:#fff}
+.urgency-label{display:block;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.urgency-row{display:flex;gap:8px;margin-bottom:16px}
+.urgency-btn{flex:1;padding:8px 4px;background:var(--cream-deep);border:1.5px solid var(--border);border-radius:8px;font-size:.74rem;font-weight:600;cursor:pointer;text-align:center;transition:all .15s;font-family:'Outfit',sans-serif;color:var(--ink-soft)}
+.urgency-btn.sel-routine{background:#D8F3DC;border-color:var(--ok);color:var(--ok)}
+.urgency-btn.sel-soon{background:#FFF3CD;border-color:#9C6A00;color:#9C6A00}
+.urgency-btn.sel-urgent{background:#FDECEA;border-color:var(--er);color:var(--er)}
+.btn-submit-form{width:100%;padding:13px;background:linear-gradient(135deg,var(--brown),var(--brown-mid));border:none;border-radius:10px;color:#fff;font-size:.9rem;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
+.btn-submit-form:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,61,18,.35)}
+.btn-submit-form:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.form-success{display:none;text-align:center;padding:24px 12px}
+.check-ring{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--ok),#52B788);display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;margin:0 auto 16px}
+.form-success h4{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--ink);margin-bottom:8px}
+.form-success p{font-size:.83rem;color:var(--muted);line-height:1.6}
+
+/* MARQUEE */
+.marquee-strip{background:var(--brown);overflow:hidden;padding:14px 0}
+.marquee-track{display:flex;animation:marquee 30s linear infinite;width:max-content}
+.marquee-item{display:flex;align-items:center;gap:10px;padding:0 28px;font-size:.78rem;font-weight:400;color:rgba(255,255,255,.75);white-space:nowrap;letter-spacing:.05em}
+.dot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* SECTIONS */
+.section-wrap{padding:88px 5%;position:relative}
+.section-wrap.alt-bg{background:var(--cream-deep)}
+.section-inner{max-width:1280px;margin:0 auto}
+.section-eyebrow{display:flex;align-items:center;gap:10px;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.section-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+.section-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,2.8rem);font-weight:600;color:var(--ink);line-height:1.15;margin-bottom:14px}
+.section-heading em{color:var(--brown);font-style:italic}
+.section-sub{font-size:.95rem;color:var(--muted);line-height:1.7;max-width:520px}
+.section-header{margin-bottom:52px}
+
+/* SERVICES */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.service-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:30px 26px;transition:all .22s;cursor:pointer}
+.service-card:hover{border-color:rgba(201,147,60,.4);transform:translateY(-4px);box-shadow:0 20px 48px rgba(124,61,18,.09)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:24px;z-index:999}
+.modal-overlay.open{display:flex}
+.modal-panel{position:relative;width:100%;max-width:640px;background:#fff;border-radius:28px;padding:30px 32px;box-shadow:0 28px 80px rgba(0,0,0,.18);}
+.modal-close{position:absolute;top:18px;right:18px;width:38px;height:38px;border:none;border-radius:50%;background:rgba(36,25,8,.08);color:var(--ink);font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.modal-close:hover{background:rgba(36,25,8,.14)}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--ink);margin-bottom:12px}
+.modal-summary{font-size:.98rem;color:var(--ink-soft);line-height:1.8;margin-bottom:18px}
+.modal-detail{font-size:.9rem;color:var(--muted);line-height:1.75;white-space:pre-line}
+.modal-note{margin-top:22px;font-size:.82rem;color:var(--muted);padding-top:16px;border-top:1px solid #F2ECE4}
+@media(max-width:720px){.modal-panel{padding:24px;} .modal-title{font-size:1.45rem}}
+.service-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--gold-pale),var(--cream-deep));display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:18px}
+.service-name{font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:7px}
+.service-desc{font-size:.83rem;color:var(--muted);line-height:1.65}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.about-visual{background:linear-gradient(145deg,var(--cream-deep),#EAD9C4);border-radius:24px;height:440px;display:flex;align-items:center;justify-content:center;font-size:5rem;border:1px solid var(--border);position:relative;overflow:hidden}
+.about-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,147,60,.06),transparent)}
+.about-points{display:flex;flex-direction:column;gap:18px;margin-top:28px}
+.about-point{display:flex;gap:14px;align-items:flex-start}
+.apt-icon{width:36px;height:36px;border-radius:9px;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;color:var(--brown);margin-top:2px}
+.apt-title{font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:3px}
+.apt-desc{font-size:.81rem;color:var(--muted);line-height:1.55}
+
+/* TEAM */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;justify-items:stretch;max-width:1280px;margin:0 auto;}
+.team-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:30px 22px;text-align:center;transition:all .2s;width:100%;max-width:none;}
+.team-card:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(124,61,18,.08)}
+.team-duty-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:28px 24px;margin:30px auto 0;box-shadow:0 8px 24px rgba(0,0,0,.05);width:100%;max-width:900px}
+.team-duty-title{font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:10px}
+.team-duty-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #F0E9DC}
+.team-duty-item:first-child{border-top:none}
+.team-duty-dot{width:10px;height:10px;border-radius:50%;background:#52B788;flex-shrink:0}
+.team-card:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(124,61,18,.08)}
+.team-avatar{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--brown),var(--brown-light));display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin:0 auto 16px;border:3px solid var(--gold-pale)}
+.team-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin-bottom:4px}
+.team-role{font-size:.74rem;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.team-bio{font-size:.8rem;color:var(--muted);line-height:1.6}
+
+/* INQUIRY SECTION */
+.complaint-section{background:linear-gradient(135deg,var(--brown) 0%,#2D1004 100%);position:relative;overflow:hidden}
+.complaint-section::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:rgba(201,147,60,.08);pointer-events:none}
+.complaint-section::after{content:'';position:absolute;bottom:-80px;left:-80px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.03);pointer-events:none}
+.complaint-grid{display:grid;grid-template-columns:1fr 560px;gap:64px;align-items:start}
+.complaint-left .section-eyebrow{color:rgba(245,230,200,.7)}
+.complaint-left .section-heading{color:#fff}
+.complaint-left .section-sub{color:rgba(255,255,255,.65)}
+.inq-bullets{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+.inq-bullet{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.8);font-size:.88rem}
+.inq-bullet i{color:var(--gold);width:18px;text-align:center}
+.complaint-form-card{background:#fff;border-radius:22px;padding:36px;box-shadow:0 32px 80px rgba(0,0,0,.28)}
+.cfc-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;color:var(--ink);margin-bottom:4px}
+.cfc-sub{font-size:.8rem;color:var(--muted);margin-bottom:24px}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mf-group{margin-bottom:14px}
+.mf-label{display:block;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.mf-input{width:100%;background:var(--cream-deep);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-size:.85rem;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .2s}
+.mf-input:focus{border-color:var(--brown);background:#fff}
+textarea.mf-input{resize:vertical;min-height:90px}
+.err-msg{border-radius:9px;padding:10px 13px;font-size:.8rem;margin-bottom:12px;display:none;align-items:center;gap:8px;background:#FDECEA;border:1px solid rgba(192,57,43,.2);color:var(--er)}
+.inq-form-success{display:none;text-align:center;padding:24px 8px}
+.inq-ok-ring{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--ok),#52B788);display:flex;align-items:center;justify-content:center;font-size:1.7rem;color:#fff;margin:0 auto 16px}
+.inq-form-success h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--ink);margin-bottom:8px}
+.inq-form-success p{font-size:.83rem;color:var(--muted);line-height:1.6;margin-bottom:18px}
+.btn-another{background:none;border:1.5px solid var(--border);border-radius:8px;padding:9px 20px;font-size:.82rem;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
+.btn-another:hover{border-color:var(--brown);color:var(--brown)}
+
+/* CONTACT */
+.contact-wrap{background:var(--cream)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.contact-block{margin-bottom:28px}
+.ct-block-label{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.ct-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.ct-icon{width:38px;height:38px;background:var(--gold-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--brown);flex-shrink:0}
+.ct-text strong{display:block;font-size:.88rem;font-weight:600;color:var(--ink);margin-bottom:2px}
+.ct-text span{font-size:.83rem;color:var(--muted);line-height:1.5}
+.hours-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.hr-row{display:flex;justify-content:space-between;align-items:center;padding:8px 13px;background:var(--cream-deep);border-radius:8px;font-size:.8rem}
+.hr-row span:first-child{color:var(--muted)}
+.hr-row span:last-child{font-weight:600;color:var(--ink)}
+.map-placeholder{background:linear-gradient(145deg,var(--cream-deep),#EAD9C4);border:1px solid var(--border);border-radius:18px;height:290px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--muted)}
+.map-placeholder i{font-size:2.8rem;color:var(--brown-light);opacity:.55}
+.map-placeholder p{font-size:.83rem;text-align:center;line-height:1.6}
+.map-placeholder a{color:var(--brown);font-size:.8rem;margin-top:4px;display:inline-block}
+
+/* FOOTER */
+footer{background:var(--ink);padding:52px 5% 28px}
+.footer-inner{max-width:1280px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand .brand-name{color:var(--gold-pale);margin-bottom:12px}
+.footer-desc{font-size:.83rem;color:rgba(255,255,255,.38);line-height:1.65;max-width:260px}
+.footer-col-title{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.footer-col a{display:block;font-size:.83rem;color:rgba(255,255,255,.42);text-decoration:none;margin-bottom:9px;transition:color .15s}
+.footer-col a:hover{color:var(--gold-pale)}
+.footer-divider{height:1px;background:rgba(255,255,255,.07);margin-bottom:22px}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:.76rem;color:rgba(255,255,255,.3)}
+.footer-tagline{font-size:.72rem;color:rgba(255,255,255,.25);font-style:italic}
+
+/* CHATBOT */
+.chat-fab{position:fixed;bottom:28px;right:28px;z-index:800}
+.chat-fab-btn{width:60px;height:60px;background:linear-gradient(135deg,var(--brown),var(--brown-light));border:none;border-radius:50%;cursor:pointer;font-size:1.45rem;box-shadow:0 8px 28px rgba(124,61,18,.45);transition:all .25s;display:flex;align-items:center;justify-content:center}
+.chat-fab-btn:hover{transform:scale(1.1)}
+.chat-notif{position:absolute;top:-4px;right:-4px;width:19px;height:19px;background:var(--er);border-radius:50%;border:2px solid var(--cream);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:#fff;display:none}
+.chat-panel{position:fixed;bottom:100px;right:24px;width:310px;height:420px;background:#fff;border:1px solid var(--border);border-radius:22px;display:flex;flex-direction:column;box-shadow:0 28px 72px rgba(124,61,18,.22);transform:scale(.88) translateY(24px);opacity:0;pointer-events:none;transition:all .28s cubic-bezier(.34,1.56,.64,1);z-index:800}
+.chat-panel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+.chat-header{padding:14px 16px;background:linear-gradient(135deg,var(--brown),var(--brown-mid));border-radius:22px 22px 0 0;display:flex;align-items:center;justify-content:space-between}
+.chat-hd-left{display:flex;align-items:center;gap:10px}
+.chat-hd-av{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.chat-hd-name{font-size:.9rem;font-weight:600;color:#fff}
+.chat-hd-status{font-size:.68rem;color:rgba(255,255,255,.68);display:flex;align-items:center;gap:4px}
+.chat-hd-status::before{content:'';width:5px;height:5px;border-radius:50%;background:#52B788;display:inline-block}
+.chat-close{background:none;border:none;color:rgba(255,255,255,.65);cursor:pointer;font-size:.92rem;padding:4px;transition:color .15s}
+.chat-close:hover{color:#fff}
+.chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.quick-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
+.quick-chip{background:var(--cream-deep);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.73rem;font-weight:500;color:var(--brown);cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif}
+.quick-chip:hover{background:var(--gold-pale);border-color:var(--gold)}
+.msg-bubble{max-width:86%;padding:10px 13px;border-radius:14px;font-size:.82rem;line-height:1.5;word-wrap:break-word}
+.msg-bubble.bot{background:var(--cream-deep);border:1px solid var(--border);color:var(--ink-soft);align-self:flex-start;border-radius:4px 14px 14px 14px}
+.msg-bubble.user{background:linear-gradient(135deg,var(--brown),var(--brown-mid));color:#fff;align-self:flex-end;border-radius:14px 14px 4px 14px}
+.typing-dots{display:flex;gap:4px;padding:2px 0}
+.typing-dots span{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:tdot 1.2s infinite}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.chat-input-bar{padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center}
+.chat-input-bar input{flex:1;background:var(--cream-deep);border:1.5px solid var(--border);border-radius:20px;padding:9px 14px;font-size:.82rem;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;transition:border-color .2s}
+.chat-input-bar input:focus{border-color:var(--brown);background:#fff}
+.chat-send-btn{width:36px;height:36px;background:linear-gradient(135deg,var(--brown),var(--brown-mid));border:none;border-radius:50%;cursor:pointer;color:#fff;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.chat-send-btn:hover{transform:scale(1.08)}
+
+/* SPIN */
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* MOBILE */
+@media(max-width:960px){
+  .hero-inner{grid-template-columns:1fr;gap:40px;padding:120px 5% 60px}
+  .hero-card{display:none}
+  .services-grid,.team-grid{grid-template-columns:1fr 1fr}
+  .about-grid,.complaint-grid,.contact-grid{grid-template-columns:1fr}
+  .about-visual{height:220px}
+  nav ul,.nav-right{display:none}
+  .mobile-toggle{display:block}
+  nav.mob-open ul{display:flex;flex-direction:column;position:fixed;top:72px;left:0;right:0;background:var(--cream);border-bottom:1px solid var(--border);padding:16px 24px;gap:4px;z-index:899}
+  .footer-top{grid-template-columns:1fr}
+  .mf-row{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .services-grid,.team-grid{grid-template-columns:1fr}
+  .hours-grid{grid-template-columns:1fr}
+  .chat-panel{width:calc(100vw - 32px);right:16px;bottom:92px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="mainHeader">
+  <div class="nav-inner">
+    <a class="brand" href="#home">
+      <div class="brand-tooth">🦷</div>
+      <div class="brand-name">Guerrero Dental<span>Manila, Philippines</span></div>
+    </a>
+    <nav id="mainNav">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#team">Our Team</a></li>
+        <li><a href="#submit-complaint">Book Now</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a class="btn-nav-primary" href="#submit-complaint"><i class="fas fa-calendar-check"></i> Book Appointment</a>
+    </div>
+    <button class="mobile-toggle" id="mobileToggle"><i class="fas fa-bars"></i></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-tag">Trusted Dental Care Since 2008</div>
+      <h1>Your Smile Deserves<br><em>The Best Care</em></h1>
+      <p>Exceptional dental services with cutting-edge technology and a patient-centered approach. Located at Room 200 Simacor Mansion, Sta. Mesa, Manila.</p>
+      <div class="hero-actions">
+        <a class="btn-hero-primary" href="#submit-complaint"><i class="fas fa-calendar-check"></i> Book an Appointment</a>
+        <a class="btn-hero-ghost" href="#services"><i class="fas fa-tooth"></i> Our Services</a>
+      </div>
+    </div>
+    <!-- Quick Inquiry Card -->
+    <div class="hero-card">
+      <div class="hero-card-badge">Quick Inquiry</div>
+      <div id="heroFormWrap">
+        <h3>Tell Us How We Can Help</h3>
+        <p>Submit your concern and our team will get back to you within 24 hours.</p>
+        <div class="form-row">
+          <div class="form-field"><label>First Name</label><input id="hf-fn" placeholder="Juan"></div>
+          <div class="form-field"><label>Last Name</label><input id="hf-ln" placeholder="Dela Cruz"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-field"><label>Phone</label><input id="hf-contact" placeholder="0917-000-0000" type="tel"></div>
+          <div class="form-field"><label>Email</label><input id="hf-email" placeholder="email@example.com" type="email"></div>
+        </div>
+        <div class="form-field"><label>Main Concern</label>
+          <select id="hf-concern">
+            <option value="">Select a concern</option>
+            <option>Toothache / Pain</option><option>Broken or Chipped Tooth</option>
+            <option>Teeth Cleaning / Check-up</option><option>Teeth Whitening</option>
+            <option>Braces / Orthodontics</option><option>Dental Implants</option>
+            <option>Missing Tooth</option><option>Gum Problem</option><option>Other Concern</option>
+          </select>
+        </div>
+        <span class="urgency-label">Urgency Level</span>
+        <div class="urgency-row">
+          <button class="urgency-btn" id="hurg-r" onclick="setHUrg('routine',this)">🟢 Routine</button>
+          <button class="urgency-btn" id="hurg-s" onclick="setHUrg('soon',this)">🟡 Soon</button>
+          <button class="urgency-btn" id="hurg-u" onclick="setHUrg('urgent',this)">🔴 Urgent</button>
+        </div>
+        <button class="btn-submit-form" id="hfBtn" onclick="submitHeroForm()">
+          <div class="spin" id="hfSpin"></div>
+          <i class="fas fa-paper-plane" id="hfIco"></i>
+          <span id="hfLbl">Send Inquiry</span>
+        </button>
+      </div>
+      <div class="form-success" id="heroFormSuccess">
+        <div class="check-ring">✔</div>
+        <h4>Inquiry Received!</h4>
+        <p>Thank you! Our team will contact you within 24 hours to confirm your appointment.</p>
+        <button class="btn-another" onclick="resetHeroForm()" style="margin-top:16px">Submit Another</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="dot"></span>General Dentistry</span>
+    <span class="marquee-item"><span class="dot"></span>Cosmetic Dentistry</span>
+    <span class="marquee-item"><span class="dot"></span>Dental Implants</span>
+    <span class="marquee-item"><span class="dot"></span>Orthodontics</span>
+    <span class="marquee-item"><span class="dot"></span>Teeth Whitening</span>
+    <span class="marquee-item"><span class="dot"></span>Emergency Dental</span>
+    <span class="marquee-item"><span class="dot"></span>Periodontics</span>
+    <span class="marquee-item"><span class="dot"></span>Pediatric Dentistry</span>
+    <span class="marquee-item"><span class="dot"></span>Root Canal Therapy</span>
+    <span class="marquee-item"><span class="dot"></span>Dental Fillings</span>
+    <span class="marquee-item"><span class="dot"></span>General Dentistry</span>
+    <span class="marquee-item"><span class="dot"></span>Cosmetic Dentistry</span>
+    <span class="marquee-item"><span class="dot"></span>Dental Implants</span>
+    <span class="marquee-item"><span class="dot"></span>Orthodontics</span>
+    <span class="marquee-item"><span class="dot"></span>Teeth Whitening</span>
+    <span class="marquee-item"><span class="dot"></span>Emergency Dental</span>
+    <span class="marquee-item"><span class="dot"></span>Periodontics</span>
+    <span class="marquee-item"><span class="dot"></span>Pediatric Dentistry</span>
+    <span class="marquee-item"><span class="dot"></span>Root Canal Therapy</span>
+    <span class="marquee-item"><span class="dot"></span>Dental Fillings</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section-wrap" id="services">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">What We Offer</div>
+      <h2 class="section-heading">Comprehensive <em>Dental Services</em></h2>
+      <p class="section-sub">From routine cleanings to advanced cosmetic procedures, we provide complete dental care for the whole family.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-service="General Dentistry" data-summary="Routine check-ups, cleanings, fillings, and preventive care to keep your teeth healthy for life." data-detail="Comprehensive preventive care including dental exams, professional cleaning, fluoride treatment, and patient education. We catch problems early so you can enjoy a healthy smile for years to come."><div class="service-icon">🔍</div><div class="service-name">General Dentistry</div><div class="service-desc">Routine check-ups, cleanings, fillings, and preventive care to keep your teeth healthy for life.</div></div>
+      <div class="service-card" data-service="Cosmetic Dentistry" data-summary="Teeth whitening, veneers, bonding, and smile makeovers for the perfect confident smile." data-detail="Advanced cosmetic treatments to brighten, reshape, and restore your smile. We offer custom whitening, porcelain veneers, composite bonding, and smile design to suit your goals."><div class="service-icon">✨</div><div class="service-name">Cosmetic Dentistry</div><div class="service-desc">Teeth whitening, veneers, bonding, and smile makeovers for the perfect confident smile.</div></div>
+      <div class="service-card" data-service="Dental Implants" data-summary="Permanent, natural-looking tooth replacement solutions with titanium implant technology." data-detail="We place and restore dental implants for secure, long-lasting replacement of missing teeth. Implants preserve bone, restore chewing function, and help you smile with confidence."><div class="service-icon">🔩</div><div class="service-name">Dental Implants</div><div class="service-desc">Permanent, natural-looking tooth replacement solutions with titanium implant technology.</div></div>
+      <div class="service-card" data-service="Orthodontics" data-summary="Braces and clear aligners to straighten teeth and correct bite issues at any age." data-detail="Our orthodontic options include traditional braces and clear aligners to move teeth gently and precisely. We treat crooked teeth, overcrowding, bite problems, and jaw alignment for lasting results."><div class="service-icon">😬</div><div class="service-name">Orthodontics</div><div class="service-desc">Braces and clear aligners to straighten teeth and correct bite issues at any age.</div></div>
+      <div class="service-card" data-service="Emergency Dental" data-summary="Same-day care for toothaches, broken teeth, lost fillings, and dental trauma." data-detail="When dental pain or injury strikes, we provide fast, compassionate emergency treatment. Our team handles acute tooth pain, broken restorations, trauma, and urgent infections."><div class="service-icon">🚨</div><div class="service-name">Emergency Dental</div><div class="service-desc">Same-day care for toothaches, broken teeth, lost fillings, and dental trauma.</div></div>
+      <div class="service-card" data-service="Pediatric Dentistry" data-summary="Gentle, child-friendly dental care in a warm environment kids actually look forward to." data-detail="We specialize in caring for children with gentle exams, cleanings, fluoride, sealants, and habit counseling. Our team creates a positive first dental experience for kids and families."><div class="service-icon">👶</div><div class="service-name">Pediatric Dentistry</div><div class="service-desc">Gentle, child-friendly dental care in a warm environment kids actually look forward to.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section-wrap alt-bg" id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-visual">🦷</div>
+      <div>
+        <div class="section-eyebrow">About the Clinic</div>
+        <h2 class="section-heading">Quality Care in the <em>Heart of Manila</em></h2>
+        <p class="section-sub">Guerrero Dental has been serving patients in Sta. Mesa, Manila for over 15 years — combining modern technology with compassionate, personalized care.</p>
+        <div class="about-points">
+          <div class="about-point"><div class="apt-icon"><i class="fas fa-award"></i></div><div><div class="apt-title">Board-Certified Dentists</div><div class="apt-desc">Our team holds advanced certifications in general and specialty dentistry.</div></div></div>
+          <div class="about-point"><div class="apt-icon"><i class="fas fa-microscope"></i></div><div><div class="apt-title">Modern Equipment</div><div class="apt-desc">Digital X-rays, laser dentistry, and the latest clinical tools for precise treatment.</div></div></div>
+          <div class="about-point"><div class="apt-icon"><i class="fas fa-heart"></i></div><div><div class="apt-title">Patient-First Approach</div><div class="apt-desc">We listen carefully and create personalized treatment plans for every patient.</div></div></div>
+          <div class="about-point"><div class="apt-icon"><i class="fas fa-shield-alt"></i></div><div><div class="apt-title">Safe & Hygienic</div><div class="apt-desc">Hospital-grade sterilization and strict infection control protocols at all times.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section-wrap" id="team">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Meet the Team</div>
+      <h2 class="section-heading">Our <em>Dental Experts</em></h2>
+      <p class="section-sub">Skilled, caring professionals dedicated to your oral health and long-term comfort.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card"><div class="team-avatar">👩‍⚕️</div><div class="team-name">Dr. Bambina N. Guerrero</div><div class="team-role">Lead Dentist & Founder</div><div class="team-bio">DDS, Ateneo de Manila. 15+ years experience in general and cosmetic dentistry. Specializes in full-mouth rehabilitations and smile makeovers.</div></div>
+      <div class="team-card"><div class="team-avatar">👨‍⚕️</div><div class="team-name">Dr. Jasond Guerrero-Ferrer</div><div class="team-role">Associate Dentist</div><div class="team-bio">DDS with a patient-centered focus on restorative dentistry and preventive care, delivering gentle treatment for all ages.</div></div>
+    </div>
+    <div class="team-duty-card">
+      <div class="team-duty-title">Staff on Duty</div>
+      <div class="team-duty-item"><span class="team-duty-dot"></span><div><strong>Dr. Bambina N. Guerrero</strong><br><span style="font-size:.85rem;color:var(--muted)">Lead Dentist — On Duty</span></div></div>
+      <div class="team-duty-item"><span class="team-duty-dot"></span><div><strong>Dr. Jasond Guerrero-Ferrer</strong><br><span style="font-size:.85rem;color:var(--muted)">Associate Dentist — On Duty</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FULL INQUIRY FORM -->
+<section class="section-wrap complaint-section" id="submit-complaint">
+  <div class="section-inner">
+    <div class="complaint-grid">
+      <div class="complaint-left">
+        <div class="section-eyebrow">Book an Appointment</div>
+        <h2 class="section-heading">Submit Your <em>Inquiry</em></h2>
+        <p class="section-sub">Fill out the form and our team will reach out within 24 hours to confirm your schedule.</p>
+        <div class="inq-bullets">
+          <div class="inq-bullet"><i class="fas fa-clock"></i> Response within 24 hours</div>
+          <div class="inq-bullet"><i class="fas fa-shield-alt"></i> Your information is kept private</div>
+          <div class="inq-bullet"><i class="fas fa-phone-alt"></i> Emergency line: <strong style="color:var(--gold-pale);margin-left:4px">0917-5850-158</strong></div>
+          <div class="inq-bullet"><i class="fas fa-map-marker-alt"></i> Room 200, Simacor Mansion, Sta. Mesa, Manila</div>
+          <div class="inq-bullet"><i class="fas fa-calendar-alt"></i> Mon–Fri 8am–6pm · Sat 9am–2pm</div>
+        </div>
+      </div>
+      <div class="complaint-form-card">
+        <div id="complaintFormWrap">
+          <div class="cfc-title">Patient Inquiry Form</div>
+          <div class="cfc-sub">Fields marked * are required.</div>
+          <div class="err-msg" id="cfErr"><i class="fas fa-exclamation-circle"></i><span id="cfErrTxt">Please fill in required fields.</span></div>
+          <div class="mf-row">
+            <div class="mf-group"><label class="mf-label">First Name *</label><input class="mf-input" id="cf-fn" placeholder="Juan"></div>
+            <div class="mf-group"><label class="mf-label">Last Name *</label><input class="mf-input" id="cf-ln" placeholder="Dela Cruz"></div>
+          </div>
+          <div class="mf-row">
+            <div class="mf-group"><label class="mf-label">Phone Number *</label><input class="mf-input" id="cf-phone" type="tel" placeholder="0917-000-0000"></div>
+            <div class="mf-group"><label class="mf-label">Email Address</label><input class="mf-input" id="cf-email" type="email" placeholder="email@example.com"></div>
+          </div>
+          <div class="mf-row">
+            <div class="mf-group"><label class="mf-label">Date of Birth</label><input class="mf-input" id="cf-dob" type="date"></div>
+            <div class="mf-group"><label class="mf-label">Preferred Date</label><input class="mf-input" id="cf-prefdate" type="date"></div>
+          </div>
+          <div class="mf-group"><label class="mf-label">Main Concern *</label>
+            <select class="mf-input" id="cf-concern">
+              <option value="">Select your main concern</option>
+              <option>Toothache / Severe Pain</option><option>Broken or Chipped Tooth</option>
+              <option>Teeth Cleaning / General Check-up</option><option>Teeth Whitening / Bleaching</option>
+              <option>Braces / Orthodontic Consultation</option><option>Dental Implants</option>
+              <option>Missing Tooth / Dentures</option><option>Gum Disease / Bleeding Gums</option>
+              <option>Root Canal Treatment</option><option>Pediatric / Child Dental Care</option>
+              <option>Emergency Dental Visit</option><option>Other / General Inquiry</option>
+            </select>
+          </div>
+          <div class="mf-group"><label class="mf-label">Describe Your Concern</label>
+            <textarea class="mf-input" id="cf-desc" rows="3" placeholder="e.g. I've had throbbing pain in my lower left molar for 3 days, worse when eating cold food..."></textarea>
+          </div>
+          <div class="mf-row">
+            <div class="mf-group"><label class="mf-label">Preferred Time</label>
+              <select class="mf-input" id="cf-time">
+                <option value="">Any time</option>
+                <option>Morning (8am – 12pm)</option><option>Afternoon (12pm – 4pm)</option>
+                <option>Late Afternoon (4pm – 6pm)</option><option>Saturday Morning (9am – 12pm)</option>
+              </select>
+            </div>
+            <div class="mf-group"><label class="mf-label">How Did You Hear of Us?</label>
+              <select class="mf-input" id="cf-referral">
+                <option value="">Select...</option>
+                <option>Facebook / Social Media</option><option>Google Search</option>
+                <option>Friend or Family</option><option>Walk-in / Passed by</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+          <span class="urgency-label" style="margin-bottom:7px;display:block">Urgency Level</span>
+          <div class="urgency-row">
+            <button class="urgency-btn" id="curg-r" onclick="setCUrg('routine',this)">🟢 Routine — Not urgent</button>
+            <button class="urgency-btn" id="curg-s" onclick="setCUrg('soon',this)">🟡 Soon — Within a week</button>
+            <button class="urgency-btn" id="curg-u" onclick="setCUrg('urgent',this)">🔴 Urgent — Need help now</button>
+          </div>
+          <button class="btn-submit-form" id="cfBtn" onclick="submitComplaintForm()">
+            <div class="spin" id="cfSpin"></div>
+            <i class="fas fa-paper-plane" id="cfIco"></i>
+            <span id="cfLbl">Submit My Inquiry</span>
+          </button>
+          <p style="font-size:.7rem;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5">By submitting, you agree to be contacted by our dental team regarding your inquiry.</p>
+        </div>
+        <div class="inq-form-success" id="cfFormSuccess">
+          <div class="inq-ok-ring">✔</div>
+          <h4>We've Received Your Inquiry!</h4>
+          <p>Thank you! Our staff will review your details and contact you within <strong>24 hours</strong> to confirm. For emergencies call <strong>0917-5850-158</strong>.</p>
+          <button class="btn-another" onclick="resetComplaintForm()">Submit Another Inquiry</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section-wrap contact-wrap" id="contact">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Get In Touch</div>
+      <h2 class="section-heading">Visit Our <em>Clinic</em></h2>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-block">
+          <div class="ct-block-label">Location & Contact</div>
+          <div class="ct-item"><div class="ct-icon"><i class="fas fa-map-marker-alt"></i></div><div class="ct-text"><strong>Address</strong><span>Room 200, Simacor Mansion, 3232 R. Magsaysay Blvd., Sta. Mesa, Manila</span></div></div>
+          <div class="ct-item"><div class="ct-icon"><i class="fas fa-phone-alt"></i></div><div class="ct-text"><strong>Phone / Viber</strong><span>0917-5850-158</span></div></div>
+          <div class="ct-item"><div class="ct-icon"><i class="fas fa-phone-alt" style="transform:rotate(90deg)"></i></div><div class="ct-text"><strong>Landline</strong><span>(02) 8xxx-xxxx</span></div></div>
+          <div class="ct-item"><div class="ct-icon"><i class="fas fa-envelope"></i></div><div class="ct-text"><strong>Email</strong><span>info@guerrerodental.com</span></div></div>
+          <div class="ct-item"><div class="ct-icon"><i class="fas fa-envelope-open-text"></i></div><div class="ct-text"><strong>Appointments</strong><span>appointments@guerrerodental.com</span></div></div>
+          <div class="ct-item"><div class="ct-icon"><i class="fab fa-facebook-f"></i></div><div class="ct-text"><strong>Facebook</strong><span>facebook.com/GuerreroDentalClinic</span></div></div>
+        </div>
+        <div class="contact-block">
+          <div class="ct-block-label">Clinic Hours</div>
+          <div class="hours-grid">
+            <div class="hr-row"><span>Monday – Friday</span><span>8:00 AM – 6:00 PM</span></div>
+            <div class="hr-row"><span>Saturday</span><span>9:00 AM – 2:00 PM</span></div>
+            <div class="hr-row"><span>Sunday</span><span style="color:var(--er)">Closed</span></div>
+            <div class="hr-row"><span>Holidays</span><span style="color:var(--er)">Closed</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="map-placeholder">
+        <iframe
+          src="https://maps.google.com/maps?q=Simacor%20Mansion%20Sta%20Mesa%20Manila&t=&z=15&ie=UTF8&iwloc=&output=embed"
+          width="100%"
+          height="320"
+          style="border:0;min-height:320px"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <p><strong>Room 200, Simacor Mansion</strong><br>3232 R. Magsaysay Blvd.<br>Sta. Mesa, Manila</p>
+        <a href="https://maps.google.com/?q=Simacor+Mansion+Sta+Mesa+Manila" target="_blank" rel="noopener">Open in Google Maps →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="serviceModal" onclick="closeServiceModal(event)">
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeServiceModal(event)"><i class="fas fa-times"></i></button>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-summary" id="modalSummary"></div>
+    <div class="modal-detail" id="modalDetail"></div>
+    <div class="modal-note">Need help choosing? Call us at <strong>0917-5850-158</strong> or use the inquiry form below.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="brand footer-brand"><div class="brand-tooth">🦷</div><div class="brand-name">Guerrero Dental<span>Manila, Philippines</span></div></div>
+        <p class="footer-desc" style="margin-top:14px">Providing exceptional dental care to families in Sta. Mesa, Manila for over 15 years. Your smile is our purpose.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Quick Links</div>
+        <div class="footer-col">
+          <a href="#home">Home</a><a href="#services">Services</a>
+          <a href="#about">About Us</a><a href="#team">Our Team</a>
+          <a href="#submit-complaint">Book Now</a><a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Connect With Us</div>
+        <div class="footer-col">
+        </div>
+        <div class="footer-col-title" style="margin-top:20px">Emergency</div>
+        <div style="font-size:.88rem;color:rgba(255,255,255,.55)">Call: 0917-5850-158</div>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© <span id="footerYear"></span> Guerrero Dental Clinic. All rights reserved.</div>
+      <div class="footer-tagline">Your Smile, Our Purpose</div>
+    </div>
+  </div>
+</footer>
+
+<!-- AI CHATBOT -->
+<div class="chat-fab">
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+      <div class="chat-hd-left">
+        <div class="chat-hd-av">🦷</div>
+        <div><div class="chat-hd-name">Dental Assistant</div><div class="chat-hd-status">Online now</div></div>
+      </div>
+      <button class="chat-close" onclick="toggleChat()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="chat-messages" id="chatMsgs">
+      <div class="msg-bubble bot">Hi! I'm your virtual dental assistant 😊 I can help you book an appointment, answer questions about our services, or guide you to the right form. How can I help you today?</div>
+    </div>
+    <div class="quick-chips" id="quickChips">
+      <button class="quick-chip" onclick="quickAsk('What services do you offer?')">Our Services</button>
+      <button class="quick-chip" onclick="quickAsk('How do I book an appointment?')">Book Appointment</button>
+      <button class="quick-chip" onclick="quickAsk('What are your clinic hours?')">Clinic Hours</button>
+      <button class="quick-chip" onclick="quickAsk('Where are you located?')">Location</button>
+    </div>
+    <div class="chat-input-bar">
+      <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendChatMsg()">
+      <button class="chat-send-btn" onclick="sendChatMsg()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+  <button class="chat-fab-btn" onclick="toggleChat()">🦷<div class="chat-notif" id="chatNotif">1</div></button>
+</div>
+
+<script>
+// HEADER SCROLL
+const header=document.getElementById('mainHeader');
+let lastScrollY=window.scrollY;
+window.addEventListener('scroll',()=>{
+  const currentScrollY=window.scrollY;
+  const navOpen=document.getElementById('mainNav').classList.contains('mob-open');
+  header.classList.toggle('scrolled',currentScrollY>20);
+
+  if(navOpen||currentScrollY<80){
+    header.classList.remove('nav-hidden');
+  }else if(currentScrollY>lastScrollY){
+    header.classList.add('nav-hidden'); // Hide while scrolling down
+  }else{
+    header.classList.remove('nav-hidden'); // Show while scrolling up
+  }
+  lastScrollY=currentScrollY;
+},{passive:true});
+document.getElementById('mobileToggle').addEventListener('click',()=>document.getElementById('mainNav').classList.toggle('mob-open'));
+document.querySelectorAll('#mainNav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('mainNav').classList.remove('mob-open')));
+document.getElementById('footerYear').textContent=new Date().getFullYear();
+
+// URGENCY
+let hUrgency='routine', cUrgency='routine';
+function setHUrg(level,btn){
+  hUrgency=level;
+  ['hurg-r','hurg-s','hurg-u'].forEach(id=>document.getElementById(id).className='urgency-btn');
+  btn.className='urgency-btn sel-'+level;
+}
+function setCUrg(level,btn){
+  cUrgency=level;
+  ['curg-r','curg-s','curg-u'].forEach(id=>document.getElementById(id).className='urgency-btn');
+  btn.className='urgency-btn sel-'+level;
+}
+
+const serviceModal=document.getElementById('serviceModal');
+const modalTitle=document.getElementById('modalTitle');
+const modalSummary=document.getElementById('modalSummary');
+const modalDetail=document.getElementById('modalDetail');
+
+document.querySelectorAll('.service-card').forEach(card=>{
+  card.addEventListener('click',()=>openServiceModal(card));
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape' && serviceModal.classList.contains('open')) closeServiceModal();
+});
+
+function openServiceModal(card){
+  modalTitle.textContent=card.dataset.service || 'Service Details';
+  modalSummary.textContent=card.dataset.summary || '';
+  modalDetail.textContent=card.dataset.detail || '';
+  serviceModal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeServiceModal(e){
+  if(e) e.preventDefault();
+  serviceModal.classList.remove('open');
+  document.body.style.overflow='auto';
+}
+
+// HERO QUICK FORM
+async function submitHeroForm(){
+  const fn=document.getElementById('hf-fn').value.trim();
+  const ln=document.getElementById('hf-ln').value.trim();
+  const contact=document.getElementById('hf-contact').value.trim();
+  const concern=document.getElementById('hf-concern').value;
+  if(!fn||!ln||!contact||!concern){alert('Please fill in Name, Phone, and Concern.');return}
+  const btn=document.getElementById('hfBtn');
+  btn.disabled=true;
+  document.getElementById('hfSpin').style.display='block';
+  document.getElementById('hfIco').style.display='none';
+  document.getElementById('hfLbl').textContent='Sending…';
+  try{
+    await fetch('/api/complaints',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:fn+' '+ln,phone:contact,email:document.getElementById('hf-email').value.trim(),concern,urgency:hUrgency,status:'new'})});
+  }catch(e){console.warn(e)}
+  document.getElementById('heroFormWrap').style.display='none';
+  document.getElementById('heroFormSuccess').style.display='block';
+}
+function resetHeroForm(){
+  document.getElementById('heroFormWrap').style.display='block';
+  document.getElementById('heroFormSuccess').style.display='none';
+  ['hf-fn','hf-ln','hf-contact','hf-email'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  document.getElementById('hf-concern').value='';
+  const btn=document.getElementById('hfBtn');btn.disabled=false;
+  document.getElementById('hfSpin').style.display='none';document.getElementById('hfIco').style.display='';document.getElementById('hfLbl').textContent='Send Inquiry';
+  hUrgency='routine';['hurg-r','hurg-s','hurg-u'].forEach(id=>document.getElementById(id).className='urgency-btn');
+}
+
+// FULL COMPLAINT FORM
+async function submitComplaintForm(){
+  const fn=document.getElementById('cf-fn').value.trim();
+  const ln=document.getElementById('cf-ln').value.trim();
+  const phone=document.getElementById('cf-phone').value.trim();
+  const concern=document.getElementById('cf-concern').value;
+  const errBox=document.getElementById('cfErr');errBox.style.display='none';
+  if(!fn||!ln||!phone||!concern){
+    document.getElementById('cfErrTxt').textContent='Please fill in First Name, Last Name, Phone, and Concern.';
+    errBox.style.display='flex';errBox.scrollIntoView({behavior:'smooth',block:'center'});return;
+  }
+  const btn=document.getElementById('cfBtn');btn.disabled=true;
+  document.getElementById('cfSpin').style.display='block';
+  document.getElementById('cfIco').style.display='none';
+  document.getElementById('cfLbl').textContent='Submitting…';
+  try{
+    const res=await fetch('/api/complaints',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        name:fn+' '+ln,phone,email:document.getElementById('cf-email').value,
+        dob:document.getElementById('cf-dob').value,preferredDate:document.getElementById('cf-prefdate').value,
+        concern,description:document.getElementById('cf-desc').value,
+        urgency:cUrgency,preferredTime:document.getElementById('cf-time').value,
+        referral:document.getElementById('cf-referral').value,status:'new'
+      })});
+    if(!res.ok){const d=await res.json();document.getElementById('cfErrTxt').textContent=d.message||'Submission failed.';errBox.style.display='flex';btn.disabled=false;document.getElementById('cfSpin').style.display='none';document.getElementById('cfIco').style.display='';document.getElementById('cfLbl').textContent='Submit My Inquiry';return;}
+  }catch(e){console.warn(e)}
+  document.getElementById('complaintFormWrap').style.display='none';
+  document.getElementById('cfFormSuccess').style.display='block';
+  document.getElementById('submit-complaint').scrollIntoView({behavior:'smooth'});
+}
+function resetComplaintForm(){
+  document.getElementById('complaintFormWrap').style.display='block';
+  document.getElementById('cfFormSuccess').style.display='none';
+  document.getElementById('cfErr').style.display='none';
+  ['cf-fn','cf-ln','cf-phone','cf-email','cf-dob','cf-prefdate','cf-desc'].forEach(id=>document.getElementById(id).value='');
+  ['cf-concern','cf-time','cf-referral'].forEach(id=>document.getElementById(id).value='');
+  const btn=document.getElementById('cfBtn');btn.disabled=false;
+  document.getElementById('cfSpin').style.display='none';document.getElementById('cfIco').style.display='';document.getElementById('cfLbl').textContent='Submit My Inquiry';
+  cUrgency='routine';['curg-r','curg-s','curg-u'].forEach(id=>document.getElementById(id).className='urgency-btn');
+}
+
+// CHATBOT
+function buildChatSys(){
+  const now=new Date();
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const day=days[now.getDay()];
+  const hr=now.getHours();
+  const min=now.getMinutes().toString().padStart(2,'0');
+  const ampm=hr>=12?'PM':'AM';
+  const hr12=hr%12||12;
+  const timeStr=`${hr12}:${min} ${ampm}`;
+  const isOpen=(now.getDay()>0&&now.getDay()<6&&hr>=8&&hr<18)||(now.getDay()===6&&hr>=9&&hr<14);
+  return `You are a friendly dental assistant for Guerrero Dental Clinic in Manila, Philippines.
+
+Current time: ${day}, ${timeStr} (Philippines time)
+Clinic status RIGHT NOW: ${isOpen?'OPEN':'CLOSED'}
+
+Clinic hours:
+- Monday to Friday: 8:00 AM to 6:00 PM
+- Saturday: 9:00 AM to 2:00 PM
+- Sunday: Closed
+
+If a patient asks if you are open or what the hours are, use the current time above to give an accurate answer.
+
+Location: Room 200, Simacor Mansion, 3232 R. Magsaysay Blvd., Sta. Mesa, Manila (near SM Sta. Mesa)
+Contact: 0917-5850-158 | info@guerrerodental.com
+Appointments: appointments@guerrerodental.com
+
+Services offered: General Dentistry, Cosmetic Dentistry, Dental Implants, Orthodontics, Emergency Dental Care, Pediatric Dentistry, Teeth Whitening/Bleaching, Dental Fillings, Tooth Extractions, Teeth Cleaning, Root Canal Treatment, Dentures, Veneers, Braces
+
+Doctors:
+- Dr. Bambina N. Guerrero (General & Cosmetic Dentistry)
+- Dr. Jasond Guerrero-Ferrer (General Dentistry)
+
+Help patients with:
+- Booking appointments (use the form on this page or call 0917-5850-158)
+- Answering questions about services, procedures, pricing
+- Dental health tips
+- HMO/insurance: tell them to call the clinic to confirm accepted HMOs
+- Pricing: varies by procedure, recommend free consultation
+
+Be warm, friendly, and concise. Plain text only, no markdown, no bullet points with dashes. If unsure about anything specific, direct them to call 0917-5850-158.`;
+}
+const CHAT_SYS=buildChatSys();
+let chatOpen=false,chatBusy=false,chatHistory=[];
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chatPanel').classList.toggle('open',chatOpen);
+  if(chatOpen){document.getElementById('chatNotif').style.display='none';document.getElementById('chatInput').focus();}
+}
+function quickAsk(q){document.getElementById('chatInput').value=q;document.getElementById('quickChips').style.display='none';sendChatMsg();}
+const FOLLOWUP_SETS = [
+  ["How do I book?","What's the price?","Do you accept walk-ins?"],
+  ["Tell me about teeth whitening","How often should I visit?","Do you handle emergencies?"],
+  ["Where are you located?","What are your hours?","Can I call to book?"],
+  ["What payment methods?","Is it painful?","How long does it take?"],
+];
+let followupIdx=0;
+
+async function sendChatMsg(){
+  const input=document.getElementById('chatInput');const text=input.value.trim();
+  if(!text||chatBusy)return;
+  input.value='';chatBusy=true;
+  // Hide any existing followup chips
+  const existing=document.getElementById('followupChips');if(existing)existing.remove();
+  appendMsg(text,'user');chatHistory.push({role:'user',content:text});showTyping();
+  try{
+    const res=await fetch('/api/chat-public',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:buildChatSys(),messages:chatHistory})});
+    const data=await res.json();removeTyping();
+    const reply=data.content?.[0]?.text||data.error?.message||"Sorry, I couldn't respond. Please call 0917-5850-158!";
+    chatHistory.push({role:'assistant',content:reply});appendMsg(reply,'bot');
+    // Show follow-up suggestion chips after bot replies
+    showFollowupChips();
+  }catch(e){removeTyping();appendMsg("I'm having trouble connecting right now. You can reach us at 0917-5850-158, email info@guerrerodental.com, or fill in the inquiry form below!",'bot');}
+  chatBusy=false;
+}
+
+function showFollowupChips(){
+  const old=document.getElementById('followupChips');if(old)old.remove();
+  const set=FOLLOWUP_SETS[followupIdx%FOLLOWUP_SETS.length];followupIdx++;
+  const wrap=document.createElement('div');
+  wrap.id='followupChips';
+  wrap.style.cssText='display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 8px';
+  set.forEach(q=>{
+    const btn=document.createElement('button');
+    btn.className='quick-chip';btn.textContent=q;
+    btn.onclick=()=>{wrap.remove();document.getElementById('chatInput').value=q;sendChatMsg();};
+    wrap.appendChild(btn);
+  });
+  document.getElementById('chatMsgs').appendChild(wrap);
+  document.getElementById('chatMsgs').scrollTop=9999;
+}
+function appendMsg(text,role){
+  const div=document.createElement('div');div.className='msg-bubble '+role;div.textContent=text;
+  document.getElementById('chatMsgs').appendChild(div);document.getElementById('chatMsgs').scrollTop=9999;
+}
+function showTyping(){
+  const div=document.createElement('div');div.className='msg-bubble bot';div.id='typingBubble';
+  div.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+  document.getElementById('chatMsgs').appendChild(div);document.getElementById('chatMsgs').scrollTop=9999;
+}
+function removeTyping(){const el=document.getElementById('typingBubble');if(el)el.remove();}
+setTimeout(()=>{if(!chatOpen)document.getElementById('chatNotif').style.display='flex';},4000);
+</script>
+</body>
+</html>
