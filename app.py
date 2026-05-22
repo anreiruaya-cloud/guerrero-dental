@@ -52,6 +52,8 @@ base = os.environ.get("DATABASE_URL")
 if base:
     app.config["SQLALCHEMY_DATABASE_URI"] = base
 else:
+    # Ensure the instance folder exists (Railway has no pre-created folders)
+    os.makedirs(app.instance_path, exist_ok=True)
     db_file = os.path.join(app.instance_path, "guerrero_dental.db")
     # Convert backslashes to forward slashes for SQLAlchemy URI
     db_path = os.path.abspath(db_file).replace("\\", "/")
