@@ -1458,27 +1458,18 @@ def _normalize_time(t):
     return t
 
 
+# ── DB INIT (runs for both gunicorn and direct python app.py) ────────────
+with app.app_context():
+    db.create_all()
+    seed()
+
 # ── MAIN ─────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        seed()
-        print("\n🦷  Guerrero Dental — Full-Stack v3.0")
-        print("━" * 60)
-        print("   PUBLIC SITE:    http://localhost:5000/")
-        print()
-        print("   STAFF PORTAL (hidden from public):")
-        print("   Login:          http://localhost:5000/gd-admin/login")
-        print("   Superadmin:     http://localhost:5000/gd-admin/dashboard/superadmin")
-        print("   Admin:          http://localhost:5000/gd-admin/dashboard/admin")
-        print("   Nurse:          http://localhost:5000/gd-admin/dashboard/nurse")
-        print()
-        print("   CREDENTIALS:")
-        print("   superadmin@guerrerodental.com   SuperAdmin2025!")
-        print("   admin@guerrerodental.com        Admin2025!")
-        print("   nurse@guerrerodental.com        NurseAna2025!")
-        print("   nurse2@guerrerodental.com       NurseMaria2025!")
-        print("━" * 60 + "\n")
+    print("\n🦷  Guerrero Dental — Full-Stack v3.0")
+    print("━" * 60)
+    print("   PUBLIC SITE:    http://localhost:5000/")
+    print("   Login:          http://localhost:5000/gd-admin/login")
+    print("━" * 60 + "\n")
     debug_mode = os.environ.get("FLASK_ENV", "production") == "development"
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=debug_mode, host="0.0.0.0", port=port)
